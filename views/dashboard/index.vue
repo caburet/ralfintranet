@@ -12,7 +12,7 @@
           </div>
           <div class="control">
             <div class="select is-fullwidth">
-              <select  >
+              <select  v-model="agencies">
                 <option value="OTROS">Otros</option>
                 <option v-for="node in agencies" :value="node._id">{{node.label}}</option>
               </select>
@@ -23,7 +23,7 @@
           </div>
           <div class="control">
             <div class="select is-fullwidth">
-              <select  >
+              <select v-model="campaign"  >
                 <option value="OTROS">Otros</option>
               </select>
             </div>
@@ -41,7 +41,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text"  placeholder="Nombre">
+                <input class="input" type="text" v-model="owner.name"  placeholder="Nombre">
               </p>
             </div>
             <div class="control-label">
@@ -49,7 +49,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text"  placeholder="Apellido">
+                <input class="input" v-model="owner.lastname" type="text"  placeholder="Apellido">
               </p>
             </div>
           </div>
@@ -59,8 +59,11 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select  >
+                <select v-model="owner.IDtype" >
                   <option value="DNI">DNI</option>
+                  <option value="LE">LE</option>
+                  <option value="CI">CI</option>
+                  <option value="LC">LC</option>
                 </select>
               </div>
             </div>
@@ -69,7 +72,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text"  placeholder="Numero">
+                <input class="input" type="text" v-model="owner.ID" placeholder="Numero">
               </p>
             </div>
           </div>
@@ -79,7 +82,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select  >
+                <select v-model="owner.sex" >
                   <option value="F">Femenino</option>
                   <option value="M">Masculino</option>
                 </select>
@@ -125,7 +128,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text"  placeholder="Nombre">
+                <input class="input" type="text" v-model="cowner.name" placeholder="Nombre">
               </p>
             </div>
             <div class="control-label">
@@ -133,7 +136,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text"  placeholder="Apellido">
+                <input class="input" type="text" v-model="cowner.lastname" placeholder="Apellido">
               </p>
             </div>
           </div>
@@ -143,8 +146,11 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select  >
-                  <option value="DNI">DNI</option>
+                <select v-model="cowner.IDtype" >
+                <option value="DNI">DNI</option>
+                <option value="LE">LE</option>
+                <option value="CI">CI</option>
+                <option value="LC">LC</option>
                 </select>
               </div>
             </div>
@@ -153,7 +159,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text"  placeholder="Numero">
+                <input class="input" type="text" v-model="cowner.ID" placeholder="Numero">
               </p>
             </div>
           </div>
@@ -163,7 +169,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select  >
+                <select v-model="cowner.sex" >
                   <option value="F">Femenino</option>
                   <option value="M">Masculino</option>
                 </select>
@@ -192,7 +198,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text"  placeholder="Nombre">
+                <input class="input" type="text" v-model="coowner.name" placeholder="Nombre">
               </p>
             </div>
             <div class="control-label">
@@ -200,7 +206,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text"  placeholder="Apellido">
+                <input class="input" type="text" v-model="coowner.lastname" placeholder="Apellido">
               </p>
             </div>
           </div>
@@ -210,8 +216,11 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select  >
-                  <option value="DNI">DNI</option>
+                <select v-model="coowner.IDtype" >
+                <option value="DNI">DNI</option>
+                <option value="LE">LE</option>
+                <option value="CI">CI</option>
+                <option value="LC">LC</option>
                 </select>
               </div>
             </div>
@@ -220,7 +229,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text"  placeholder="Numero">
+                <input class="input" type="text" v-model="coowner.ID" placeholder="Numero">
               </p>
             </div>
           </div>
@@ -230,7 +239,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select  >
+                <select v-model="coowner.sex" >
                   <option value="F">Femenino</option>
                   <option value="M">Masculino</option>
                 </select>
@@ -259,7 +268,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text"  placeholder="Nombre">
+                <input class="input" type="text" v-model="gowner.name" placeholder="Nombre">
               </p>
             </div>
             <div class="control-label">
@@ -267,7 +276,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text"  placeholder="Apellido">
+                <input class="input" type="text" v-model="gowner.lastname" placeholder="Apellido">
               </p>
             </div>
           </div>
@@ -277,8 +286,11 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select  >
-                  <option value="DNI">DNI</option>
+                <select v-model="gowner.IDtype" >
+                <option value="DNI">DNI</option>
+                <option value="LE">LE</option>
+                <option value="CI">CI</option>
+                <option value="LC">LC</option>
                 </select>
               </div>
             </div>
@@ -287,7 +299,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text"  placeholder="Numero">
+                <input class="input" type="text" v-model="gowner.ID" placeholder="Numero">
               </p>
             </div>
           </div>
@@ -297,7 +309,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select  >
+                <select v-model="gowner.sex" >
                   <option value="F">Femenino</option>
                   <option value="M">Masculino</option>
                 </select>
@@ -317,8 +329,8 @@
               <label class="label"></label>
             </div>
             <div class="control">
-              <button class="button is-primary" v-on:click="onclickfn()">Submit</button>
-              <button class="button is-link" v-on:click="onclickcan()">Cancel</button>
+              <button class="button is-primary" v-on:click="onclickfn()">Salvar</button>
+              <button class="button is-link" v-on:click="onclickcan()">Cancelar</button>
             </div>
           </div>
         </div>
@@ -333,6 +345,7 @@ import Chart from 'vue-bulma-chartjs'
 import { mapActions } from 'vuex'
 import { INIT_AGENCIES } from 'vuex-store/mutation-types'
 import store from './../../store'
+const { state } = store
 export default {
   components: {
     Chart
@@ -342,7 +355,36 @@ export default {
       seenconyuge: false,
       seenconcubino: false,
       seengarante: false,
-      agencies: [{_id: 1, label: 'Otra Agencia'}]
+      owner: {
+        sex: '',
+        name: '',
+        ID: '',
+        IDtype: '',
+        lastname: ''
+      },
+      gowner: {
+        sex: '',
+        name: '',
+        ID: '',
+        IDtype: '',
+        lastname: ''
+      },
+      cowner: {
+        sex: '',
+        name: '',
+        ID: '',
+        IDtype: '',
+        lastname: ''
+      },
+      coowner: {
+        sex: '',
+        name: '',
+        ID: '',
+        IDtype: '',
+        lastname: ''
+      },
+      campaign: '',
+      agencies: state.app.verifyclient.agencies
     }
   },
   created: function () {
@@ -366,7 +408,8 @@ export default {
     },
     onclickfn () {
       this.$http({
-        url: 'http://localhost:8080/intranet/api/datafetch',
+        method: 'GET',
+        url: '/ralfintranet/api/savedata',
         transformResponse: [(data) => {
           return JSON.parse(data)
         }],
@@ -375,7 +418,7 @@ export default {
             Normalized: false,
             NumberOfDays: false,
             DataPeriod: false,
-            Elements: []
+            Elements: JSON.stringify(this.owner)
           }
         }
       }).then((response) => {
@@ -405,7 +448,7 @@ export default {
     loadData () {
       console.log(this.$route.params)
       this.$http({
-        url: 'http://localhost:8080/ralfintranet/api/getVerifyClientData/',
+        url: '/ralfintranet/api/getVerifyClientData/',
         transformResponse: [(data) => {
           return JSON.parse(data)
         }],

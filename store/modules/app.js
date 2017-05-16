@@ -76,8 +76,7 @@ const mutations = {
     console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
     console.log(JSON.parse(data.data.agencias[0]))
     for (let d in data.data.agencias) {
-      let agencieData = JSON.parse(d)
-      console.log(agencieData.CRMAccountGID)
+      let agencieData = JSON.parse(data.data.agencias[d])
       state.verifyclient.agencies.push(
         {_id: agencieData.CRMAccountGID,
           label: agencieData.Name
