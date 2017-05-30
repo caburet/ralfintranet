@@ -125,6 +125,7 @@ export default {
       this.labels.length = 0
       this.data.length = 0
       this.$http({
+        method: 'GET',
         url: api,
         transformResponse: [(data) => {
           return JSON.parse(data.replace(/T00:00:00/g, ''))

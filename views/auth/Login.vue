@@ -9,11 +9,11 @@
         <form v-on:submit.prevent="login">
           <label class="label">Email</label>
           <p class="control">
-            <input v-model="data.body.username" class="input" type="text" placeholder="email@example.org">
+            <input v-model="data.body.webuser" class="input" type="text" placeholder="email@example.org">
           </p>
           <label class="label">Password</label>
           <p class="control">
-            <input v-model="data.body.password" class="input" type="password" placeholder="password">
+            <input v-model="data.body.webpassword" class="input" type="password" placeholder="password">
           </p>
 
           <p class="control">
@@ -42,8 +42,8 @@ export default {
     return {
       data: {
         body: {
-          username: null,
-          password: null
+          webuser: null,
+          webpassword: null
         },
         rememberMe: false
       },
@@ -58,43 +58,44 @@ export default {
   },
   methods: {
     login () {
-      var redirect = this.$auth.redirect()
-      this.$auth.login({
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        data: this.data.body,
-        rememberMe: this.data.rememberMe,
-        redirect: {name: redirect ? redirect.from.name : 'Home'},
-        success (res) {
+      this.$http({
+        url: 'http://localhost:8080/myapp/loginPerson',
+        dataType: 'text',
+        contentType: 'text/plain',
+        params: {
+          parameters: {
+            Normalized: false,
+            webuser: this.data.body.webuser,
+            webpassword: this.data.body.webpassword
+          }
+        }
+      }).then((res) => {
+        this.$http({
+          url: 'http://localhost:8080/myapp/loginPerson',
+          dataType: 'text',
+          contentType: 'text/plain',
+          params: {
+            parameters: {
+              Normalized: false,
+              webuser: this.data.body.webuser,
+              webpassword: this.data.body.webpassword
+            }
+          }
+        }).then((res) => {
           console.log('Auth Success')
+            // console.log('Token: ' + this.$auth.token())
+            // console.log(res)
+        }).catch((error) => {
+          console.log(error)
+        })
+        console.log('Auth Success')
           // console.log('Token: ' + this.$auth.token())
           // console.log(res)
-        },
-        error (err) {
-          if (err.response) {
-            // The request was made, but the server responded with a status code
-            // that falls out of the range of 2xx
-            // console.log(err.response.status)
-            // console.log(err.response.data)
-            // console.log(err.response.headers)
-            this.error = err.response.data
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', err.message)
-          }
-          console.log(err.config)
-        }
+      }).catch((error) => {
+        console.log(error)
       })
     }
   }
-  // filters: {
-  //   json: function (value) {
-  //     console.log(value)
-  //     return value
-  //   }
-  // }
-
 }
 </script>
 

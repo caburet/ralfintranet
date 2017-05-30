@@ -409,7 +409,7 @@ export default {
     onclickfn () {
       this.$http({
         method: 'GET',
-        url: '/ralfintranet/api/savedata',
+        url: 'http://localhost:8080/ralfintranet/api/savedata',
         transformResponse: [(data) => {
           return JSON.parse(data)
         }],
@@ -418,7 +418,11 @@ export default {
             Normalized: false,
             NumberOfDays: false,
             DataPeriod: false,
-            Elements: JSON.stringify(this.owner)
+            Elements: JSON.stringify(this.owner),
+            owner: JSON.stringify(this.owner),
+            gowner: JSON.stringify(this.gowner),
+            cowner: JSON.stringify(this.cowner),
+            coowner: JSON.stringify(this.coowner)
           }
         }
       }).then((response) => {
