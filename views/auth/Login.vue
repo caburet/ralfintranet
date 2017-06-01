@@ -37,7 +37,7 @@
 
 <script>
 export default {
-
+import { INIT_AGENCIES } from 'vuex-store/mutation-types'
   data () {
     return {
       data: {
@@ -58,6 +58,7 @@ export default {
   },
   methods: {
     login () {
+      console.log('va el 1do')
       this.$http({
         url: 'http://localhost:8080/myapp/loginPerson',
         dataType: 'text',
@@ -70,25 +71,9 @@ export default {
           }
         }
       }).then((res) => {
-        this.$http({
-          url: 'http://localhost:8080/myapp/loginPerson',
-          dataType: 'text',
-          contentType: 'text/plain',
-          params: {
-            parameters: {
-              Normalized: false,
-              webuser: this.data.body.webuser,
-              webpassword: this.data.body.webpassword
-            }
-          }
-        }).then((res) => {
-          console.log('Auth Success')
-            // console.log('Token: ' + this.$auth.token())
-            // console.log(res)
-        }).catch((error) => {
-          console.log(error)
-        })
+        console.log('va el 2do')
         console.log('Auth Success')
+
           // console.log('Token: ' + this.$auth.token())
           // console.log(res)
       }).catch((error) => {

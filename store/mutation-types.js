@@ -13,3 +13,5 @@ export const INIT_DATA = 'INIT_DATA'
 export const REFRESH_CASE = 'REFRESH_CASE'
 
 export const INIT_AGENCIES = 'INIT_AGENCIES'
+
+export const LOGIN = 'LOGIN'
