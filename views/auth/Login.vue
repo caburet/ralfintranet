@@ -6,24 +6,22 @@
     <div class="column is-6 is-offset-3">
       <div class="box">
         <div v-show="error" style="color:red; word-wrap:break-word;">{{ error }}</div>
-        <form v-on:submit.prevent="login">
-          <label class="label">Email</label>
+        <form method="post" action="/oo/api/personLogin">
+          <label class="label">Usuario</label>
           <p class="control">
-            <input v-model="data.body.webuser" class="input" type="text" placeholder="email@example.org">
+            <input name="username" class="input" type="text" placeholder="email@example.org">
           </p>
           <label class="label">Password</label>
           <p class="control">
-            <input v-model="data.body.webpassword" class="input" type="password" placeholder="password">
+            <input name="password" class="input" type="password" placeholder="password">
           </p>
-
-          <p class="control">
-            <label class="checkbox">
-              <input type="checkbox" v-model="data.rememberMe">
-              Remember me
-            </label>
+          <p class="control" style="display:none">
+            <input v-model="redirect_on_success" name="redirect_on_success" class="input" type="text" value="/intranet/">
           </p>
-
-          <hr>
+          <p class="control" style="display:none">
+            <input name="mode" class="input" type="text" value="person">
+          </p>
+        <hr>
           <p class="control">
             <button type="submit" class="button is-primary">Login</button>
             <button class="button is-default">Cancel</button>
@@ -36,50 +34,19 @@
 </template>
 
 <script>
+import router from './../../router'
 export default {
-import { INIT_AGENCIES } from 'vuex-store/mutation-types'
+
   data () {
     return {
-      data: {
-        body: {
-          webuser: null,
-          webpassword: null
-        },
-        rememberMe: false
-      },
-      error: null
+      redirect_on_success: '/intranet/' + router.resolve('dashboard').href
     }
   },
   mounted () {
-    if (this.$auth.redirect()) {
-      console.log('Redirect from: ' + this.$auth.redirect().from.name)
-    }
-    // Can set query parameter here for auth redirect or just do it silently in login redirect.
+    let url = router.resolve('dashboard')
+    console.log(url)
   },
   methods: {
-    login () {
-      console.log('va el 1do')
-      this.$http({
-        url: 'http://localhost:8080/myapp/loginPerson',
-        dataType: 'text',
-        contentType: 'text/plain',
-        params: {
-          parameters: {
-            Normalized: false,
-            webuser: this.data.body.webuser,
-            webpassword: this.data.body.webpassword
-          }
-        }
-      }).then((res) => {
-        console.log('va el 2do')
-        console.log('Auth Success')
-
-          // console.log('Token: ' + this.$auth.token())
-          // console.log(res)
-      }).catch((error) => {
-        console.log(error)
-      })
-    }
   }
 }
 </script>

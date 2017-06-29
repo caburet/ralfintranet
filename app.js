@@ -52,45 +52,6 @@ const app = new Vue({
   router,
   store,
   nprogress,
-  // created () {
-  //   this.$nextTick(function () {
-  //      // initialize store data structure by submitting action.
-  //     this.$http({
-  //       url: '/intranet/api/datafetch',
-  //       transformResponse: [(data) => {
-  //         return JSON.parse(data)
-  //       }],
-  //       params: {
-  //         parameters: {
-  //           Normalized: false,
-  //           NumberOfDays: false,
-  //           DataPeriod: false,
-  //           Elements: []
-  //         }
-  //       }
-  //     }).then((response) => {
-  //       console.log(response)
-  //       var arrayLength = response.data.records.length
-  //       var data = []
-  //       for (var i = 0; i < arrayLength; i++) {
-  //         let obj = JSON.parse(response.data.records[i])
-  //         let dic = {}
-  //         dic.SerNr = obj.SerNr
-  //         dic.CaseTypeComment = obj.CaseTypeComment
-  //         dic.Asignee = obj.Asignee
-  //         dic.ProblemDesc = obj.ProblemDesc
-  //         dic.CaseComment = obj.CaseComment
-  //         dic.StatusName = obj.StatusName
-  //         dic.TransDate = obj.TransDate
-  //         dic.TransTime = obj.TransTime
-  //         data.push(dic)
-  //       }
-  //       store.commit(INIT_DATA, data)
-  //     }).catch((error) => {
-  //       console.log(error)
-  //     })
-  //   })
-  // },
   ...App
 
 })
