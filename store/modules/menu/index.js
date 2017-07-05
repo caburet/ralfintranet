@@ -1,6 +1,5 @@
 import * as types from '../../mutation-types'
 import lazyLoading from './lazyLoading'
-// import charts from './charts'
 // import uifeatures from './uifeatures'
 // import components from './components'
 // import tables from './tables'
@@ -20,7 +19,48 @@ const state = {
         link: 'dashboard/index.vue'
       },
       component: lazyLoading('dashboard', true)
+    },
+    {
+      name: 'cars',
+      path: '/cars',
+      props: ['message'],
+      meta: {
+        icon: 'fa-tachometer',
+        link: 'cars/index.vue'
+      },
+      component: lazyLoading('cars', true)
+    },
+    {
+      name: 'extend',
+      path: '/extend',
+      props: ['message'],
+      meta: {
+        icon: 'fa-tachometer',
+        link: 'extend/index.vue'
+      },
+      component: lazyLoading('extend', true)
+    },
+    {
+      name: 'additional',
+      path: '/additional',
+      props: ['message'],
+      meta: {
+        icon: 'fa-tachometer',
+        link: 'additional/index.vue'
+      },
+      component: lazyLoading('additional', true)
+    },
+    {
+      name: 'simulator',
+      path: '/simulator',
+      props: ['message'],
+      meta: {
+        icon: 'fa-tachometer',
+        link: 'simulator/index.vue'
+      },
+      component: lazyLoading('simulator', true)
     }
+
   ]
 }
 
