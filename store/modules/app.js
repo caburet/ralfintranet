@@ -1,6 +1,7 @@
 import * as types from '../mutation-types'
 
 const state = {
+  personname: '',
   verifyclient: {
     agencies: [
     ]
@@ -53,22 +54,10 @@ const mutations = {
         }
       )
     }
-    state.case.client = data.tittle
   },
   [types.LOGIN] (state, data) {
     console.log(data)
-    console.log(data.data)
-    console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
-    console.log(JSON.parse(data.data.agencias[0]))
-    for (let d in data.data.agencias) {
-      let agencieData = JSON.parse(data.data.agencias[d])
-      state.verifyclient.agencies.push(
-        {_id: agencieData.CRMAccountGID,
-          label: agencieData.Name
-        }
-      )
-    }
-    state.case.client = data.tittle
+    state.personname = data
   }
 }
 

@@ -23,10 +23,12 @@
             <div class="control-label">
               <label class="label">Modelo</label>
             </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.name"  placeholder="Nombre">
-              </p>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select  v-model="brand">
+                  <option v-for="node in brand" :value="node._id">{{node.label}}</option>
+                </select>
+              </div>
             </div>
 
           </div>
@@ -36,11 +38,8 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="owner.IDtype" >
-                  <option value="DNI">DNI</option>
-                  <option value="LE">LE</option>
-                  <option value="CI">CI</option>
-                  <option value="LC">LC</option>
+                <select  v-model="year">
+                  <option v-for="node in brand" :value="node._id">{{node.label}}</option>
                 </select>
               </div>
             </div>
@@ -53,8 +52,8 @@
             <div class="control">
               <div class="select is-fullwidth">
                 <select v-model="owner.sex" >
-                  <option value="F">Femenino</option>
-                  <option value="M">Masculino</option>
+                  <option value="0">No</option>
+                  <option value="1">Si</option>
                 </select>
               </div>
             </div>
@@ -64,17 +63,16 @@
               <label class="label">Valor GNC</label>
             </div>
             <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="owner.sex" >
-                  <option value="F">Femenino</option>
-                  <option value="M">Masculino</option>
-                </select>
+              <div class="control is-grouped">
+                <p class="control is-expanded">
+                  <input class="input" v-model="owner.lastname" type="text"  placeholder="Apellido">
+                </p>
               </div>
             </div>
           </div>
           <div class="control is-horizontal">
             <div class="control-label">
-              <label class="label">0km</label>
+              <label class="label">Uso</label>
             </div>
             <div class="control">
               <div class="select is-fullwidth">
@@ -122,10 +120,13 @@
             <div class="control-label">
               <label class="label">Plazo</label>
             </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.ID" placeholder="Numero">
-              </p>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select v-model="owner.sex" >
+                  <option value="0">No</option>
+                  <option value="1">Si</option>
+                </select>
+              </div>
             </div>
           </div>
           <div class="control is-horizontal">
@@ -159,7 +160,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <input class="input" type="text" v-model="car.infovalue"  placeholder="" disabled>
+                <input class="input" type="date" v-model="car.infovalue"  placeholder="">
               </p>
               </div>
             </div>
@@ -168,7 +169,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <input class="input" type="text" v-model="car.infovalue"  placeholder="" disabled>
+                <input class="input" type="text" v-model="car.infovalue"  placeholder="">
               </p>
               </div>
             </div>
@@ -177,18 +178,24 @@
             <div class="control-label">
               <label class="label">Provincia</label>
             </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" v-model="owner.lastname" type="text"  placeholder="Apellido">
-              </p>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select v-model="owner.sex" >
+                  <option value="0">No</option>
+                  <option value="1">Si</option>
+                </select>
+              </div>
             </div>
             <div class="control-label">
               <label class="label">Localidad</label>
             </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" v-model="owner.lastname" type="text"  placeholder="Apellido">
-              </p>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select v-model="owner.sex" >
+                  <option value="0">No</option>
+                  <option value="1">Si</option>
+                </select>
+              </div>
             </div>
           </div>
           <div class="control is-horizontal">

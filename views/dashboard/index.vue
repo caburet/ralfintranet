@@ -12,7 +12,7 @@
           </div>
           <div class="control">
             <div class="select is-fullwidth">
-              <select  v-model="agencies">
+              <select  v-model="agencie">
                 <option value="OTROS">Otros</option>
                 <option v-for="node in agencies" :value="node._id">{{node.label}}</option>
               </select>
@@ -343,7 +343,7 @@
 <script>
 import Chart from 'vue-bulma-chartjs'
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES } from 'vuex-store/mutation-types'
+import { INIT_AGENCIES, LOGIN } from 'vuex-store/mutation-types'
 import store from './../../store'
 const { state } = store
 export default {
@@ -384,7 +384,8 @@ export default {
         lastname: ''
       },
       campaign: '',
-      agencies: state.app.verifyclient.agencies
+      agencies: state.app.verifyclient.agencies,
+      agencie: ''
     }
   },
   created: function () {
@@ -415,10 +416,8 @@ export default {
         }],
         params: {
           parameters: {
-            Normalized: false,
-            NumberOfDays: false,
-            DataPeriod: false,
-            Elements: JSON.stringify(this.owner),
+            campaign: this.campaign,
+            agencie: this.agencie,
             owner: JSON.stringify(this.owner),
             gowner: JSON.stringify(this.gowner),
             cowner: JSON.stringify(this.cowner),
@@ -464,6 +463,8 @@ export default {
         // console.log(response.data.records)
         console.log('TERMINA LOS CONSOLE')
         store.commit(INIT_AGENCIES, response)
+
+        store.commit(LOGIN, response.data.personname)
       }).catch((error) => {
         console.log(error)
       })

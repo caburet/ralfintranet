@@ -3,11 +3,11 @@
     <div class="tile is-ancestor">
     <div class="tile is-parent">
       <article class="tile is-child box">
-        <h1 class="title">Datos del Automovil</h1>
+        <h1 class="title">Simulador de Prestamo</h1>
         <div class="block">
         <div class="control is-horizontal">
           <div class="control-label">
-            <label class="label">Marca</label>
+            <label class="label">Monto a Simular</label>
           </div>
           <div class="control">
             <div class="select is-fullwidth">
@@ -16,235 +16,23 @@
               </select>
             </div>
           </div>
-
-
         </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Modelo</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.name"  placeholder="Nombre">
-              </p>
-            </div>
-
-          </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Año</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="owner.IDtype" >
-                  <option value="DNI">DNI</option>
-                  <option value="LE">LE</option>
-                  <option value="CI">CI</option>
-                  <option value="LC">LC</option>
-                </select>
-              </div>
-            </div>
-
-          </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">0km</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="owner.sex" >
-                  <option value="F">Femenino</option>
-                  <option value="M">Masculino</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Valor GNC</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="owner.sex" >
-                  <option value="F">Femenino</option>
-                  <option value="M">Masculino</option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">0km</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="owner.sex" >
-                  <option value="F">Femenino</option>
-                  <option value="M">Masculino</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </article>
-    </div>
-    <div class="tile is-parent">
-      <article class="tile is-child box">
-        <h1 class="title">Datos del Prestamo</h1>
-
-
-
-
-        <div class="block">
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Valor info</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <input class="input" type="text" v-model="car.infovalue"  placeholder="" disabled>
-              </p>
-              </div>
-            </div>
-          </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Monto</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" v-model="owner.lastname" type="text"  placeholder="Apellido">
-              </p>
-            </div>
-          </div>
           <div class="control is-horizontal">
             <div class="control-label">
               <label class="label">Plazo</label>
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.ID" placeholder="Numero">
+                <input class="input" type="text" v-model="owner.name"  placeholder="">
               </p>
             </div>
           </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Monto</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" v-model="owner.lastname" type="text"  placeholder="Apellido">
-              </p>
-            </div>
-          </div>
+
         </div>
       </article>
     </div>
 
-
     </div>
-    <div class="tile is-ancestor">
-    <div class="tile is-parent">
-      <article class="tile is-child box">
-        <h1 class="title">Datos Del Titular del Crédito</h1>
-
-
-
-
-        <div class="block">
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Nacimiento</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <input class="input" type="text" v-model="car.infovalue"  placeholder="" disabled>
-              </p>
-              </div>
-            </div>
-            <div class="control-label">
-              <label class="label">Ingresos</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <input class="input" type="text" v-model="car.infovalue"  placeholder="" disabled>
-              </p>
-              </div>
-            </div>
-          </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Provincia</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" v-model="owner.lastname" type="text"  placeholder="Apellido">
-              </p>
-            </div>
-            <div class="control-label">
-              <label class="label">Localidad</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" v-model="owner.lastname" type="text"  placeholder="Apellido">
-              </p>
-            </div>
-          </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Celular</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.ID" placeholder="Numero">
-              </p>
-            </div>
-            <div class="control-label">
-              <label class="label"></label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-              </p>
-            </div>
-          </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Tel. Laboral</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" v-model="owner.lastname" type="text"  placeholder="Apellido">
-              </p>
-            </div>
-            <div class="control-label">
-              <label class="label"></label>
-            </div>
-            <div class="control">
-              <button class="button is-primary" v-on:click="onclickfn()">Calcular</button>
-            </div>
-          </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Tel. Fijo</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" v-model="owner.lastname" type="text"  placeholder="Apellido">
-              </p>
-            </div>
-            <div class="control-label">
-              <label class="label"></label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-              </p>
-            </div>
-          </div>
-        </div>
-      </article>
-    </div>
-  </div>
   </div>
 </template>
 
@@ -382,10 +170,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.table-responsive {
-  display: block;
-  width: 100%;
-  min-height: .01%;
-  overflow-x: auto;
+.longlabel {
+  flex-basis:1;
 }
 </style>
