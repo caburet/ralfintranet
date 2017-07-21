@@ -21,6 +21,8 @@ export const addCase = ({ commit }, data) => commit(types.ADD_CASE, data)
 
 export const initAgencies = ({ commit }, data) => commit(types.INIT_AGENCIES, data)
 
+export const initPerson = ({ commit }, data) => commit(types.INIT_PERSON, data)
+
 export const login = ({ commit }, data) => commit(types.LOGIN, data)
 
 export const initData = ({ commit }, data) => commit(types.INIT_DATA, data)

@@ -35,6 +35,30 @@
                 <p class="control">Datos del titular del credito</p>
             </div>
           </div>
+
+          <div class="control is-horizontal">
+            <div class="control-label">
+              <label class="label">Tipo de Doc.</label>
+            </div>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select v-model="owner.IDtype" >
+                  <option value="DNI">DNI</option>
+                  <option value="LE">LE</option>
+                  <option value="CI">CI</option>
+                  <option value="LC">LC</option>
+                </select>
+              </div>
+            </div>
+            <div class="control-label">
+              <label class="label">Numero</label>
+            </div>
+            <div class="control is-grouped">
+              <p class="control is-expanded">
+                <input class="input" type="text" v-model="owner.ID" v-on:change="loadowner('owner')" placeholder="Numero">
+              </p>
+            </div>
+          </div>
           <div class="control is-horizontal">
             <div class="control-label">
               <label class="label">Nombre</label>
@@ -55,36 +79,13 @@
           </div>
           <div class="control is-horizontal">
             <div class="control-label">
-              <label class="label">Tipo de Doc.</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="owner.IDtype" >
-                  <option value="DNI">DNI</option>
-                  <option value="LE">LE</option>
-                  <option value="CI">CI</option>
-                  <option value="LC">LC</option>
-                </select>
-              </div>
-            </div>
-            <div class="control-label">
-              <label class="label">Numero</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.ID" placeholder="Numero">
-              </p>
-            </div>
-          </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
               <label class="label">Sexo</label>
             </div>
             <div class="control">
               <div class="select is-fullwidth">
                 <select v-model="owner.sex" >
-                  <option value="F">Femenino</option>
-                  <option value="M">Masculino</option>
+                  <option value="1">Femenino</option>
+                  <option value="0">Masculino</option>
                 </select>
               </div>
             </div>
@@ -122,24 +123,6 @@
                 <p class="control">Datos del Conyuge del credito</p>
             </div>
           </div>
-          <div class="control is-horizontal" >
-            <div class="control-label">
-              <label class="label">Nombre</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" type="text" v-model="cowner.name" placeholder="Nombre">
-              </p>
-            </div>
-            <div class="control-label">
-              <label class="label">Apellido</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" type="text" v-model="cowner.lastname" placeholder="Apellido">
-              </p>
-            </div>
-          </div>
           <div class="control is-horizontal">
             <div class="control-label">
               <label class="label">Tipo de Doc.</label>
@@ -159,10 +142,29 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="cowner.ID" placeholder="Numero">
+                <input class="input" type="text" v-model="cowner.ID" v-on:change="loadowner('cowner')" placeholder="Numero">
               </p>
             </div>
           </div>
+          <div class="control is-horizontal" >
+            <div class="control-label">
+              <label class="label">Nombre</label>
+            </div>
+            <div class="control is-grouped">
+              <p class="control is-expanded">
+                <input class="input" type="text" v-model="cowner.name" placeholder="Nombre">
+              </p>
+            </div>
+            <div class="control-label">
+              <label class="label">Apellido</label>
+            </div>
+            <div class="control is-grouped">
+              <p class="control is-expanded">
+                <input class="input" type="text" v-model="cowner.lastname" placeholder="Apellido">
+              </p>
+            </div>
+          </div>
+
           <div class="control is-horizontal">
             <div class="control-label">
               <label class="label">Sexo</label>
@@ -170,8 +172,8 @@
             <div class="control">
               <div class="select is-fullwidth">
                 <select v-model="cowner.sex" >
-                  <option value="F">Femenino</option>
-                  <option value="M">Masculino</option>
+                  <option value="1">Femenino</option>
+                  <option value="0">Masculino</option>
                 </select>
               </div>
             </div>
@@ -194,24 +196,6 @@
           </div>
           <div class="control is-horizontal">
             <div class="control-label">
-              <label class="label">Nombre</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" type="text" v-model="coowner.name" placeholder="Nombre">
-              </p>
-            </div>
-            <div class="control-label">
-              <label class="label">Apellido</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" type="text" v-model="coowner.lastname" placeholder="Apellido">
-              </p>
-            </div>
-          </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
               <label class="label">Tipo de Doc.</label>
             </div>
             <div class="control">
@@ -229,10 +213,29 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="coowner.ID" placeholder="Numero">
+                <input class="input" type="text" v-model="coowner.ID" v-on:change="loadowner('coowner')"placeholder="Numero">
               </p>
             </div>
           </div>
+          <div class="control is-horizontal">
+            <div class="control-label">
+              <label class="label">Nombre</label>
+            </div>
+            <div class="control is-grouped">
+              <p class="control is-expanded">
+                <input class="input" type="text" v-model="coowner.name" placeholder="Nombre">
+              </p>
+            </div>
+            <div class="control-label">
+              <label class="label">Apellido</label>
+            </div>
+            <div class="control is-grouped">
+              <p class="control is-expanded">
+                <input class="input" type="text" v-model="coowner.lastname" placeholder="Apellido">
+              </p>
+            </div>
+          </div>
+
           <div class="control is-horizontal">
             <div class="control-label">
               <label class="label">Sexo</label>
@@ -240,8 +243,8 @@
             <div class="control">
               <div class="select is-fullwidth">
                 <select v-model="coowner.sex" >
-                  <option value="F">Femenino</option>
-                  <option value="M">Masculino</option>
+                  <option value="1">Femenino</option>
+                  <option value="0">Masculino</option>
                 </select>
               </div>
             </div>
@@ -264,24 +267,6 @@
           </div>
           <div class="control is-horizontal">
             <div class="control-label">
-              <label class="label">Nombre</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" type="text" v-model="gowner.name" placeholder="Nombre">
-              </p>
-            </div>
-            <div class="control-label">
-              <label class="label">Apellido</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" type="text" v-model="gowner.lastname" placeholder="Apellido">
-              </p>
-            </div>
-          </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
               <label class="label">Tipo de Doc.</label>
             </div>
             <div class="control">
@@ -299,10 +284,29 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="gowner.ID" placeholder="Numero">
+                <input class="input" type="text" v-model="gowner.ID" v-on:change="loadowner('gowner')"placeholder="Numero">
               </p>
             </div>
           </div>
+          <div class="control is-horizontal">
+            <div class="control-label">
+              <label class="label">Nombre</label>
+            </div>
+            <div class="control is-grouped">
+              <p class="control is-expanded">
+                <input class="input" type="text" v-model="gowner.name" placeholder="Nombre">
+              </p>
+            </div>
+            <div class="control-label">
+              <label class="label">Apellido</label>
+            </div>
+            <div class="control is-grouped">
+              <p class="control is-expanded">
+                <input class="input" type="text" v-model="gowner.lastname" placeholder="Apellido">
+              </p>
+            </div>
+          </div>
+
           <div class="control is-horizontal">
             <div class="control-label">
               <label class="label">Sexo</label>
@@ -310,8 +314,8 @@
             <div class="control">
               <div class="select is-fullwidth">
                 <select v-model="gowner.sex" >
-                  <option value="F">Femenino</option>
-                  <option value="M">Masculino</option>
+                  <option value="1">Femenino</option>
+                  <option value="0">Masculino</option>
                 </select>
               </div>
             </div>
@@ -343,7 +347,7 @@
 <script>
 import Chart from 'vue-bulma-chartjs'
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES, LOGIN } from 'vuex-store/mutation-types'
+import { INIT_AGENCIES, LOGIN, INIT_PERSON} from 'vuex-store/mutation-types'
 import store from './../../store'
 const { state } = store
 export default {
@@ -396,6 +400,32 @@ export default {
     ...mapActions([
       'addCase'
     ]),
+    loadowner (type) {
+      this.$http({
+        method: 'GET',
+        url: '/ralfintranet/api/loadperson',
+        transformResponse: [(data) => {
+          return JSON.parse(data)
+        }],
+        params: {
+          parameters: {
+            personID:this[type].ID,
+          }
+        }
+      }).then((response) => {
+        console.log(response)
+        if (response.data.person)
+        {
+          this[type].name=response.data.person.name
+          this[type].lastname=response.data.person.lastname
+          this[type].sex=response.data.person.sex
+          response.data.person['type']=type
+          store.commit(INIT_PERSON, response.data.person )
+        }
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
     onclickfnbkp () {
       let dic = {}
       dic.tittle = this.tittle
@@ -410,7 +440,7 @@ export default {
     onclickfn () {
       this.$http({
         method: 'GET',
-        url: 'http://localhost:8080/ralfintranet/api/savedata',
+        url: '/ralfintranet/api/savedata',
         transformResponse: [(data) => {
           return JSON.parse(data)
         }],

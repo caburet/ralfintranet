@@ -2,6 +2,34 @@ import * as types from '../mutation-types'
 
 const state = {
   personname: '',
+  owner: {
+    sex: '',
+    name: '',
+    ID: '',
+    IDtype: '',
+    lastname: ''
+  },
+  gowner: {
+    sex: '',
+    name: '',
+    ID: '',
+    IDtype: '',
+    lastname: ''
+  },
+  cowner: {
+    sex: '',
+    name: '',
+    ID: '',
+    IDtype: '',
+    lastname: ''
+  },
+  coowner: {
+    sex: '',
+    name: '',
+    ID: '',
+    IDtype: '',
+    lastname: ''
+  },
   verifyclient: {
     agencies: [
     ]
@@ -54,6 +82,25 @@ const mutations = {
         }
       )
     }
+  },
+  [types.INIT_PERSON] (state, data) {
+    console.log(data)
+    switch(data.type) {
+    case "owner":
+        state.owner.ID=data.ID
+        state.owner.name=data.name
+        state.owner.lastname=data.lastname
+        state.owner.sex=data.sex
+        break;
+    case "cowner":
+        break;
+    case "gowner":
+        break;
+    case "coowner":
+        break;
+    default:
+        break;
+}
   },
   [types.LOGIN] (state, data) {
     console.log(data)
