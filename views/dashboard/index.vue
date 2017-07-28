@@ -14,7 +14,7 @@
             <div class="select is-fullwidth">
               <select  v-model="agencie">
                 <option value="OTROS">Otros</option>
-                <option v-for="node in agencies" :value="node._id">{{node.label}}</option>
+                <option v-for="node in agencies" :value="node._id" >{{node.label}}</option>
               </select>
             </div>
           </div>
@@ -25,11 +25,31 @@
             <div class="select is-fullwidth">
               <select v-model="campaign"  >
                 <option value="OTROS">Otros</option>
+                <option v-for="node in campaigns" :value="node._id">{{node.label}}</option>
               </select>
             </div>
           </div>
 
         </div>
+          <div class="control is-horizontal">
+            <div class="control-label">
+            </div>
+            <div class="control">
+
+            </div>
+            <div class="control-label">
+              <label class="label">Producto</label>
+            </div>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select v-model="product"  >
+                  <option value="OTROS">Otros</option>
+                  <option v-for="node in products" :value="node._id">{{node.label}}</option>
+                </select>
+              </div>
+            </div>
+
+          </div>
           <div class="control is-horizontal">
             <div class="control-label">
                 <p class="control">Datos del titular del credito</p>
@@ -354,7 +374,7 @@ export default {
   components: {
     Chart
   },
-  data () {
+  data: function () {
     return {
       seenconyuge: false,
       seenconcubino: false,
@@ -387,10 +407,35 @@ export default {
         IDtype: '',
         lastname: ''
       },
-      campaign: '',
-      agencies: state.app.verifyclient.agencies,
-      agencie: ''
+      agencie: '',
+      product: '',
+      campaign: ''
     }
+  },
+  computed:{
+    agencies (){
+      return state.app.verifyclient.agencies
+    },
+    campaigns () {
+      return state.app.verifyclient.campaigns
+    },
+    products () {
+      if (this.campaign){
+      let productslist=[]
+      for (let pr of state.app.verifyclient.products)
+      {
+        if (pr.campaign===this.campaign)
+        {
+          productslist.push(pr)
+        }
+      }
+      return productslist
+    }
+    else {
+      return []
+    }
+  }
+
   },
   created: function () {
     this.loadData()
@@ -448,6 +493,7 @@ export default {
           parameters: {
             campaign: this.campaign,
             agencie: this.agencie,
+            product: this.product,
             owner: JSON.stringify(this.owner),
             gowner: JSON.stringify(this.gowner),
             cowner: JSON.stringify(this.cowner),
@@ -456,26 +502,10 @@ export default {
         }
       }).then((response) => {
         console.log(response)
-        console.log(response.data)
-        console.log(response.data.records)
-        var arrayLength = response.data.records.length
-        for (var i = 0; i < arrayLength; i++) {
-          let obj = JSON.parse(response.data.records[i])
-          console.log('####################################')
-          console.log(obj)
-          let dic = {}
-          dic.SerNr = obj.SerNr
-          dic.CaseTypeComment = obj.CaseTypeComment
-          dic.Asignee = obj.Asignee
-          dic.ProblemDesc = obj.ProblemDesc
-          dic.CaseComment = obj.CaseComment
-          dic.StatusName = obj.StatusName
-          dic.TransDate = obj.TransDate
-          dic.TransTime = obj.TransTime
-          this.addCase(dic)
-        }
+        this.$router.push('/cars')
       }).catch((error) => {
         console.log(error)
+
       })
     },
     loadData () {
@@ -489,7 +519,7 @@ export default {
         }
       }).then((response) => {
         console.log('ARRANCA LOS CONSOLE')
-        console.log(response.data)
+        //console.log(response.data)
         // console.log(response.data.records)
         console.log('TERMINA LOS CONSOLE')
         store.commit(INIT_AGENCIES, response)

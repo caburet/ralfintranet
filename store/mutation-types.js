@@ -14,6 +14,10 @@ export const REFRESH_CASE = 'REFRESH_CASE'
 
 export const INIT_AGENCIES = 'INIT_AGENCIES'
 
+export const LOAD_MODELS = 'LOAD_MODELS'
+
+export const LOAD_YEARS = 'LOAD_YEARS'
+
 export const INIT_PERSON = 'INIT_PERSON'
 
 export const LOGIN = 'LOGIN'
