@@ -4,6 +4,7 @@
     <div class="tile is-parent">
       <article class="tile is-child box">
         <h1 class="title">Datos del Automovil</h1>
+        <h1 class="title error" v-if="showerrormensage">{{errormensage}}</h1>
         <div class="block">
         <div class="control is-horizontal">
           <div class="control-label">
@@ -38,7 +39,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select  v-model="year" v-on:change="loadcarvalue()">
+                <select  v-model="car.year" v-on:change="loadcarvalue()">
                   <option v-for="node in years" :value="node._id">{{node.label}}</option>
                 </select>
               </div>
@@ -51,7 +52,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="owner.sex" >
+                <select v-model="car.km0"  v-on:change="loadcarvalue()">
                   <option value="0">No</option>
                   <option value="1">Si</option>
                 </select>
@@ -65,7 +66,7 @@
             <div class="control">
               <div class="control is-grouped">
                 <p class="control is-expanded">
-                  <input class="input" v-model="owner.lastname" type="text" >
+                  <input class="input" v-model="car.gnc" type="text" >
                 </p>
               </div>
             </div>
@@ -76,9 +77,10 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="owner.sex" >
-                  <option value="F">Femenino</option>
-                  <option value="M">Masculino</option>
+                <select v-model="car.use" >
+                  <option value="0">Particular</option>
+                  <option value="1">Transporte de Personas</option>
+                  <option value="2">Transporte de Cargas</option>
                 </select>
               </div>
             </div>
@@ -111,7 +113,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" v-model="owner.lastname" type="text" >
+                <input class="input" v-model="amount" type="text" >
               </p>
             </div>
           </div>
@@ -129,11 +131,11 @@
           </div>
           <div class="control is-horizontal">
             <div class="control-label">
-              <label class="label">Monto</label>
+              <label class="label">Tasa</label>
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" v-model="owner.lastname" type="text" >
+                <input class="input" v-model="tasa" type="text" >
               </p>
             </div>
           </div>
@@ -166,7 +168,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <input class="input" type="date" v-model="year"  placeholder="">
+                <input class="input" type="date" v-model="owner.birthdate"  placeholder="">
               </p>
               </div>
             </div>
@@ -175,7 +177,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <input class="input" type="text" v-model="car.infovalue"  placeholder="">
+                <input class="input" type="text" v-model="owner.ingress"  placeholder="">
               </p>
               </div>
             </div>
@@ -186,7 +188,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="owner.sex" >
+                <select v-model="owner.province" >
                   <option value="0">No</option>
                   <option value="1">Si</option>
                 </select>
@@ -197,7 +199,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="owner.sex" >
+                <select v-model="owner.locality" >
                   <option value="0">No</option>
                   <option value="1">Si</option>
                 </select>
@@ -210,7 +212,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.ID" placeholder="Numero">
+                <input class="input" type="text" v-model="owner.cellphone" placeholder="Numero">
               </p>
             </div>
             <div class="control-label">
@@ -227,7 +229,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" v-model="owner.lastname" type="text" >
+                <input class="input" v-model="owner.workphone" type="text" >
               </p>
             </div>
             <div class="control-label">
@@ -243,7 +245,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" v-model="owner.lastname" type="text" >
+                <input class="input" v-model="owner.phone" type="text" >
               </p>
             </div>
             <div class="control-label">
@@ -263,7 +265,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES, LOAD_MODELS, LOAD_YEARS } from 'vuex-store/mutation-types'
+import { INIT_AGENCIES, LOAD_MODELS, LOAD_YEARS, LOAD_RATES } from 'vuex-store/mutation-types'
 import store from './../../store'
 const { state } = store
 export default {
@@ -275,43 +277,34 @@ export default {
       seenconcubino: false,
       seengarante: false,
       owner: {
-        sex: '',
-        name: '',
-        ID: '',
-        IDtype: '',
-        lastname: ''
-      },
-      gowner: {
-        sex: '',
-        name: '',
-        ID: '',
-        IDtype: '',
-        lastname: ''
-      },
-      cowner: {
-        sex: '',
-        name: '',
-        ID: '',
-        IDtype: '',
-        lastname: ''
-      },
-      coowner: {
-        sex: '',
-        name: '',
-        ID: '',
-        IDtype: '',
-        lastname: ''
+        birthdate:'',
+        ingress: '',
+        province: '',
+        locality: '',
+        cellphone: '',
+        phone: '',
+        phone: '',
+        workphone: ''
       },
       car: {
-        infovalue: 'A calcular'
-
+        infovalue: 'A calcular',
+        year: '',
+        km0:'',
+        use:'',
+        gnc:''
       },
       campaign: '',
+
       brand: '',
       model: '',
       year: '',
       month:'',
-      months:[12, 15, 18, 24, 30, 36, 48]
+      months:[12, 15, 18, 24, 30, 36, 48],
+      amount:'',
+      tasa:'',
+
+      errormensage:'',
+      showerrormensage:false
     }
   },
 
@@ -369,90 +362,47 @@ export default {
         console.log(error)
       })
     },
+    getyearname(element,id) {
+      return element._id==id;
+    },
     loadcarvalue () {
-      this.car.infovalue=this.year*1000
-    },
-    onclickfnbkp () {
-      let dic = {}
-      dic.tittle = this.tittle
-      dic.who = this.who
-      dic.tittle = this.tittle
-      dic.type = this.type
-      this.addCase(dic)
-    },
-    onclickcan () {
-      this.$router.push('/cases/basic')
-    },
-    onclickfn () {
-//      this.$http({
-//        method: 'GET',
-//        url: 'http://localhost:8080/ralfintranet/api/savedata',
-//        transformResponse: [(data) => {
-//          return JSON.parse(data)
-//        }],
-//        params: {
-//          parameters: {
-//            Normalized: false,
-//            NumberOfDays: false,
-//            DataPeriod: false,
-//            Elements: JSON.stringify(this.owner),
-//            owner: JSON.stringify(this.owner),
-//            gowner: JSON.stringify(this.gowner),
-//            cowner: JSON.stringify(this.cowner),
-//            coowner: JSON.stringify(this.coowner)
-//          }
-//        }
-//      }).then((response) => {
-//        console.log(response)
-//        console.log(response.data)
-//        console.log(response.data.records)
-//        var arrayLength = response.data.records.length
-//        for (var i = 0; i < arrayLength; i++) {
-//          let obj = JSON.parse(response.data.records[i])
-//          console.log('####################################')
-//          console.log(obj)
-//          let dic = {}
-//          dic.SerNr = obj.SerNr
-//          dic.CaseTypeComment = obj.CaseTypeComment
-//          dic.Asignee = obj.Asignee
-//          dic.ProblemDesc = obj.ProblemDesc
-//          dic.CaseComment = obj.CaseComment
-//          dic.StatusName = obj.StatusName
-//          dic.TransDate = obj.TransDate
-//          dic.TransTime = obj.TransTime
-//          this.addCase(dic)
-//        }
-//      }).catch((error) => {
-//        console.log(error)
-//      })
-    },
-    loadData () {
-//      console.log(this.$route.params)
-//      this.$http({
-//        url: '/ralfintranet/api/getVerifyClientData/',
-//        transformResponse: [(data) => {
-//          return JSON.parse(data)
-//        }],
-//        params: {
-//        }
-//      }).then((response) => {
-//        console.log('ARRANCA LOS CONSOLE')
-//        console.log(response.data)
-//        // console.log(response.data.records)
-//        console.log('TERMINA LOS CONSOLE')
-//        store.commit(INIT_AGENCIES, response)
-//      }).catch((error) => {
-//        console.log(error)
-//      })
+      console.log(this.car.year)
+      console.log(state.app.carsoptions.years)
+      let yearvalue
+      for (let yearpair of state.app.carsoptions.years)
+      {
+        console.log(yearpair)
+        if (yearpair._id==this.car.year){
+          yearvalue=yearpair.label
+        }
+      }
+      this.car.infovalue=this.car.year*1000
+      if (this.car.year && this.car.km0) {
+        this.$http({
+          method: 'GET',
+          url: '/ralfintranet/api/loadloanrates',
+          transformResponse: [(data) => {
+            return JSON.parse(data)
+          }],
+          params: {
+            parameters: {
+              year: yearvalue,
+              km0: this.car.km0,
+            }
+          }
+        }).then((response) => {
+          store.commit(LOAD_RATES, response)
+        }).catch((error) => {
+          console.log(error)
+        })
+      }
     }
   }
 }
 </script>
 <style lang="scss">
-.table-responsive {
-  display: block;
-  width: 100%;
-  min-height: .01%;
-  overflow-x: auto;
-}
+  .error {
+    color: red;
+    align-content: center;
+  }
 </style>

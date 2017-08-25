@@ -26,7 +26,7 @@ Vue.use(VueAuth, {
   loginData: { url: '/myapp/loginPerson', fetchUser: false },
   refreshData: { enabled: false }
 })
-Vue.use(NProgress)
+//Vue.use(NProgress)
 
 // Enable devtools
 Vue.config.devtools = true

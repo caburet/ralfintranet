@@ -4,6 +4,7 @@
     <div class="tile is-parent">
       <article class="tile is-child box">
         <h1 class="title">Verificar Cliente</h1>
+        <h1 class="title error" v-if="showerrormensage">{{errormensage}}</h1>
         <h2>Verifica los datos de tu cliente y verifica en minutos si tiene su Prestamo Carfacil Pre-Aprobado</h2>
         <div class="block">
         <div class="control is-horizontal">
@@ -26,6 +27,8 @@
               <select v-model="campaign"  >
                 <option value="OTROS">Otros</option>
                 <option v-for="node in campaigns" :value="node._id">{{node.label}}</option>
+
+
               </select>
             </div>
           </div>
@@ -63,10 +66,7 @@
             <div class="control">
               <div class="select is-fullwidth">
                 <select v-model="owner.IDtype" >
-                  <option value="DNI">DNI</option>
-                  <option value="LE">LE</option>
-                  <option value="CI">CI</option>
-                  <option value="LC">LC</option>
+                  <option v-for="node in idtypes" :value="node._id">{{node.label}}</option>
                 </select>
               </div>
             </div>
@@ -150,10 +150,7 @@
             <div class="control">
               <div class="select is-fullwidth">
                 <select v-model="cowner.IDtype" >
-                <option value="DNI">DNI</option>
-                <option value="LE">LE</option>
-                <option value="CI">CI</option>
-                <option value="LC">LC</option>
+                  <option v-for="node in idtypes" :value="node._id">{{node.label}}</option>
                 </select>
               </div>
             </div>
@@ -221,10 +218,7 @@
             <div class="control">
               <div class="select is-fullwidth">
                 <select v-model="coowner.IDtype" >
-                <option value="DNI">DNI</option>
-                <option value="LE">LE</option>
-                <option value="CI">CI</option>
-                <option value="LC">LC</option>
+                  <option v-for="node in idtypes" :value="node._id">{{node.label}}</option>
                 </select>
               </div>
             </div>
@@ -292,10 +286,7 @@
             <div class="control">
               <div class="select is-fullwidth">
                 <select v-model="gowner.IDtype" >
-                <option value="DNI">DNI</option>
-                <option value="LE">LE</option>
-                <option value="CI">CI</option>
-                <option value="LC">LC</option>
+                  <option v-for="node in idtypes" :value="node._id">{{node.label}}</option>
                 </select>
               </div>
             </div>
@@ -361,18 +352,26 @@
       </article>
     </div>
     </div>
+    <simplert :useRadius="true"
+              :useIcon="true"
+              ref="simplert">
+    </simplert>
+    <modal v-if="showModal" @close="onclickclosemodal()">
+      <p>{{modalContain}}</p>
+    </modal>
   </div>
 </template>
-
 <script>
-import Chart from 'vue-bulma-chartjs'
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES, LOGIN, INIT_PERSON} from 'vuex-store/mutation-types'
+import { INIT_AGENCIES, LOGIN, INIT_PERSON, TOGGLE_SIDEBAR, TOGGLE_MODAL} from 'vuex-store/mutation-types'
 import store from './../../store'
+import { Modal } from 'components/layout/'
+import Simplert from 'vue2-simplert'
 const { state } = store
 export default {
   components: {
-    Chart
+    Simplert,
+    Modal
   },
   data: function () {
     return {
@@ -407,12 +406,23 @@ export default {
         IDtype: '',
         lastname: ''
       },
+      idtypes:[{_id:1,label:'CUIT'},{_id:2,label:'DNI'},{_id:3,label:'Cedula'},{_id:4,label:'Pasaporte'},{_id:5,label:'LC'},{_id:6,label:'LE'},{_id:7,label:'CUIL'}],
       agencie: '',
       product: '',
-      campaign: ''
+      campaign: '',
+      errormensage:'',
+      showerrormensage:false,
+      rulenr:0,
+      continuestep2:true
     }
   },
   computed:{
+    showModal() {
+        return state.app.showModal
+    },
+    modalContain() {
+      return state.app.modalContain
+    },
     agencies (){
       return state.app.verifyclient.agencies
     },
@@ -471,42 +481,140 @@ export default {
         console.log(error)
       })
     },
-    onclickfnbkp () {
-      let dic = {}
-      dic.tittle = this.tittle
-      dic.who = this.who
-      dic.tittle = this.tittle
-      dic.type = this.type
-      this.addCase(dic)
-    },
     onclickcan () {
       this.$router.push('/cases/basic')
     },
-    onclickfn () {
-      this.$http({
-        method: 'GET',
-        url: '/ralfintranet/api/savedata',
-        transformResponse: [(data) => {
-          return JSON.parse(data)
-        }],
-        params: {
-          parameters: {
-            campaign: this.campaign,
-            agencie: this.agencie,
-            product: this.product,
-            owner: JSON.stringify(this.owner),
-            gowner: JSON.stringify(this.gowner),
-            cowner: JSON.stringify(this.cowner),
-            coowner: JSON.stringify(this.coowner)
-          }
-        }
-      }).then((response) => {
-        console.log(response)
+    onclickclosemodal () {
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio"} )
+    },
+    checkfn () { //TODO
+      console.log("aaaaaaaaaaaa")
+      console.log(this.product)
+      console.log(this.product=='')
+      if (this.product=='')
+        { return "Falta seleccionar campaña o producto"}
+      if (this.owner.ID=='' || (this.owner.sex!=0 && this.owner.sex!=1) || this.owner.name=='' || this.owner.lastname=='' )
+        { return "Falta ingresar datos del titular del credito"}
+      return true
+    },
+    nextrule(response){
+      console.log(response.data.resrol.length,this.rulenr,this.continuestep2 )
+      console.log(this.rulenr == response.data.resrol.length)
+      var self = this
+      if (this.rulenr == response.data.resrol.length)
+      {
+        console.log("Termino!")
+        this.continuestep2 = false
+        // TODO save person
         this.$router.push('/cars')
-      }).catch((error) => {
-        console.log(error)
+      }
+      let rolmessage = response.data.resrol[this.rulenr]
+      this.rulenr +=1
+        if (this.continuestep2) {
+          let confirmFn = function () {
+            self.continuestep2 = true
+            self.nextrule(response)
 
-      })
+          }
+          let closeFn = function () {
+            alert("no se puede continuar")
+            this.$router.push('/dashboard')
+          }
+          let obj = {
+            title: 'Alert Title',
+            message: rolmessage.message,
+            type: 'info',
+            customConfirmBtnText:"Confirmar",
+            customCloseBtnText:"Rechazar",
+            useConfirmBtn: true,
+            onConfirm: confirmFn,
+            onClose: closeFn
+          }
+          this.continuestep2 = false
+          this.$refs.simplert.openSimplert(obj)
+        }
+
+    },
+    onclickfn () {
+      this.continuestep2=true
+      this.showerrormensage=false
+      let checkresult=this.checkfn()
+      console.log(checkresult)
+      if (checkresult==true) {
+        let obj = {
+          title: 'Grabando',
+          message: 'Se procede a grabar la informacion',
+          type: 'info',
+          hideAllButton: true
+        }
+        this.$refs.simplert.openSimplert(obj)
+        this.$http({
+          method: 'GET',
+          url: '/ralfintranet/api/savedata',
+          transformResponse: [(data) => {
+            return JSON.parse(data)
+          }],
+          params: {
+            parameters: {
+              campaign: this.campaign,
+              agencie: this.agencie,
+              product: this.product,
+              owner: JSON.stringify(this.owner),
+              gowner: JSON.stringify(this.gowner),
+              cowner: JSON.stringify(this.cowner),
+              coowner: JSON.stringify(this.coowner)
+            }
+          }
+        }).then((response) => {
+
+          console.log(response)
+          if (response.data.ok==true) {
+            let continuestep2 = true
+            for (let rolmessage of response.data.resrol)
+            {
+              if (rolmessage.ruleActionType==1){
+                let obj = {
+                  title: 'Error',
+                  message: rolmessage.message,
+                  customCloseBtnText:"Cerrar",
+                  type: 'warning'
+                }
+                this.$refs.simplert.openSimplert(obj)
+                this.showerrormensage=true
+                this.errormensage=rolmessage.message
+                this.continuestep2 = false
+              }
+            }
+            if (this.continuestep2) {
+              this.nextrule(response)
+            }
+//            if (continuestep2) {
+//              this.$router.push('/cars')
+//            }
+          }
+        }).catch((error) => {
+          let obj2 = {
+            title: 'Error',
+            message: error,
+            customCloseBtnText:"Cerrar",
+            type: 'error'
+          }
+          this.$refs.simplert.openSimplert(obj2)
+          console.log(error)
+
+        })
+      }
+      else
+      {
+        let obj = {
+          title: 'Error',
+          message: checkresult,
+          type: 'warning'
+        }
+        this.$refs.simplert.openSimplert(obj)
+        this.showerrormensage=true
+        this.errormensage=checkresult
+      }
     },
     loadData () {
       console.log(this.$route.params)
@@ -523,20 +631,24 @@ export default {
         // console.log(response.data.records)
         console.log('TERMINA LOS CONSOLE')
         store.commit(INIT_AGENCIES, response)
-
-        store.commit(LOGIN, response.data.personname)
+        if (response.data.personname) {
+          store.commit(LOGIN, response.data.personname)
+        }
+        else {
+          this.$router.push('/login')
+        }
       }).catch((error) => {
+        console.log("es el catch!!!!")
         console.log(error)
+        this.$router.push('/login')
       })
     }
   }
 }
 </script>
 <style lang="scss">
-.table-responsive {
-  display: block;
-  width: 100%;
-  min-height: .01%;
-  overflow-x: auto;
+.error {
+  color: red;
+  align-content: center;
 }
 </style>

@@ -5,23 +5,38 @@
     <sidebar :show="sidebar.opened && !sidebar.hidden"></sidebar>
     <app-main></app-main>
     <footer-bar></footer-bar>
+    <modal v-if="showModal" @close="showModal = false">
+      <p>{{modalContain}}</p>
+    </modal>
   </div>
 </template>
 
 <script>
 import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
-import { Navbar, Sidebar, AppMain, FooterBar } from 'components/layout/'
+import { Navbar, Sidebar, AppMain, FooterBar,Modal } from 'components/layout/'
 import { mapGetters, mapActions } from 'vuex'
-
+import store from './store'
+const { state } = store
 export default {
   components: {
     Navbar,
     Sidebar,
     AppMain,
     FooterBar,
-    NprogressContainer
+    NprogressContainer,
+    Modal
   },
+  data:
+    {
+      showModal:false
 
+    },
+  computed: {
+    modalContain() {
+      return state.app.modalContain
+
+    }
+  },
   beforeMount () {
     const { body } = document
     const WIDTH = 768

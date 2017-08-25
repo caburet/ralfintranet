@@ -18,6 +18,10 @@ export const LOAD_MODELS = 'LOAD_MODELS'
 
 export const LOAD_YEARS = 'LOAD_YEARS'
 
+export const LOAD_RATES = 'LOAD_RATES'
+
 export const INIT_PERSON = 'INIT_PERSON'
 
 export const LOGIN = 'LOGIN'
+
+export const TOGGLE_MODAL= 'TOGGLE_MODAL'

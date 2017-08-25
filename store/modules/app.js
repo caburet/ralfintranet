@@ -1,6 +1,8 @@
 import * as types from '../mutation-types'
 
 const state = {
+  showModal:true,
+  modalContain:'Algo aca en el store',
   personname: '',
   owner: {
     sex: '',
@@ -69,7 +71,10 @@ const mutations = {
       state.sidebar.opened = true
     }
   },
-
+  [types.TOGGLE_MODAL] (state, data) {
+    state.showModal = data.opened
+    state.modalContain = data.modalcontain
+  },
   [types.SWITCH_EFFECT] (state, effectItem) {
     for (let name in effectItem) {
       state.effect[name] = effectItem[name]
@@ -152,7 +157,24 @@ const mutations = {
         if (JSON.parse(y)[field]) {
           state.carsoptions.years.push(
             {_id: JSON.parse(y)[field],
-              label: parseInt(JSON.parse(y).Year)-(i+1)
+              label: parseInt(JSON.parse(y).Year)-(i-1)
+            }
+          )
+        }
+      }
+    }
+  },
+  [types.LOAD_RATES] (state, data) {
+    console.log(data)
+    state.carsoptions.years = []
+    for (let y of data.data.years) {
+      let foo = new Array(21)
+      for (let i = 1; i < foo.length; i++) {
+        let field = 'Pre' + ('0' + i).slice(-2)
+        if (JSON.parse(y)[field]) {
+          state.carsoptions.years.push(
+            {_id: JSON.parse(y)[field],
+              label: parseInt(JSON.parse(y).Year)-(i-1)
             }
           )
         }
