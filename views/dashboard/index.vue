@@ -573,8 +573,10 @@ export default {
       this.rulenr +=1
         if (this.continuestep2) {
         console.log("rolmessage")
+        console.log(rolmessage.FormIfReturnFalse)
         console.log(rolmessage)
-          if (rolmessage.FormIfReturnFalse)
+
+          if (rolmessage.FormIfReturnFalse!='')
           {
             console.log("ENTRO AL IF DE ACA")
             this.openInNewTab(rolmessage.FormIfReturnFalse)
