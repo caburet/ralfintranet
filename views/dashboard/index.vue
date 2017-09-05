@@ -522,9 +522,7 @@ export default {
       }).then((response) => {
 
         console.log(response)
-        if (response.data.ok==true) {
-            this.nextrule(response)
-        }
+        this.nextrule(response)
       }).catch((error) => {
         let obj2 = {
           title: 'Error',
@@ -578,7 +576,7 @@ export default {
           {
             this.openInNewTab(rolmessage.FormIfReturnFalse)
           }
-          
+
           //this.continuestep2 = false
           //this.$refs.simplert.openSimplert(obj)
           store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:false, button3:true,ruleid:rolmessage.RuleInternalId} )
