@@ -480,7 +480,7 @@ export default {
         }
       }).then((response) => {
         console.log(response)
-        if (response.data.person)
+        if (response.data.person.ID)
         {
           console.log(this[type].IDtype)
           console.log(response.data.person.IDType)
@@ -523,26 +523,7 @@ export default {
 
         console.log(response)
         if (response.data.ok==true) {
-          let continuestep2 = true
-          for (let rolmessage of response.data.resrol)
-          {
-            if (rolmessage.ruleActionType==1){
-              let obj = {
-                title: 'Error',
-                message: rolmessage.message,
-                customCloseBtnText:"Cerrar",
-                type: 'warning'
-              }
-              rolmessage.message
-              //this.$refs.simplert.openSimplert(obj)
-              this.showerrormensage=true
-              this.errormensage=rolmessage.message
-              this.continuestep2 = false
-            }
-          }
-          if (this.continuestep2) {
             this.nextrule(response)
-          }
         }
       }).catch((error) => {
         let obj2 = {
@@ -552,10 +533,7 @@ export default {
           type: 'error'
         }
         store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':error, button1:true, button3:false} )
-        //this.$refs.simplert.openSimplert(obj2)
-
         console.log(error)
-
       })
     },
     onclickauthmodal (params) {
@@ -581,6 +559,8 @@ export default {
       return true
     },
     nextrule(response){
+    console.log("Va next rule consoles logs")
+
       console.log(response.data.resrol.length,this.rulenr,this.continuestep2 )
       console.log(this.rulenr == response.data.resrol.length)
       var self = this
@@ -598,7 +578,8 @@ export default {
           {
             this.openInNewTab(rolmessage.FormIfReturnFalse)
           }
-          this.continuestep2 = false
+          
+          //this.continuestep2 = false
           //this.$refs.simplert.openSimplert(obj)
           store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:false, button3:true,ruleid:rolmessage.RuleInternalId} )
         }
