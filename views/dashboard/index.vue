@@ -576,7 +576,7 @@ export default {
         console.log(rolmessage.FormIfReturnFalse)
         console.log(rolmessage)
 
-          if (rolmessage.FormIfReturnFalse!='')
+          if (rolmessage.FormIfReturnFalse!='' && rolmessage.FormIfReturnFalse!= null)
           {
             console.log("ENTRO AL IF DE ACA")
             this.openInNewTab('http://develop-ralfprueba.oppen.io/inquiry/viewInquiry?inq='+rolmessage.FormIfReturnFalse)
