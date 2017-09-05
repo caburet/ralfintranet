@@ -572,6 +572,7 @@ export default {
       let rolmessage = state.app.resrol[this.rulenr]
       this.rulenr +=1
         if (this.continuestep2) {
+        console.log(rolmessage)
           if (rolmessage.FormIfReturnFalse)
           {
             this.openInNewTab(rolmessage.FormIfReturnFalse)
