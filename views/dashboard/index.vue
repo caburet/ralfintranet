@@ -572,9 +572,11 @@ export default {
       let rolmessage = state.app.resrol[this.rulenr]
       this.rulenr +=1
         if (this.continuestep2) {
+        console.log("rolmessage")
         console.log(rolmessage)
           if (rolmessage.FormIfReturnFalse)
           {
+            console.log("ENTRO AL IF DE ACA")
             this.openInNewTab(rolmessage.FormIfReturnFalse)
           }
 
