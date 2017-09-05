@@ -356,14 +356,14 @@
               :useIcon="true"
               ref="simplert">
     </simplert>
-    <modal v-if="showModal" @close="onclickclosemodal()">
+    <modal v-if="showModal" @close="onclickclosemodal" @auth="onclickauthmodal" @pend="onclickpendmodal" @rech="onclickrechmodal" >
       <p>{{modalContain}}</p>
     </modal>
   </div>
 </template>
 <script>
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES, LOGIN, INIT_PERSON, TOGGLE_SIDEBAR, TOGGLE_MODAL} from 'vuex-store/mutation-types'
+import { INIT_AGENCIES, LOGIN, INIT_PERSON, TOGGLE_SIDEBAR, TOGGLE_MODAL, OPP_DATA} from 'vuex-store/mutation-types'
 import store from './../../store'
 import { Modal } from 'components/layout/'
 import Simplert from 'vue2-simplert'
@@ -456,6 +456,11 @@ export default {
       'addCase'
     ]),
     loadowner (type) {
+      if (this[type].ID.indexOf('-') > -1)
+      {
+        alert("Ingrese los datos sin guiones");
+        return false
+      }
       this.$http({
         method: 'GET',
         url: '/ralfintranet/api/loadperson',
@@ -471,10 +476,14 @@ export default {
         console.log(response)
         if (response.data.person)
         {
+          console.log(this[type].IDtype)
+          console.log(response.data.person.IDType)
+          this[type].ID=response.data.person.ID
+          this[type].IDtype=response.data.person.IDtype
           this[type].name=response.data.person.name
           this[type].lastname=response.data.person.lastname
           this[type].sex=response.data.person.sex
-          response.data.person['type']=type
+          //response.data.person['type']=type
           store.commit(INIT_PERSON, response.data.person )
         }
       }).catch((error) => {
@@ -482,10 +491,77 @@ export default {
       })
     },
     onclickcan () {
-      this.$router.push('/cases/basic')
+      let text='texto '
+      store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':text , button1:true,button3:false} )
+      //this.$router.push('/cases/basic')
     },
     onclickclosemodal () {
-      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio"} )
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+    },
+    setrulestatus (params,rulestate) {
+      this.$http({
+        method: 'GET',
+        url: '/ralfintranet/api/setrulestatus',
+        transformResponse: [(data) => {
+          return JSON.parse(data)
+        }],
+        params: {
+          opcode: state.app.opcode,
+          username: params[0],
+          password: params[1],
+          ruleid: state.app.ruleid,
+          state: rulestate
+        }
+      }).then((response) => {
+
+        console.log(response)
+        if (response.data.ok==true) {
+          let continuestep2 = true
+          for (let rolmessage of response.data.resrol)
+          {
+            if (rolmessage.ruleActionType==1){
+              let obj = {
+                title: 'Error',
+                message: rolmessage.message,
+                customCloseBtnText:"Cerrar",
+                type: 'warning'
+              }
+              rolmessage.message
+              //this.$refs.simplert.openSimplert(obj)
+              this.showerrormensage=true
+              this.errormensage=rolmessage.message
+              this.continuestep2 = false
+            }
+          }
+          if (this.continuestep2) {
+            this.nextrule(response)
+          }
+        }
+      }).catch((error) => {
+        let obj2 = {
+          title: 'Error',
+          message: error,
+          customCloseBtnText:"Cerrar",
+          type: 'error'
+        }
+        store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':error, button1:true, button3:false} )
+        //this.$refs.simplert.openSimplert(obj2)
+
+        console.log(error)
+
+      })
+    },
+    onclickauthmodal (params) {
+      this.setrulestatus(params,1)
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+    },
+    onclickpendmodal (params) {
+      this.setrulestatus(params,3)
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+    },
+    onclickrechmodal (params) {
+      this.setrulestatus(params,2)
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
     },
     checkfn () { //TODO
       console.log("aaaaaaaaaaaa")
@@ -520,22 +596,24 @@ export default {
             alert("no se puede continuar")
             this.$router.push('/dashboard')
           }
-          let obj = {
-            title: 'Alert Title',
-            message: rolmessage.message,
-            type: 'info',
-            customConfirmBtnText:"Confirmar",
-            customCloseBtnText:"Rechazar",
-            useConfirmBtn: true,
-            onConfirm: confirmFn,
-            onClose: closeFn
-          }
+//          let obj = {
+//            title: 'Alert Title',
+//            message: rolmessage.message,
+//            type: 'info',
+//            customConfirmBtnText:"Confirmar",
+//            customCloseBtnText:"Rechazar",
+//            useConfirmBtn: true,
+//            onConfirm: confirmFn,
+//            onClose: closeFn
+//          }
           this.continuestep2 = false
-          this.$refs.simplert.openSimplert(obj)
+          //this.$refs.simplert.openSimplert(obj)
+          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:false, button3:true,ruleid:rolmessage.RuleInternalId} )
         }
 
     },
     onclickfn () {
+      this.rulenr=0
       this.continuestep2=true
       this.showerrormensage=false
       let checkresult=this.checkfn()
@@ -547,7 +625,8 @@ export default {
           type: 'info',
           hideAllButton: true
         }
-        this.$refs.simplert.openSimplert(obj)
+        //this.$refs.simplert.openSimplert(obj)
+        store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':'Se procede a grabar la informacion',button1:false, button3:false} )
         this.$http({
           method: 'GET',
           url: '/ralfintranet/api/savedata',
@@ -569,6 +648,7 @@ export default {
 
           console.log(response)
           if (response.data.ok==true) {
+            store.commit(OPP_DATA, response.data )
             let continuestep2 = true
             for (let rolmessage of response.data.resrol)
             {
@@ -579,6 +659,7 @@ export default {
                   customCloseBtnText:"Cerrar",
                   type: 'warning'
                 }
+                rolmessage.message
                 this.$refs.simplert.openSimplert(obj)
                 this.showerrormensage=true
                 this.errormensage=rolmessage.message
@@ -588,9 +669,6 @@ export default {
             if (this.continuestep2) {
               this.nextrule(response)
             }
-//            if (continuestep2) {
-//              this.$router.push('/cars')
-//            }
           }
         }).catch((error) => {
           let obj2 = {
@@ -599,7 +677,9 @@ export default {
             customCloseBtnText:"Cerrar",
             type: 'error'
           }
-          this.$refs.simplert.openSimplert(obj2)
+          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':error, button1:true, button3:false} )
+          //this.$refs.simplert.openSimplert(obj2)
+
           console.log(error)
 
         })
@@ -611,7 +691,8 @@ export default {
           message: checkresult,
           type: 'warning'
         }
-        this.$refs.simplert.openSimplert(obj)
+        //this.$refs.simplert.openSimplert(obj)
+        store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':checkresult, button1:true, button3:false} )
         this.showerrormensage=true
         this.errormensage=checkresult
       }

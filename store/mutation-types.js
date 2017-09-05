@@ -25,3 +25,5 @@ export const INIT_PERSON = 'INIT_PERSON'
 export const LOGIN = 'LOGIN'
 
 export const TOGGLE_MODAL= 'TOGGLE_MODAL'
+
+export const OPP_DATA= 'OPP_DATA'

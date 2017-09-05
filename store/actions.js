@@ -34,3 +34,5 @@ export const initData = ({ commit }, data) => commit(types.INIT_DATA, data)
 export const refreshCase = ({ commit }, casedata) => commit(types.REFRESH_CASE, casedata)
 
 export const toggleModal = ({ commit }, opened) => commit(types.TOGGLE_MODAL, data)
+
+export const oppdata = ({ commit }, data) => commit(types.OPP_DATA, data)

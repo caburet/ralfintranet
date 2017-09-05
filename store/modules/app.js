@@ -1,9 +1,13 @@
 import * as types from '../mutation-types'
 
 const state = {
-  showModal:true,
+  showModal:false,
   modalContain:'Algo aca en el store',
+  buttons3:false,
+  buttons1:false,
   personname: '',
+  opcode: '',
+  ruleid: '',
   owner: {
     sex: '',
     name: '',
@@ -74,6 +78,12 @@ const mutations = {
   [types.TOGGLE_MODAL] (state, data) {
     state.showModal = data.opened
     state.modalContain = data.modalcontain
+    state.buttons3 = data.button3
+    state.buttons1 = data.button1
+    state.ruleid = data.ruleid
+  },
+  [types.OPP_DATA] (state, data) {
+    state.opcode = data.opcode
   },
   [types.SWITCH_EFFECT] (state, effectItem) {
     for (let name in effectItem) {
