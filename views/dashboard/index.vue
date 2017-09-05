@@ -417,6 +417,7 @@ export default {
     }
   },
   computed:{
+
     showModal() {
         return state.app.showModal
     },
@@ -455,6 +456,11 @@ export default {
     ...mapActions([
       'addCase'
     ]),
+    openInNewTab(url) {
+    console.log(url)
+      var win = window.open(url, '_blank');
+      win.focus();
+    },
     loadowner (type) {
       if (this[type].ID.indexOf('-') > -1)
       {
@@ -491,6 +497,7 @@ export default {
       })
     },
     onclickcan () {
+
       let text='texto '
       store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':text , button1:true,button3:false} )
       //this.$router.push('/cases/basic')
@@ -587,25 +594,10 @@ export default {
       let rolmessage = response.data.resrol[this.rulenr]
       this.rulenr +=1
         if (this.continuestep2) {
-          let confirmFn = function () {
-            self.continuestep2 = true
-            self.nextrule(response)
-
+          if (rolmessage.FormIfReturnFalse)
+          {
+            this.openInNewTab(rolmessage.FormIfReturnFalse)
           }
-          let closeFn = function () {
-            alert("no se puede continuar")
-            this.$router.push('/dashboard')
-          }
-//          let obj = {
-//            title: 'Alert Title',
-//            message: rolmessage.message,
-//            type: 'info',
-//            customConfirmBtnText:"Confirmar",
-//            customCloseBtnText:"Rechazar",
-//            useConfirmBtn: true,
-//            onConfirm: confirmFn,
-//            onClose: closeFn
-//          }
           this.continuestep2 = false
           //this.$refs.simplert.openSimplert(obj)
           store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:false, button3:true,ruleid:rolmessage.RuleInternalId} )
@@ -664,6 +656,10 @@ export default {
                 this.showerrormensage=true
                 this.errormensage=rolmessage.message
                 this.continuestep2 = false
+                if (rolmessage.FormIfReturnFalse)
+                {
+                  this.openInNewTab(rolmessage.FormIfReturnFalse)
+                }
               }
             }
             if (this.continuestep2) {
