@@ -1,6 +1,7 @@
 import * as types from '../mutation-types'
 
 const state = {
+  resrol:[],
   showModal:false,
   modalContain:'Algo aca en el store',
   buttons3:false,
@@ -84,6 +85,7 @@ const mutations = {
   },
   [types.OPP_DATA] (state, data) {
     state.opcode = data.opcode
+    state.resrol = data.resrol
   },
   [types.SWITCH_EFFECT] (state, effectItem) {
     for (let name in effectItem) {

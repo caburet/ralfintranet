@@ -559,17 +559,17 @@ export default {
     nextrule(response){
     console.log("Va next rule consoles logs")
 
-      console.log(response.data.resrol.length,this.rulenr,this.continuestep2 )
-      console.log(this.rulenr == response.data.resrol.length)
+      console.log(state.app.resrol.length,this.rulenr,this.continuestep2 )
+      console.log(this.rulenr == state.app.resrol.length)
       var self = this
-      if (this.rulenr == response.data.resrol.length)
+      if (this.rulenr == state.app.resrol.length)
       {
         console.log("Termino!")
         this.continuestep2 = false
         // TODO save person
         this.$router.push('/cars')
       }
-      let rolmessage = response.data.resrol[this.rulenr]
+      let rolmessage = state.app.resrol[this.rulenr]
       this.rulenr +=1
         if (this.continuestep2) {
           if (rolmessage.FormIfReturnFalse)
@@ -621,7 +621,7 @@ export default {
           if (response.data.ok==true) {
             store.commit(OPP_DATA, response.data )
             let continuestep2 = true
-            for (let rolmessage of response.data.resrol)
+            for (let rolmessage of state.app.resrol)
             {
               if (rolmessage.ruleActionType==1){
                 let obj = {
