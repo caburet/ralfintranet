@@ -579,7 +579,7 @@ export default {
           if (rolmessage.FormIfReturnFalse!='')
           {
             console.log("ENTRO AL IF DE ACA")
-            this.openInNewTab(rolmessage.FormIfReturnFalse)
+            this.openInNewTab('http://develop-ralfprueba.oppen.io/inquiry/viewInquiry?inq='+rolmessage.FormIfReturnFalse)
           }
 
           //this.continuestep2 = false
