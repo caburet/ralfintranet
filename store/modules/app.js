@@ -5,6 +5,7 @@ const state = {
   showModal:false,
   modalContain:'Algo aca en el store',
   buttons3:false,
+  form:false,
   buttons1:false,
   personname: '',
   opcode: '',
@@ -81,6 +82,7 @@ const mutations = {
     state.modalContain = data.modalcontain
     state.buttons3 = data.button3
     state.buttons1 = data.button1
+    state.form = data.form
     state.ruleid = data.ruleid
   },
   [types.OPP_DATA] (state, data) {

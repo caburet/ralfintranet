@@ -575,16 +575,9 @@ export default {
         console.log("rolmessage")
         console.log(rolmessage.FormIfReturnFalse)
         console.log(rolmessage)
-
-          if (rolmessage.FormIfReturnFalse!='' && rolmessage.FormIfReturnFalse!= null)
-          {
-            console.log("ENTRO AL IF DE ACA")
-            this.openInNewTab('http://develop-ralfprueba.oppen.io/inquiry/viewInquiry?inq='+rolmessage.FormIfReturnFalse)
-          }
-
           //this.continuestep2 = false
           //this.$refs.simplert.openSimplert(obj)
-          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:false, button3:true,ruleid:rolmessage.RuleInternalId} )
+          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:false, button3:true,ruleid:rolmessage.RuleInternalId, form:rolmessage.FormIfReturnFalse} )
         }
 
     },
