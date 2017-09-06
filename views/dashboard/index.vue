@@ -573,11 +573,12 @@ export default {
       this.rulenr +=1
         if (this.continuestep2) {
         console.log("rolmessage")
-        console.log(rolmessage.FormIfReturnFalse)
+        console.log(rolmessage.formIfReturnFalse)
+        console.log(state.app.resrol[this.rulenr].formIfReturnFalse)
         console.log(rolmessage)
           //this.continuestep2 = false
           //this.$refs.simplert.openSimplert(obj)
-          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:false, button3:true,ruleid:rolmessage.RuleInternalId, form:rolmessage.FormIfReturnFalse} )
+          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:false, button3:true,ruleid:rolmessage.RuleInternalId, form:rolmessage.formIfReturnFalse} )
         }
 
     },
