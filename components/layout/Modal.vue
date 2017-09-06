@@ -37,7 +37,7 @@ export default {
   methods: {
     openInNewTab() {
     console.log(state.app.form)
-    let url = 'develop-ralfprueba.oppen.io/inquiry/viewInquiry?inq=' + state.app.form
+    let url = 'http://develop-ralfprueba.oppen.io/inquiry/viewInquiry?inq=' + state.app.form
       var win = window.open(url, '_blank');
       win.focus();
     }
