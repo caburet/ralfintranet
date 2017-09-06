@@ -13,7 +13,7 @@
             <button  v-if="buttons3" class="button is-primary" @click="$emit('pend',[username,password])">Pendiente</button>
             <button  v-if="buttons3" class="button is-primary" @click="$emit('rech',[username,password])">Rechazar</button>
             <button  v-if="buttons1" class="button is-primary" @click="$emit('close')">Continuar</button>
-            <button  v-if="form" class="button is-primary" onclick="window.open('http://develop-ralfprueba.oppen.io/inquiry/viewInquiry?inq={{this.form}}')">Encuesta</button>
+            <button  v-if="form" class="button is-primary" @click="openInNewTab()">Encuesta</button>
             <img v-if="!buttons1 && !buttons3"src="spinner.gif">
           </div>
           </div>
@@ -35,6 +35,12 @@ export default {
     }
   },
   methods: {
+    openInNewTab() {
+    console.log(state.app.form)
+    let url = 'develop-ralfprueba.oppen.io/inquiry/viewInquiry?inq=' + state.app.form
+      var win = window.open(url, '_blank');
+      win.focus();
+    }
   },
   computed: {
     buttons3() {
