@@ -574,7 +574,6 @@ export default {
         if (this.continuestep2) {
         console.log("rolmessage")
         console.log(rolmessage.formIfReturnFalse)
-        console.log(state.app.resrol[this.rulenr].formIfReturnFalse)
         console.log(rolmessage)
           //this.continuestep2 = false
           //this.$refs.simplert.openSimplert(obj)
