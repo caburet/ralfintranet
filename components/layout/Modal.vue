@@ -23,6 +23,7 @@
 
 <script>
 import store from './../../store'
+import { TOGGLE_MODAL} from 'vuex-store/mutation-types'
 const { state } = store
 export default {
   components: {},
