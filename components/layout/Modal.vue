@@ -37,10 +37,11 @@ export default {
   },
   methods: {
     openInNewTab() {
-    console.log(state.app.form)
-    let formid=state.app.form
-    store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':state.app.modalContain, button1:state.app.buttons1, button3:state.app.buttons3,ruleid:state.app.ruleid, form:''} )
-    let url = 'http://develop-ralfprueba.oppen.io/inquiry/viewInquiry?inq=' + formid
+      console.log(state.app.form)
+      let formid=state.app.form
+
+      let url = 'http://develop-ralfprueba.oppen.io/inquiry/viewInquiry?inq=' + state.app.form
+      store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':state.app.modalContain, button1:state.app.buttons1, button3:state.app.buttons3,ruleid:state.app.ruleid, form:''} )
       var win = window.open(url, '_blank');
       win.focus();
     }
