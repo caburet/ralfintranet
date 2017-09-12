@@ -577,7 +577,14 @@ export default {
         console.log(rolmessage)
           //this.continuestep2 = false
           //this.$refs.simplert.openSimplert(obj)
-          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:false, button3:true,ruleid:rolmessage.RuleInternalId, form:rolmessage.formIfReturnFalse} )
+          if (rolmessage.ruleActionType==1)
+          {
+            store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:true, button3:false,ruleid:rolmessage.RuleInternalId, form:rolmessage.formIfReturnFalse} )
+          }
+          else{
+            store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:false, button3:true,ruleid:rolmessage.RuleInternalId, form:rolmessage.formIfReturnFalse} )
+          }
+
         }
 
     },
@@ -619,25 +626,26 @@ export default {
           if (response.data.ok==true) {
             store.commit(OPP_DATA, response.data )
             let continuestep2 = true
+            store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':'',button1:false, button3:false} )
             for (let rolmessage of state.app.resrol)
             {
-              if (rolmessage.ruleActionType==1){
-                let obj = {
-                  title: 'Error',
-                  message: rolmessage.message,
-                  customCloseBtnText:"Cerrar",
-                  type: 'warning'
-                }
-                rolmessage.message
-                this.$refs.simplert.openSimplert(obj)
-                this.showerrormensage=true
-                this.errormensage=rolmessage.message
-                this.continuestep2 = false
-                if (rolmessage.FormIfReturnFalse)
-                {
-                  this.openInNewTab(rolmessage.FormIfReturnFalse)
-                }
-              }
+//              if (rolmessage.ruleActionType==1){
+//                let obj = {
+//                  title: 'Error',
+//                  message: rolmessage.message,
+//                  customCloseBtnText:"Cerrar",
+//                  type: 'warning'
+//                }
+//                rolmessage.message
+//                this.$refs.simplert.openSimplert(obj)
+//                this.showerrormensage=true
+//                this.errormensage=rolmessage.message
+//                //this.continuestep2 = false
+//                if (rolmessage.FormIfReturnFalse)
+//                {
+//                  this.openInNewTab(rolmessage.FormIfReturnFalse)
+//                }
+//              }
             }
             if (this.continuestep2) {
               this.nextrule(response)
