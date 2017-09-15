@@ -13,7 +13,7 @@
           </div>
           <div class="control">
             <div class="select is-fullwidth">
-              <select  v-model="agencie">
+              <select  v-model="agencie" v-on:change="cleancampaign()">
                 <option value="OTROS">Otros</option>
                 <option v-for="node in agencies" :value="node._id" >{{node.label}}</option>
               </select>
@@ -24,7 +24,7 @@
           </div>
           <div class="control">
             <div class="select is-fullwidth">
-              <select v-model="campaign"  >
+              <select v-model="campaign"  v-on:change="cleanproduct()">
                 <option value="OTROS">Otros</option>
                 <option v-for="node in campaigns" :value="node._id">{{node.label}}</option>
 
@@ -428,25 +428,11 @@ export default {
       return state.app.verifyclient.agencies
     },
     campaigns () {
-      return state.app.verifyclient.campaigns
+      return state.app.verifyclient.campaigns.filter(x => x.custcode === this.agencie )
     },
     products () {
-      if (this.campaign){
-      let productslist=[]
-      for (let pr of state.app.verifyclient.products)
-      {
-        if (pr.campaign===this.campaign)
-        {
-          productslist.push(pr)
-        }
-      }
-      return productslist
+      return state.app.verifyclient.products.filter(x => x.campaign === this.campaign )
     }
-    else {
-      return []
-    }
-  }
-
   },
   created: function () {
     this.loadData()
@@ -460,6 +446,15 @@ export default {
     console.log(url)
       var win = window.open(url, '_blank');
       win.focus();
+    },
+    cleancampaign () {
+      console.log(this)
+      console.log(this.data)
+      this.campaign=''
+      this.product=''
+    },
+    cleanproduct () {
+      this.product=''
     },
     loadowner (type) {
       if (this[type].ID.indexOf('-') > -1)
@@ -504,6 +499,7 @@ export default {
     },
     onclickclosemodal () {
       store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+      this.nextrule('')
     },
     setrulestatus (params,rulestate) {
       this.$http({
@@ -627,29 +623,13 @@ export default {
             store.commit(OPP_DATA, response.data )
             let continuestep2 = true
             store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':'',button1:false, button3:false} )
-            for (let rolmessage of state.app.resrol)
-            {
-//              if (rolmessage.ruleActionType==1){
-//                let obj = {
-//                  title: 'Error',
-//                  message: rolmessage.message,
-//                  customCloseBtnText:"Cerrar",
-//                  type: 'warning'
-//                }
-//                rolmessage.message
-//                this.$refs.simplert.openSimplert(obj)
-//                this.showerrormensage=true
-//                this.errormensage=rolmessage.message
-//                //this.continuestep2 = false
-//                if (rolmessage.FormIfReturnFalse)
-//                {
-//                  this.openInNewTab(rolmessage.FormIfReturnFalse)
-//                }
-//              }
-            }
             if (this.continuestep2) {
               this.nextrule(response)
             }
+          }
+          else {
+            //alert(response.data.error)
+              store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':response.data.error,button1:false, button3:false} )
           }
         }).catch((error) => {
           let obj2 = {
@@ -658,7 +638,7 @@ export default {
             customCloseBtnText:"Cerrar",
             type: 'error'
           }
-          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':error, button1:true, button3:false} )
+          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':error, button1:false, button3:false} )
           //this.$refs.simplert.openSimplert(obj2)
 
           console.log(error)

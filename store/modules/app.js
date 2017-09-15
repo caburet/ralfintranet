@@ -110,7 +110,9 @@ const mutations = {
     for (let d of data.data.campaign) {
       state.verifyclient.campaigns.push(
         {_id: d.code,
-          label: d.name
+          label: d.name,
+          custcode: d.custcode
+
         }
       )
     }
