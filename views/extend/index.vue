@@ -4,76 +4,74 @@
     <div class="tile is-parent">
       <article class="tile is-child box">
         <h1 class="title">Formulario Extendido</h1>
-        <div class="block">
-        <div class="control is-horizontal">
-          <div class="control-label">
-            <label class="label">Nivel de Educación</label>
-          </div>
-          <div class="control">
-            <div class="select is-fullwidth">
-              <select  v-model="brand">
-                <option v-for="node in brand" :value="node._id">{{node.label}}</option>
-              </select>
-            </div>
-          </div>
+        <form class="col s12 " id="lead_form" name="inquiryForm" action="/inquiry/inq_process?==QO5IDO9QWafNWZyZSeylmb1RncvBHcP1DZy92YlJnJxATPx5Wa" method="post">
+          <dynamicform></dynamicform>
+        </form>
+        <!--<div class="control is-horizontal">-->
+          <!--<div>-->
+            <!--<h1>My dynamic form: lala</h1>-->
+            <!---->
+          <!--</div>-->
+          <!--<div class="control-label">-->
+            <!--<label class="label">Nivel de Educación</label>-->
+          <!--</div>-->
+          <!--<div class="control">-->
+            <!--<div class="select is-fullwidth">-->
+              <!--<select  v-model="brand">-->
+                <!--<option v-for="node in brand" :value="node._id">{{node.label}}</option>-->
+              <!--</select>-->
+            <!--</div>-->
+          <!--</div>-->
 
 
-        </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Estado Civil</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="owner.IDtype" >
-                  <option value="DNI">DNI</option>
-                  <option value="LE">LE</option>
-                  <option value="CI">CI</option>
-                  <option value="LC">LC</option>
-                </select>
-              </div>
-            </div>
+        <!--</div>-->
+          <!--<div class="control is-horizontal">-->
+            <!--<div class="control-label">-->
+              <!--<label class="label">Estado Civil</label>-->
+            <!--</div>-->
+            <!--<div class="control">-->
+              <!--<div class="select is-fullwidth">-->
+                <!--<select v-model="owner.IDtype" >-->
+                  <!--<option value="DNI">DNI</option>-->
+                  <!--<option value="LE">LE</option>-->
+                  <!--<option value="CI">CI</option>-->
+                  <!--<option value="LC">LC</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
 
-          </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Tipo de Educación</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="owner.IDtype" >
-                  <option value="DNI">DNI</option>
-                  <option value="LE">LE</option>
-                  <option value="CI">CI</option>
-                  <option value="LC">LC</option>
-                </select>
-              </div>
-            </div>
+          <!--</div>-->
+          <!--<div class="control is-horizontal">-->
+            <!--<div class="control-label">-->
+              <!--<label class="label">Tipo de Educación</label>-->
+            <!--</div>-->
+            <!--<div class="control">-->
+              <!--<div class="select is-fullwidth">-->
+                <!--<select v-model="owner.IDtype" >-->
+                  <!--<option value="DNI">DNI</option>-->
+                  <!--<option value="LE">LE</option>-->
+                  <!--<option value="CI">CI</option>-->
+                  <!--<option value="LC">LC</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
 
-          </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Es Argentino?</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="owner.sex" >
-                  <option value="F">Femenino</option>
-                  <option value="M">Masculino</option>
-                </select>
-              </div>
-            </div>
-          </div>
+          <!--</div>-->
+          <!--<div class="control is-horizontal">-->
+            <!--<div class="control-label">-->
+              <!--<label class="label">Es Argentino?</label>-->
+            <!--</div>-->
+            <!--<div class="control">-->
+              <!--<div class="select is-fullwidth">-->
+                <!--<select v-model="owner.sex" >-->
+                  <!--<option value="F">Femenino</option>-->
+                  <!--<option value="M">Masculino</option>-->
+                <!--</select>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
 
-          <div class="control is-horizontal">
-            <div class="control-label">
-            </div>
-            <div class="control">
-              <button class="button is-primary" v-on:click="onclickfn()">Siguiente</button>
-            </div>
-          </div>
 
-        </div>
       </article>
     </div>
 
@@ -86,9 +84,12 @@
 import { mapActions } from 'vuex'
 import { INIT_AGENCIES } from 'vuex-store/mutation-types'
 import store from './../../store'
+import { dynamicform } from './../../components/layout/'
 const { state } = store
+
 export default {
   components: {
+    dynamicform
   },
   data () {
     return {
@@ -100,27 +101,6 @@ export default {
 
       },
       owner: {
-        sex: '',
-        name: '',
-        ID: '',
-        IDtype: '',
-        lastname: ''
-      },
-      gowner: {
-        sex: '',
-        name: '',
-        ID: '',
-        IDtype: '',
-        lastname: ''
-      },
-      cowner: {
-        sex: '',
-        name: '',
-        ID: '',
-        IDtype: '',
-        lastname: ''
-      },
-      coowner: {
         sex: '',
         name: '',
         ID: '',
@@ -162,11 +142,6 @@ export default {
             Normalized: false,
             NumberOfDays: false,
             DataPeriod: false,
-            Elements: JSON.stringify(this.owner),
-            owner: JSON.stringify(this.owner),
-            gowner: JSON.stringify(this.gowner),
-            cowner: JSON.stringify(this.cowner),
-            coowner: JSON.stringify(this.coowner)
           }
         }
       }).then((response) => {
@@ -196,7 +171,7 @@ export default {
     loadData () {
       console.log(this.$route.params)
       this.$http({
-        url: '/ralfintranet/api/getVerifyClientData/',
+        url: '/inquiry/viewInquiry?===QO5IDO9QWafNWZyZibvNna9QXYtJ3bmZSeylmb1RncvBHcP1DZy92YlJnJxATPx5Wa',
         transformResponse: [(data) => {
           return JSON.parse(data)
         }],
@@ -207,7 +182,7 @@ export default {
         console.log(response.data)
         // console.log(response.data.records)
         console.log('TERMINA LOS CONSOLE')
-        store.commit(INIT_AGENCIES, response)
+        //store.commit(INIT_AGENCIES, response)
       }).catch((error) => {
         console.log(error)
       })
