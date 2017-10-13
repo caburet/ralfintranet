@@ -13,7 +13,7 @@
             <button  v-if="buttons3" class="button is-primary" @click="$emit('pend',[username,password])">Pendiente</button>
             <button  v-if="buttons3" class="button is-primary" @click="$emit('rech',[username,password])">Rechazar</button>
             <button  v-if="buttons1" class="button is-primary" @click="$emit('close')">Continuar</button>
-            <button  v-if="form" class="button is-primary" @click="openInNewTab()">Encuesta</button>
+            <button  v-if="form" class="button is-primary" @click="$emit('inquiry')">Encuesta</button>
             <img v-if="!buttons1 && !buttons3"src="spinner.gif">
           </div>
           </div>

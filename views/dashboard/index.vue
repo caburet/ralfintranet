@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="tile is-ancestor">
+    <div v-if="showverify" class="tile is-ancestor">
     <div class="tile is-parent">
       <article class="tile is-child box">
         <h1 class="title">Verificar Cliente</h1>
@@ -356,9 +356,63 @@
               :useIcon="true"
               ref="simplert">
     </simplert>
-    <modal v-if="showModal" @close="onclickclosemodal" @auth="onclickauthmodal" @pend="onclickpendmodal" @rech="onclickrechmodal" >
+    <modal v-if="showModal" @close="onclickclosemodal" @inquiry="onclickopeninquiry" @auth="onclickauthmodal" @pend="onclickpendmodal" @rech="onclickrechmodal" >
       <p>{{modalContain}}</p>
     </modal>
+    <div :id="inquiry" v-if="showinquiry">
+      <div class="tile is-ancestor">
+        <div class="tile is-parent">
+          <article class="tile is-child box">
+            <h1 class="title">Formulario Extendido</h1>
+            <form class="col s12 " id="lead_form" name="inquiryForm" v-on:submit.prevent="onSubmit">
+              <div class="block" >
+                <div class="control is-horizontal" v-for="formItem in formValues">
+                  <div class="control-label">
+                    <label class="label">{{formItem.Question}}</label>
+                  </div>
+                  <div class="control">
+                    <div class="control is-grouped" v-if="formItem.Type == 'open'">
+                      <p class="control is-expanded">
+                        <input  v-on:change="onChange(formItem.QuestionCode,$event.target.value)" :name="formItem.QuestionCode" class="input" v-model="formItem.QuestionCode" type="memo" >
+                      </p>
+                    </div>
+                    <div class="control is-grouped" v-if="formItem.Type == 'multiple'">
+                      <p class="control is-expanded"  v-for="itemoptions in formItem.Options">
+                        <input v-on:change="onChange(formItem.QuestionCode,$event.target.value)" :name="formItem.QuestionCode" class="input"  type="checkbox" >
+                      </p>
+                    </div>
+                    <div class="control is-grouped" v-if="formItem.Type == 'combobox'">
+                      <div class="control "  v-for="node in formItem.Options">
+                        <input v-on:change="onChange(formItem.QuestionCode,$event.target.value)" :ref="formItem.QuestionCode" :value="node" :name="formItem.QuestionCode" type="radio" id="5No">
+                        <label class="active" :for="node">{{node}}</label>
+                      </div>
+                    </div>
+                    <div class="control is-grouped" v-if="formItem.Type == 'yesno'">
+                      <div class="control is-expanded">
+                        <input v-on:change="onChange(formItem.QuestionCode,$event.target.value)" value="Yes" :name="formItem.QuestionCode" type="radio" id="5Yes">
+                        <label class="active" for="5Yes">Yes</label>
+                        <input v-on:change="onChange(formItem.QuestionCode,$event.target.value)" value="No" :name="formItem.QuestionCode" type="radio" id="5No">
+                        <label class="active" for="5No">No</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="control is-horizontal">
+                  <div class="control-label">
+                  </div>
+                  <div class="control">
+                    <button class="button is-primary" type="submit">Siguiente</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </article>
+        </div>
+
+      </div>
+
+    </div>
   </div>
 </template>
 <script>
@@ -375,6 +429,8 @@ export default {
   },
   data: function () {
     return {
+      showverify: true,
+      showinquiry: false,
       seenconyuge: false,
       seenconcubino: false,
       seengarante: false,
@@ -432,6 +488,9 @@ export default {
     },
     products () {
       return state.app.verifyclient.products.filter(x => x.campaign === this.campaign )
+    },
+    formValues() {
+      return state.app.form_items_from_server
     }
   },
   created: function () {
@@ -442,6 +501,21 @@ export default {
     ...mapActions([
       'addCase'
     ]),
+    onSubmit : function (){
+      //here do what u want
+      console.log("finish")
+      console.log(state.app.inquirydata)
+      this.$http.post('/inquiry/inq_process?==0EzM40DZp91YlJnJu92cq1Ddh1mcvZmJ5JXauVHdy9Gcw9UPkJ3bjVmcmEDMFZUPx5Wa ', state.app.inquirydata).then(function (response) {
+        // Success
+        this.showinquiry=false
+        this.showverify=true
+        console.log(response.data)
+      },function (response) {
+        // Error
+        console.log(response.data)
+      });
+      console.log("emitio false!")
+    },
     openInNewTab(url) {
     console.log(url)
       var win = window.open(url, '_blank');
@@ -500,6 +574,12 @@ export default {
     onclickclosemodal () {
       store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
       this.nextrule('')
+    },
+    onclickopeninquiry () {
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+      this.showinquiry=true
+      this.showverify=false
+
     },
     setrulestatus (params,rulestate) {
       this.$http({

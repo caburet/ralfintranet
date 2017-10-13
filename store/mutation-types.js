@@ -27,3 +27,5 @@ export const LOGIN = 'LOGIN'
 export const TOGGLE_MODAL= 'TOGGLE_MODAL'
 
 export const OPP_DATA= 'OPP_DATA'
+
+export const INQUIRY_DATA= 'INQUIRY_DATA'

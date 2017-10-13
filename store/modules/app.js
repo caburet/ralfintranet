@@ -1,18 +1,19 @@
 import * as types from '../mutation-types'
 
 const state = {
-  resrol:[],
-  form_items_from_server: [{"internalId":1,"Code":"01","Name":"Prueba","Comment":null,"User":"","DefOptions":null,"Closed":null,"attachFlag":null,"syncVersion":4,"Finished":null,"PersonCode":null,"AllowMultipleAnswers":null,"SendResultsByMail":null,"ShowResults":0,"WithoutPersonAssigned":null,"RecordSource":null,"createTime":"2017-08-29T14:13:01.694Z","updateTime":"2017-09-04T18:34:49.834Z","createUser":"OO","updateUser":"OO","Office":null,"Department":null,"isForEmployee":null,"masterId":1,"rowNr":0,"QuestionCode":"1","Question":"Edad","Type":"open","Options":"","Group":"A","rowId":1,"Scores":"5","Default":null,"QuestionScore":null,"Classification":null},
-    {"internalId":2,"Code":"01","Name":"Prueba","Comment":null,"User":"","DefOptions":null,"Closed":null,"attachFlag":null,"syncVersion":4,"Finished":null,"PersonCode":null,"AllowMultipleAnswers":null,"SendResultsByMail":null,"ShowResults":0,"WithoutPersonAssigned":null,"RecordSource":null,"createTime":"2017-08-29T14:13:01.694Z","updateTime":"2017-09-04T18:34:49.834Z","createUser":"OO","updateUser":"OO","Office":null,"Department":null,"isForEmployee":null,"masterId":1,"rowNr":1,"QuestionCode":"2","Question":"Genero","Type":"combobox","Options":["a","b","c"],"Group":"B","rowId":2,"Scores":"4","Default":null,"QuestionScore":null,"Classification":null},
-    {"internalId":3,"Code":"01","Name":"Prueba","Comment":null,"User":"","DefOptions":null,"Closed":null,"attachFlag":null,"syncVersion":4,"Finished":null,"PersonCode":null,"AllowMultipleAnswers":null,"SendResultsByMail":null,"ShowResults":0,"WithoutPersonAssigned":null,"RecordSource":null,"createTime":"2017-08-29T14:13:01.694Z","updateTime":"2017-09-04T18:34:49.834Z","createUser":"OO","updateUser":"OO","Office":null,"Department":null,"isForEmployee":null,"masterId":1,"rowNr":2,"QuestionCode":"3","Question":"Nacionalidad","Type":"combobox","Options":["d","f","h"],"Group":"C","rowId":3,"Scores":"3","Default":null,"QuestionScore":null,"Classification":null},
-    {"internalId":4,"Code":"01","Name":"Prueba","Comment":null,"User":"","DefOptions":null,"Closed":null,"attachFlag":null,"syncVersion":4,"Finished":null,"PersonCode":null,"AllowMultipleAnswers":null,"SendResultsByMail":null,"ShowResults":0,"WithoutPersonAssigned":null,"RecordSource":null,"createTime":"2017-08-29T14:13:01.694Z","updateTime":"2017-09-04T18:34:49.834Z","createUser":"OO","updateUser":"OO","Office":null,"Department":null,"isForEmployee":null,"masterId":1,"rowNr":3,"QuestionCode":"4","Question":"Estado Civil","Type":"yesno","Options":"","Group":"D","rowId":4,"Scores":"2","Default":null,"QuestionScore":null,"Classification":null},
-    {"internalId":5,"Code":"01","Name":"Prueba","Comment":null,"User":"","DefOptions":null,"Closed":null,"attachFlag":null,"syncVersion":4,"Finished":null,"PersonCode":null,"AllowMultipleAnswers":null,"SendResultsByMail":null,"ShowResults":0,"WithoutPersonAssigned":null,"RecordSource":null,"createTime":"2017-08-29T14:13:01.694Z","updateTime":"2017-09-04T18:34:49.834Z","createUser":"OO","updateUser":"OO","Office":null,"Department":null,"isForEmployee":null,"masterId":1,"rowNr":4,"QuestionCode":"5","Question":"Persona/Hijo(s) a Cargo","Type":"yesno","Options":"","Group":"E","rowId":5,"Scores":"1","Default":null,"QuestionScore":null,"Classification":null},
-    {"internalId":6,"Code":"01","Name":"Prueba","Comment":null,"User":"","DefOptions":null,"Closed":null,"attachFlag":null,"syncVersion":4,"Finished":null,"PersonCode":null,"AllowMultipleAnswers":null,"SendResultsByMail":null,"ShowResults":0,"WithoutPersonAssigned":null,"RecordSource":null,"createTime":"2017-08-29T14:13:01.694Z","updateTime":"2017-09-04T18:34:49.834Z","createUser":"OO","updateUser":"OO","Office":null,"Department":null,"isForEmployee":null,"masterId":1,"rowNr":5,"QuestionCode":"6","Question":"Cant. Pers/Hijo(s) a cargo","Type":"open","Options":"","Group":"F","rowId":6,"Scores":"10","Default":null,"QuestionScore":null,"Classification":null}],
-  showModal:false,
-  modalContain:'Algo aca en el store',
-  buttons3:false,
-  form:false,
-  buttons1:false,
+  resrol: [],
+  inquirydata: {},
+  form_items_from_server: [{'internalId': 1, 'Code': '01', 'Name': 'Prueba', 'Comment': null, 'User': '', 'DefOptions': null, 'Closed': null, 'attachFlag': null, 'syncVersion': 4, 'Finished': null, 'PersonCode': null, 'AllowMultipleAnswers': null, 'SendResultsByMail': null, 'ShowResults': 0, 'WithoutPersonAssigned': null, 'RecordSource': null, 'createTime': '2017-08-29T14:13:01.694Z', 'updateTime': '2017-09-04T18:34:49.834Z', 'createUser': 'OO', 'updateUser': 'OO', 'Office': null, 'Department': null, 'isForEmployee': null, 'masterId': 1, 'rowNr': 0, 'QuestionCode': '1', 'Question': 'Edad', 'Type': 'open', 'Options': '', 'Group': 'A', 'rowId': 1, 'Scores': '5', 'Default': null, 'QuestionScore': null, 'Classification': null},
+    {'internalId': 2, 'Code': '01', 'Name': 'Prueba', 'Comment': null, 'User': '', 'DefOptions': null, 'Closed': null, 'attachFlag': null, 'syncVersion': 4, 'Finished': null, 'PersonCode': null, 'AllowMultipleAnswers': null, 'SendResultsByMail': null, 'ShowResults': 0, 'WithoutPersonAssigned': null, 'RecordSource': null, 'createTime': '2017-08-29T14:13:01.694Z', 'updateTime': '2017-09-04T18:34:49.834Z', 'createUser': 'OO', 'updateUser': 'OO', 'Office': null, 'Department': null, 'isForEmployee': null, 'masterId': 1, 'rowNr': 1, 'QuestionCode': '2', 'Question': 'Genero', 'Type': 'combobox', 'Options': ['a', 'b', 'c'], 'Group': 'B', 'rowId': 2, 'Scores': '4', 'Default': null, 'QuestionScore': null, 'Classification': null},
+    {'internalId': 3, 'Code': '01', 'Name': 'Prueba', 'Comment': null, 'User': '', 'DefOptions': null, 'Closed': null, 'attachFlag': null, 'syncVersion': 4, 'Finished': null, 'PersonCode': null, 'AllowMultipleAnswers': null, 'SendResultsByMail': null, 'ShowResults': 0, 'WithoutPersonAssigned': null, 'RecordSource': null, 'createTime': '2017-08-29T14:13:01.694Z', 'updateTime': '2017-09-04T18:34:49.834Z', 'createUser': 'OO', 'updateUser': 'OO', 'Office': null, 'Department': null, 'isForEmployee': null, 'masterId': 1, 'rowNr': 2, 'QuestionCode': '3', 'Question': 'Nacionalidad', 'Type': 'combobox', 'Options': ['d', 'f', 'h'], 'Group': 'C', 'rowId': 3, 'Scores': '3', 'Default': null, 'QuestionScore': null, 'Classification': null},
+    {'internalId': 4, 'Code': '01', 'Name': 'Prueba', 'Comment': null, 'User': '', 'DefOptions': null, 'Closed': null, 'attachFlag': null, 'syncVersion': 4, 'Finished': null, 'PersonCode': null, 'AllowMultipleAnswers': null, 'SendResultsByMail': null, 'ShowResults': 0, 'WithoutPersonAssigned': null, 'RecordSource': null, 'createTime': '2017-08-29T14:13:01.694Z', 'updateTime': '2017-09-04T18:34:49.834Z', 'createUser': 'OO', 'updateUser': 'OO', 'Office': null, 'Department': null, 'isForEmployee': null, 'masterId': 1, 'rowNr': 3, 'QuestionCode': '4', 'Question': 'Estado Civil', 'Type': 'yesno', 'Options': '', 'Group': 'D', 'rowId': 4, 'Scores': '2', 'Default': null, 'QuestionScore': null, 'Classification': null},
+    {'internalId': 5, 'Code': '01', 'Name': 'Prueba', 'Comment': null, 'User': '', 'DefOptions': null, 'Closed': null, 'attachFlag': null, 'syncVersion': 4, 'Finished': null, 'PersonCode': null, 'AllowMultipleAnswers': null, 'SendResultsByMail': null, 'ShowResults': 0, 'WithoutPersonAssigned': null, 'RecordSource': null, 'createTime': '2017-08-29T14:13:01.694Z', 'updateTime': '2017-09-04T18:34:49.834Z', 'createUser': 'OO', 'updateUser': 'OO', 'Office': null, 'Department': null, 'isForEmployee': null, 'masterId': 1, 'rowNr': 4, 'QuestionCode': '5', 'Question': 'Persona/Hijo(s) a Cargo', 'Type': 'yesno', 'Options': '', 'Group': 'E', 'rowId': 5, 'Scores': '1', 'Default': null, 'QuestionScore': null, 'Classification': null},
+    {'internalId': 6, 'Code': '01', 'Name': 'Prueba', 'Comment': null, 'User': '', 'DefOptions': null, 'Closed': null, 'attachFlag': null, 'syncVersion': 4, 'Finished': null, 'PersonCode': null, 'AllowMultipleAnswers': null, 'SendResultsByMail': null, 'ShowResults': 0, 'WithoutPersonAssigned': null, 'RecordSource': null, 'createTime': '2017-08-29T14:13:01.694Z', 'updateTime': '2017-09-04T18:34:49.834Z', 'createUser': 'OO', 'updateUser': 'OO', 'Office': null, 'Department': null, 'isForEmployee': null, 'masterId': 1, 'rowNr': 5, 'QuestionCode': '6', 'Question': 'Cant. Pers/Hijo(s) a cargo', 'Type': 'open', 'Options': '', 'Group': 'F', 'rowId': 6, 'Scores': '10', 'Default': null, 'QuestionScore': null, 'Classification': null}],
+  showModal: false,
+  modalContain: 'Algo aca en el store',
+  buttons3: false,
+  form: false,
+  buttons1: false,
   personname: '',
   opcode: '',
   ruleid: '',
@@ -92,8 +93,22 @@ const mutations = {
     state.ruleid = data.ruleid
   },
   [types.OPP_DATA] (state, data) {
+    console.log(data)
     state.opcode = data.opcode
     state.resrol = data.resrol
+    state.form_items_from_server = data.inquiryres
+  },
+  [types.INQUIRY_DATA]: function (state, data) {
+    console.log(data)
+    if (data.type = 'checkbox') {
+      if (state.inquirydata[data.id]) {
+        state.inquirydata[data.id] = !state.inquirydata[data.id]
+      } else {
+        state.inquirydata[data.id] = true
+      }
+    }
+    state.inquirydata[data.id] = data.value
+    console.log(state.inquirydata)
   },
   [types.SWITCH_EFFECT] (state, effectItem) {
     for (let name in effectItem) {
@@ -179,7 +194,7 @@ const mutations = {
         if (JSON.parse(y)[field]) {
           state.carsoptions.years.push(
             {_id: JSON.parse(y)[field],
-              label: parseInt(JSON.parse(y).Year)-(i-1)
+              label: parseInt(JSON.parse(y).Year) - (i - 1)
             }
           )
         }
@@ -196,7 +211,7 @@ const mutations = {
         if (JSON.parse(y)[field]) {
           state.carsoptions.years.push(
             {_id: JSON.parse(y)[field],
-              label: parseInt(JSON.parse(y).Year)-(i-1)
+              label: parseInt(JSON.parse(y).Year) - (i - 1)
             }
           )
         }

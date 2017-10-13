@@ -4,74 +4,49 @@
     <div class="tile is-parent">
       <article class="tile is-child box">
         <h1 class="title">Formulario Extendido</h1>
-        <form class="col s12 " id="lead_form" name="inquiryForm" action="/inquiry/inq_process?==QO5IDO9QWafNWZyZSeylmb1RncvBHcP1DZy92YlJnJxATPx5Wa" method="post">
-          <dynamicform></dynamicform>
+        <form class="col s12 " id="lead_form" name="inquiryForm" v-on:submit.prevent="onSubmit">
+          <div class="block" >
+            <div class="control is-horizontal" v-for="formItem in formValues">
+              <div class="control-label">
+                <label class="label">{{formItem.Question}}</label>
+              </div>
+              <div class="control">
+                <div class="control is-grouped" v-if="formItem.Type == 'open'">
+                  <p class="control is-expanded">
+                    <input  v-on:change="onChange(formItem.QuestionCode,$event.target.value)" :name="formItem.QuestionCode" class="input" v-model="formItem.QuestionCode" type="memo" >
+                  </p>
+                </div>
+                <div class="control is-grouped" v-if="formItem.Type == 'multiple'">
+                  <p class="control is-expanded"  v-for="itemoptions in formItem.Options">
+                    <input v-on:change="onChange(formItem.QuestionCode,$event.target.value)" :name="formItem.QuestionCode" class="input"  type="checkbox" >
+                  </p>
+                </div>
+                <div class="control is-grouped" v-if="formItem.Type == 'combobox'">
+                  <div class="control "  v-for="node in formItem.Options">
+                    <input v-on:change="onChange(formItem.QuestionCode,$event.target.value)" :ref="formItem.QuestionCode" :value="node" :name="formItem.QuestionCode" type="radio" id="5No">
+                    <label class="active" :for="node">{{node}}</label>
+                  </div>
+                </div>
+                <div class="control is-grouped" v-if="formItem.Type == 'yesno'">
+                  <div class="control is-expanded">
+                    <input v-on:change="onChange(formItem.QuestionCode,$event.target.value)" value="Yes" :name="formItem.QuestionCode" type="radio" id="5Yes">
+                    <label class="active" for="5Yes">Yes</label>
+                    <input v-on:change="onChange(formItem.QuestionCode,$event.target.value)" value="No" :name="formItem.QuestionCode" type="radio" id="5No">
+                    <label class="active" for="5No">No</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="control is-horizontal">
+              <div class="control-label">
+              </div>
+              <div class="control">
+                <button class="button is-primary" type="submit">Siguiente</button>
+              </div>
+            </div>
+          </div>
         </form>
-        <!--<div class="control is-horizontal">-->
-          <!--<div>-->
-            <!--<h1>My dynamic form: lala</h1>-->
-            <!---->
-          <!--</div>-->
-          <!--<div class="control-label">-->
-            <!--<label class="label">Nivel de Educación</label>-->
-          <!--</div>-->
-          <!--<div class="control">-->
-            <!--<div class="select is-fullwidth">-->
-              <!--<select  v-model="brand">-->
-                <!--<option v-for="node in brand" :value="node._id">{{node.label}}</option>-->
-              <!--</select>-->
-            <!--</div>-->
-          <!--</div>-->
-
-
-        <!--</div>-->
-          <!--<div class="control is-horizontal">-->
-            <!--<div class="control-label">-->
-              <!--<label class="label">Estado Civil</label>-->
-            <!--</div>-->
-            <!--<div class="control">-->
-              <!--<div class="select is-fullwidth">-->
-                <!--<select v-model="owner.IDtype" >-->
-                  <!--<option value="DNI">DNI</option>-->
-                  <!--<option value="LE">LE</option>-->
-                  <!--<option value="CI">CI</option>-->
-                  <!--<option value="LC">LC</option>-->
-                <!--</select>-->
-              <!--</div>-->
-            <!--</div>-->
-
-          <!--</div>-->
-          <!--<div class="control is-horizontal">-->
-            <!--<div class="control-label">-->
-              <!--<label class="label">Tipo de Educación</label>-->
-            <!--</div>-->
-            <!--<div class="control">-->
-              <!--<div class="select is-fullwidth">-->
-                <!--<select v-model="owner.IDtype" >-->
-                  <!--<option value="DNI">DNI</option>-->
-                  <!--<option value="LE">LE</option>-->
-                  <!--<option value="CI">CI</option>-->
-                  <!--<option value="LC">LC</option>-->
-                <!--</select>-->
-              <!--</div>-->
-            <!--</div>-->
-
-          <!--</div>-->
-          <!--<div class="control is-horizontal">-->
-            <!--<div class="control-label">-->
-              <!--<label class="label">Es Argentino?</label>-->
-            <!--</div>-->
-            <!--<div class="control">-->
-              <!--<div class="select is-fullwidth">-->
-                <!--<select v-model="owner.sex" >-->
-                  <!--<option value="F">Femenino</option>-->
-                  <!--<option value="M">Masculino</option>-->
-                <!--</select>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-
-
       </article>
     </div>
 
@@ -82,17 +57,23 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES } from 'vuex-store/mutation-types'
+import { INQUIRY_DATA, OPP_DATA} from 'vuex-store/mutation-types'
 import store from './../../store'
 import { dynamicform } from './../../components/layout/'
 const { state } = store
 
 export default {
+  computed: {
+    formValues() {
+      return state.app.form_items_from_server
+    }
+  },
   components: {
     dynamicform
   },
   data () {
     return {
+      customForm:[],
       seenconyuge: false,
       seenconcubino: false,
       seengarante: false,
@@ -113,12 +94,34 @@ export default {
   },
   created: function () {
     this.loadData()
+    this.owner.sex="algo"
+    console.log(this.owner.sex)
   },
   stated: {},
   methods: {
     ...mapActions([
       'addCase'
     ]),
+    onChange : function (a,b,c=''){
+      //here do what u want
+      console.log("update")
+      console.log(a)
+      console.log(b)
+      store.commit(INQUIRY_DATA, {id:a,value:b,type:c} )
+    },
+    onSubmit : function (){
+      //here do what u want
+      console.log("finish")
+      console.log(state.app.inquirydata)
+      this.$http.post('/inquiry/inq_process?==0EzM40DZp91YlJnJu92cq1Ddh1mcvZmJ5JXauVHdy9Gcw9UPkJ3bjVmcmEDMFZUPx5Wa ', state.app.inquirydata).then(function (response) {
+        // Success
+        console.log(response.data)
+      },function (response) {
+        // Error
+        console.log(response.data)
+      });
+      console.log("emitio false!")
+    },
     onclickfnbkp () {
       let dic = {}
       dic.tittle = this.tittle
@@ -171,7 +174,7 @@ export default {
     loadData () {
       console.log(this.$route.params)
       this.$http({
-        url: '/inquiry/viewInquiry?===QO5IDO9QWafNWZyZibvNna9QXYtJ3bmZSeylmb1RncvBHcP1DZy92YlJnJxATPx5Wa',
+        url: '/ralfintranet/api/redirectform',
         transformResponse: [(data) => {
           return JSON.parse(data)
         }],
@@ -180,6 +183,16 @@ export default {
       }).then((response) => {
         console.log('ARRANCA LOS CONSOLE')
         console.log(response.data)
+        store.commit(OPP_DATA, response.data )
+        console.log('this.customform')
+        console.log(this.customForm)
+        let newobj = {}
+        for (let row of state.app.form_items_from_server)
+        {
+          newobj[row.QuestionCode]=1
+        }
+        this.customForm = newobj
+        console.log(this.customForm)
         // console.log(response.data.records)
         console.log('TERMINA LOS CONSOLE')
         //store.commit(INIT_AGENCIES, response)
