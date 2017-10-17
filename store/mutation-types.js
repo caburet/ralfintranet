@@ -29,3 +29,5 @@ export const TOGGLE_MODAL= 'TOGGLE_MODAL'
 export const OPP_DATA= 'OPP_DATA'
 
 export const INQUIRY_DATA= 'INQUIRY_DATA'
+
+export const TOGGLE_INQUIRY= 'TOGGLE_INQUIRY' 

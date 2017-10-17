@@ -373,25 +373,25 @@
                   <div class="control">
                     <div class="control is-grouped" v-if="formItem.Type == 'open'">
                       <p class="control is-expanded">
-                        <input  v-on:change="onChange(formItem.QuestionCode,$event.target.value)" :name="formItem.QuestionCode" class="input" v-model="formItem.QuestionCode" type="memo" >
+                        <input  v-on:change="onInquiryChange(formItem.QuestionCode,$event.target.value)" :name="formItem.QuestionCode" class="input" v-model="formItem.QuestionCode" type="memo" >
                       </p>
                     </div>
                     <div class="control is-grouped" v-if="formItem.Type == 'multiple'">
                       <p class="control is-expanded"  v-for="itemoptions in formItem.Options">
-                        <input v-on:change="onChange(formItem.QuestionCode,$event.target.value)" :name="formItem.QuestionCode" class="input"  type="checkbox" >
+                        <input v-on:change="onInquiryChange(formItem.QuestionCode,$event.target.value)" :name="formItem.QuestionCode" class="input"  type="checkbox" >
                       </p>
                     </div>
                     <div class="control is-grouped" v-if="formItem.Type == 'combobox'">
                       <div class="control "  v-for="node in formItem.Options">
-                        <input v-on:change="onChange(formItem.QuestionCode,$event.target.value)" :ref="formItem.QuestionCode" :value="node" :name="formItem.QuestionCode" type="radio" id="5No">
+                        <input v-on:change="onInquiryChange(formItem.QuestionCode,$event.target.value)" :ref="formItem.QuestionCode" :value="node" :name="formItem.QuestionCode" type="radio" id="5No">
                         <label class="active" :for="node">{{node}}</label>
                       </div>
                     </div>
                     <div class="control is-grouped" v-if="formItem.Type == 'yesno'">
                       <div class="control is-expanded">
-                        <input v-on:change="onChange(formItem.QuestionCode,$event.target.value)" value="Yes" :name="formItem.QuestionCode" type="radio" id="5Yes">
+                        <input v-on:change="onInquiryChange(formItem.QuestionCode,$event.target.value)" value="Yes" :name="formItem.QuestionCode" type="radio" id="5Yes">
                         <label class="active" for="5Yes">Yes</label>
-                        <input v-on:change="onChange(formItem.QuestionCode,$event.target.value)" value="No" :name="formItem.QuestionCode" type="radio" id="5No">
+                        <input v-on:change="onInquiryChange(formItem.QuestionCode,$event.target.value)" value="No" :name="formItem.QuestionCode" type="radio" id="5No">
                         <label class="active" for="5No">No</label>
                       </div>
                     </div>
@@ -417,7 +417,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES, LOGIN, INIT_PERSON, TOGGLE_SIDEBAR, TOGGLE_MODAL, OPP_DATA} from 'vuex-store/mutation-types'
+import { INIT_AGENCIES, LOGIN, INQUIRY_DATA, INIT_PERSON, TOGGLE_SIDEBAR, TOGGLE_MODAL, OPP_DATA, TOGGLE_INQUIRY} from 'vuex-store/mutation-types'
 import store from './../../store'
 import { Modal } from 'components/layout/'
 import Simplert from 'vue2-simplert'
@@ -429,8 +429,7 @@ export default {
   },
   data: function () {
     return {
-      showverify: true,
-      showinquiry: false,
+
       seenconyuge: false,
       seenconcubino: false,
       seengarante: false,
@@ -473,7 +472,12 @@ export default {
     }
   },
   computed:{
-
+    showverify() {
+      return state.app.showverify
+    },
+    showinquiry() {
+      return state.app.showinquiry
+    },
     showModal() {
         return state.app.showModal
     },
@@ -501,16 +505,25 @@ export default {
     ...mapActions([
       'addCase'
     ]),
+    onInquiryChange : function (a,b,c=''){
+      //here do what u want
+      console.log("update")
+      console.log(a)
+      console.log(b)
+      store.commit(INQUIRY_DATA, {id:a,value:b,type:c} )
+    },
     onSubmit : function (){
       //here do what u want
       console.log("finish")
       console.log(state.app.inquirydata)
-      this.$http.post('/inquiry/inq_process?==0EzM40DZp91YlJnJu92cq1Ddh1mcvZmJ5JXauVHdy9Gcw9UPkJ3bjVmcmEDMFZUPx5Wa ', state.app.inquirydata).then(function (response) {
+      this.$http.post('/inquiry/inq_process?==0EzM40DZp91YlJnJu92cq1Ddh1mcvZmJ5JXauVHdy9Gcw9UPkJ3bjVmcmEDMFZUPx5Wa ', state.app.inquirydata)
+        .then(function (response) {
+
         // Success
-        this.showinquiry=false
-        this.showverify=true
+        store.commit(TOGGLE_INQUIRY,{'showinquiry':false,'showverify':true} )
+        this.nextrule('')
         console.log(response.data)
-      },function (response) {
+      }.bind(this),function (response) {
         // Error
         console.log(response.data)
       });
@@ -577,9 +590,7 @@ export default {
     },
     onclickopeninquiry () {
       store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
-      this.showinquiry=true
-      this.showverify=false
-
+      store.commit(TOGGLE_INQUIRY,{'showinquiry':true,'showverify':false} )
     },
     setrulestatus (params,rulestate) {
       this.$http({
