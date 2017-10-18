@@ -3,6 +3,7 @@ import * as types from '../mutation-types'
 const state = {
   resrol: [],
   inquirydata: {},
+  inquirystring:'',
   form_items_from_server: [],
   showModal: false,
   showverify: true,
@@ -97,6 +98,7 @@ const mutations = {
     state.opcode = data.opcode
     state.resrol = data.resrol
     state.form_items_from_server = data.inquiryres
+    state.inquirystring =  data.inquirystring
   },
   [types.INQUIRY_DATA]: function (state, data) {
     console.log(data)

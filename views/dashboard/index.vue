@@ -516,11 +516,19 @@ export default {
       //here do what u want
       console.log("finish")
       console.log(state.app.inquirydata)
-      this.$http.post('/inquiry/inq_process?==0EzM40DZp91YlJnJu92cq1Ddh1mcvZmJ5JXauVHdy9Gcw9UPkJ3bjVmcmEDMFZUPx5Wa ', state.app.inquirydata)
+      this.$http.post('/inquiry/inq_process?=='+state.app.inquirystring, state.app.inquirydata)
         .then(function (response) {
 
         // Success
+          console.log(response.data)
         store.commit(TOGGLE_INQUIRY,{'showinquiry':false,'showverify':true} )
+        this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId='+state.app.opcode+'&score='+response.data.score+'&inquirycode='+response.data.InquiryResult.fields.InquiryCode)
+          .then(function (responsescore)
+          { console.log("Grabo el score")       }.bind(this)
+            ,function (responsescore) {
+            // Error
+            console.log(responsescore.data)
+          });
         this.nextrule('')
         console.log(response.data)
       }.bind(this),function (response) {
