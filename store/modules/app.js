@@ -3,7 +3,7 @@ import * as types from '../mutation-types'
 const state = {
   resrol: [],
   inquirydata: {},
-  inquirystring:'',
+  inquirystring: '',
   form_items_from_server: [],
   showModal: false,
   showverify: true,
@@ -46,9 +46,12 @@ const state = {
   carsoptions: {
     brands: [],
     models: [],
-    years: []
+    years: [],
+    codia: ''
   },
   verifyclient: {
+    citycodes: [],
+    provinces: [],
     agencies: [],
     campaigns: [],
     products: []
@@ -98,7 +101,7 @@ const mutations = {
     state.opcode = data.opcode
     state.resrol = data.resrol
     state.form_items_from_server = data.inquiryres
-    state.inquirystring =  data.inquirystring
+    state.inquirystring = data.inquirystring
   },
   [types.INQUIRY_DATA]: function (state, data) {
     console.log(data)
@@ -122,6 +125,7 @@ const mutations = {
     state.verifyclient.agencies = []
     state.verifyclient.campaigns = []
     state.verifyclient.products = []
+    state.verifyclient.provinces = []
     for (let d in data.data.agencias) {
       let agencieData = JSON.parse(data.data.agencias[d])
       state.verifyclient.agencies.push(
@@ -154,6 +158,14 @@ const mutations = {
         }
       )
     }
+    for (let p of data.data.provinces) {
+      state.verifyclient.provinces.push(
+        {_id: JSON.parse(p).Code,
+          label: JSON.parse(p).Name
+
+        }
+      )
+    }
     console.log(state.verifyclient)
   },
   [types.INIT_PERSON] (state, data) {
@@ -175,6 +187,16 @@ const mutations = {
         break
     }
   },
+  [types.LOAD_CITYCODES] (state, data) {
+    state.verifyclient.citycodes = []
+    for (let c of data.data.citycodes) {
+      state.verifyclient.citycodes.push(
+        {_id: JSON.parse(c).CityCode,
+          label: JSON.parse(c).Code
+        }
+      )
+    }
+  },
   [types.LOAD_MODELS] (state, data) {
     state.carsoptions.models = []
     state.carsoptions.years = []
@@ -188,6 +210,9 @@ const mutations = {
   },
   [types.LOAD_YEARS] (state, data) {
     console.log(data)
+    console.log(data.data.years[0])
+    console.log(JSON.parse(data.data.years[0]).Codia)
+    state.carsoptions.codia = JSON.parse(data.data.years[0]).Codia
     state.carsoptions.years = []
     for (let y of data.data.years) {
       let foo = new Array(21)

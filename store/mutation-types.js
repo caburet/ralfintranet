@@ -30,4 +30,6 @@ export const OPP_DATA= 'OPP_DATA'
 
 export const INQUIRY_DATA= 'INQUIRY_DATA'
 
-export const TOGGLE_INQUIRY= 'TOGGLE_INQUIRY' 
+export const TOGGLE_INQUIRY= 'TOGGLE_INQUIRY'
+
+export const LOAD_CITYCODES='LOAD_CITYCODES'

@@ -12,7 +12,7 @@
           </div>
           <div class="control">
             <div class="select is-fullwidth">
-              <select  v-model="brand" v-on:change="loadmodels()">
+              <select  v-model="car.brand" v-on:change="loadmodels()">
                 <option v-for="node in brands" :value="node._id"  >{{node.label}}</option>
               </select>
             </div>
@@ -26,7 +26,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select  v-model="model" v-on:change="loadyears()">
+                <select  v-model="car.model" v-on:change="loadyears()">
                   <option v-for="node in models" :value="node._id">{{node.label}}</option>
                 </select>
               </div>
@@ -40,7 +40,7 @@
             <div class="control">
               <div class="select is-fullwidth">
                 <select  v-model="car.year" v-on:change="loadcarvalue()">
-                  <option v-for="node in years" :value="node._id">{{node.label}}</option>
+                  <option v-for="node in years" :value="node.label">{{node.label}}</option>
                 </select>
               </div>
             </div>
@@ -85,10 +85,18 @@
               </div>
             </div>
           </div>
+          <div class="control is-horizontal">
+            <div class="control-label">
+
+            </div>
+            <div class="control">
+              <button class="button is-primary" v-on:click="onclicksavecar()">Salvar</button>
+            </div>
+          </div>
         </div>
       </article>
     </div>
-    <div class="tile is-parent">
+    <div class="tile is-parent" v-if="false">
       <article class="tile is-child box">
         <h1 class="title">Datos del Prestamo</h1>
 
@@ -153,7 +161,7 @@
 
 
     </div>
-    <div class="tile is-ancestor">
+    <div class="tile is-ancestor" v-if="false">
     <div class="tile is-parent">
       <article class="tile is-child box">
         <h1 class="title">Datos Del Titular del Crédito</h1>
@@ -291,7 +299,9 @@ export default {
         year: '',
         km0:'',
         use:'',
-        gnc:''
+        gnc:'',
+        brand:'',
+        model:''
       },
       campaign: '',
 
@@ -325,6 +335,33 @@ export default {
     ...mapActions([
       'addCase'
     ]),
+    onclicksavecar () {
+      this.$http({
+        method: 'GET',
+        url: '/ralfintranet/api/setcarstatus',
+        transformResponse: [(data) => {
+          return JSON.parse(data)
+        }],
+        params: {
+          opcode:state.app.opcode,
+          car:this.car,
+          codia:state.app.carsoptions.codia
+        }
+      }).then((response) => {
+
+        console.log(response)
+
+      }).catch((error) => {
+        let obj2 = {
+          title: 'Error',
+          message: error,
+          customCloseBtnText:"Cerrar",
+          type: 'error'
+        }
+        store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':error, button1:true, button3:false} )
+        console.log(error)
+      })
+    },
     loadmodels () {
       this.$http({
         method: 'GET',
@@ -334,7 +371,7 @@ export default {
         }],
         params: {
           parameters: {
-            brand:this.brand,
+            brand:this.car.brand,
           }
         }
       }).then((response) => {
@@ -352,8 +389,8 @@ export default {
         }],
         params: {
           parameters: {
-            brand:this.brand,
-            model:this.model,
+            brand:this.car.brand,
+            model:this.car.model,
           }
         }
       }).then((response) => {
