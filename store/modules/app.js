@@ -176,6 +176,9 @@ const mutations = {
         state.owner.name = data.name
         state.owner.lastname = data.lastname
         state.owner.sex = data.sex
+        state.owner.birthdate = data.birthdate.substring(0, 10)
+        state.owner.province = data.province
+        state.owner.citycode = data.localitycode
         break
       case 'cowner':
         break

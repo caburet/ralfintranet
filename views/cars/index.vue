@@ -63,12 +63,10 @@
             <div class="control-label">
               <label class="label">Valor GNC</label>
             </div>
-            <div class="control">
-              <div class="control is-grouped">
-                <p class="control is-expanded">
-                  <input class="input" v-model="car.gnc" type="text" >
-                </p>
-              </div>
+            <div class="control is-grouped">
+              <p class="control is-expanded">
+                <input class="input" v-model="car.gnc" type="text" >
+              </p>
             </div>
           </div>
           <div class="control is-horizontal">
@@ -85,24 +83,12 @@
               </div>
             </div>
           </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-
-            </div>
-            <div class="control">
-              <button class="button is-primary" v-on:click="onclicksavecar()">Salvar</button>
-            </div>
-          </div>
         </div>
       </article>
     </div>
-    <div class="tile is-parent" v-if="false">
+    <div class="tile is-parent">
       <article class="tile is-child box">
         <h1 class="title">Datos del Prestamo</h1>
-
-
-
-
         <div class="block">
           <div class="control is-horizontal">
             <div class="control-label">
@@ -147,21 +133,13 @@
               </p>
             </div>
           </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-
-            </div>
-            <div class="control">
-              <button class="button is-primary" v-on:click="onclickfn()">Calcular</button>
-            </div>
-          </div>
         </div>
       </article>
     </div>
 
 
     </div>
-    <div class="tile is-ancestor" v-if="false">
+    <div class="tile is-ancestor">
     <div class="tile is-parent">
       <article class="tile is-child box">
         <h1 class="title">Datos Del Titular del Crédito</h1>
@@ -176,7 +154,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <input class="input" type="date" v-model="owner.birthdate"  placeholder="">
+                <input class="input" v-model="owner.birthdate" type="date"  placeholder="01/01/1980">
               </p>
               </div>
             </div>
@@ -195,21 +173,19 @@
               <label class="label">Provincia</label>
             </div>
             <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="owner.province" >
-                  <option value="0">No</option>
-                  <option value="1">Si</option>
-                </select>
-              </div>
+                <div class="select is-fullwidth">
+                  <select v-model="owner.province" v-on:change="loadcitycodes()">
+                    <option v-for="node in provinces" :value="node._id">{{node.label}}</option>
+                  </select>
+                </div>
             </div>
             <div class="control-label">
               <label class="label">Localidad</label>
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="owner.locality" >
-                  <option value="0">No</option>
-                  <option value="1">Si</option>
+                <select v-model="owner.citycode" >
+                  <option v-for="node in citycodes" :value="node._id">{{node._id}} {{node.label}}</option>
                 </select>
               </div>
             </div>
@@ -244,7 +220,7 @@
               <label class="label"></label>
             </div>
             <div class="control">
-              <button class="button is-primary" v-on:click="onclickfn()">Calcular</button>
+              <button class="button is-primary" v-on:click="onclicksavesecondwindow()">Salvar</button>
             </div>
           </div>
           <div class="control is-horizontal">
@@ -273,7 +249,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES, LOAD_MODELS, LOAD_YEARS, LOAD_RATES } from 'vuex-store/mutation-types'
+import { INIT_AGENCIES, LOAD_MODELS, LOAD_YEARS, LOAD_RATES, LOAD_CITYCODES } from 'vuex-store/mutation-types'
 import store from './../../store'
 const { state } = store
 export default {
@@ -292,7 +268,8 @@ export default {
         cellphone: '',
         phone: '',
         phone: '',
-        workphone: ''
+        workphone: '',
+        localitycode:''
       },
       car: {
         infovalue: 'A calcular',
@@ -319,6 +296,12 @@ export default {
   },
 
   computed:{
+    provinces (){
+      return state.app.verifyclient.provinces
+    },
+    citycodes (){
+      return state.app.verifyclient.citycodes
+    },
     brands (){
       return state.app.carsoptions.brands
     },
@@ -330,25 +313,55 @@ export default {
     }
 
   },
+  created: function () {
+    this.loadData()
+  },
   stated: {},
   methods: {
     ...mapActions([
       'addCase'
     ]),
-    onclicksavecar () {
+    loadData () {
+    this.owner=state.app.owner
+      console.log(this.owner)
+      if (this.owner.province)
+      {
+        this.loadcitycodes()
+      }
+    },
+    loadcitycodes () {
       this.$http({
         method: 'GET',
-        url: '/ralfintranet/api/setcarstatus',
+        url: '/ralfintranet/api/loadcitycodes',
+        transformResponse: [(data) => {
+          return JSON.parse(data)
+        }],
+        params: {
+          parameters: {
+            province:this.owner.province,
+          }
+        }
+      }).then((response) => {
+        store.commit(LOAD_CITYCODES, response)
+      }).catch((error) => {
+        console.log(error)
+      })
+    },
+    onclicksavesecondwindow () {
+      this.$http({
+        method: 'GET',
+        url: '/ralfintranet/api/setsecondwindow',
         transformResponse: [(data) => {
           return JSON.parse(data)
         }],
         params: {
           opcode:state.app.opcode,
           car:this.car,
-          codia:state.app.carsoptions.codia
+          codia:state.app.carsoptions.codia,
+          owner:this.owner
         }
       }).then((response) => {
-
+        alert(response)
         console.log(response)
 
       }).catch((error) => {
@@ -358,7 +371,8 @@ export default {
           customCloseBtnText:"Cerrar",
           type: 'error'
         }
-        store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':error, button1:true, button3:false} )
+        alert(error)
+
         console.log(error)
       })
     },
@@ -415,23 +429,23 @@ export default {
       }
       this.car.infovalue=this.car.year*1000
       if (this.car.year && this.car.km0) {
-        this.$http({
-          method: 'GET',
-          url: '/ralfintranet/api/loadloanrates',
-          transformResponse: [(data) => {
-            return JSON.parse(data)
-          }],
-          params: {
-            parameters: {
-              year: yearvalue,
-              km0: this.car.km0,
-            }
-          }
-        }).then((response) => {
-          store.commit(LOAD_RATES, response)
-        }).catch((error) => {
-          console.log(error)
-        })
+//        this.$http({
+//          method: 'GET',
+//          url: '/ralfintranet/api/loadloanrates',
+//          transformResponse: [(data) => {
+//            return JSON.parse(data)
+//          }],
+//          params: {
+//            parameters: {
+//              year: yearvalue,
+//              km0: this.car.km0,
+//            }
+//          }
+//        }).then((response) => {
+//          store.commit(LOAD_RATES, response)
+//        }).catch((error) => {
+//          console.log(error)
+//        })
       }
     }
   }

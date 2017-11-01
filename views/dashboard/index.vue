@@ -110,36 +110,13 @@
               </div>
             </div>
             <div class="control-label">
-              <label class="label">Fecha de Nacimiento</label>
+
             </div>
             <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" v-model="owner.birthdate" type="date"  placeholder="01/01/1980">
-              </p>
+
             </div>
           </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Provincia</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="owner.province" v-on:change="loadcitycodes()">
-                  <option v-for="node in provinces" :value="node._id">{{node.label}}</option>
-                </select>
-              </div>
-            </div>
-            <div class="control-label">
-              <label class="label">Codigo de Localidad</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="owner.localitycode" >
-                  <option v-for="node in citycodes" :value="node._id">{{node.label}}</option>
-                </select>
-              </div>
-            </div>
-          </div>
+
           <!--- --------------------- -->
           <!--- Botones para mostrar y ocultar los datos -->
           <!--- --------------------- -->
@@ -441,7 +418,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES, LOGIN, INQUIRY_DATA, INIT_PERSON, TOGGLE_SIDEBAR, TOGGLE_MODAL, OPP_DATA, TOGGLE_INQUIRY, LOAD_CITYCODES} from 'vuex-store/mutation-types'
+import { INIT_AGENCIES, LOGIN, INQUIRY_DATA, INIT_PERSON, TOGGLE_SIDEBAR, TOGGLE_MODAL, OPP_DATA, TOGGLE_INQUIRY} from 'vuex-store/mutation-types'
 import store from './../../store'
 import { Modal } from 'components/layout/'
 import Simplert from 'vue2-simplert'
@@ -462,7 +439,10 @@ export default {
         name: '',
         ID: '',
         IDtype: '',
-        lastname: ''
+        lastname: '',
+        birthdate:'',
+        province:'',
+        citycode:''
       },
       gowner: {
         sex: '',
@@ -507,12 +487,6 @@ export default {
     },
     modalContain() {
       return state.app.modalContain
-    },
-    provinces (){
-      return state.app.verifyclient.provinces
-    },
-    citycodes (){
-      return state.app.verifyclient.citycodes
     },
     agencies (){
       return state.app.verifyclient.agencies
@@ -581,24 +555,6 @@ export default {
     cleanproduct () {
       this.product=''
     },
-    loadcitycodes () {
-      this.$http({
-        method: 'GET',
-        url: '/ralfintranet/api/loadcitycodes',
-        transformResponse: [(data) => {
-          return JSON.parse(data)
-        }],
-        params: {
-          parameters: {
-            province:this.owner.province,
-          }
-        }
-      }).then((response) => {
-        store.commit(LOAD_CITYCODES, response)
-      }).catch((error) => {
-        console.log(error)
-      })
-    },
     loadowner (type) {
       if (this[type].ID.indexOf('-') > -1)
       {
@@ -628,9 +584,9 @@ export default {
           this[type].lastname=response.data.person.lastname
           this[type].sex=response.data.person.sex
           this[type].birthdate=response.data.person.birthdate.substring(0, 10);
-          this[type].province=response.data.person.province;
-          this[type].localitycode=response.data.person.localitycode
-          //response.data.person['type']=type
+          this[type].province=response.data.person.province
+          this[type].citycode=response.data.person.localitycode
+          response.data.person['type']=type
           store.commit(INIT_PERSON, response.data.person )
         }
       }).catch((error) => {
