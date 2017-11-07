@@ -420,23 +420,6 @@ export default {
       }
       this.car.infovalue=this.car.year*1000
       if (this.car.year && this.car.km0) {
-//        this.$http({
-//          method: 'GET',
-//          url: '/ralfintranet/api/loadloanrates',
-//          transformResponse: [(data) => {
-//            return JSON.parse(data)
-//          }],
-//          params: {
-//            parameters: {
-//              year: yearvalue,
-//              km0: this.car.km0,
-//            }
-//          }
-//        }).then((response) => {
-//          store.commit(LOAD_RATES, response)
-//        }).catch((error) => {
-//          console.log(error)
-//        })
       }
     }
   }
