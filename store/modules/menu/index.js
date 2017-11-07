@@ -31,16 +31,6 @@ const state = {
       component: lazyLoading('cars', true)
     },
     {
-      name: 'extend',
-      path: '/extend',
-      props: ['message'],
-      meta: {
-        icon: 'fa-tachometer',
-        link: 'extend/index.vue'
-      },
-      component: lazyLoading('extend', true)
-    },
-    {
       name: 'additional',
       path: '/additional',
       props: ['message'],

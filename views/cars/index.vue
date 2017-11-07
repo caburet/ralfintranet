@@ -123,16 +123,6 @@
               </div>
             </div>
           </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Tasa</label>
-            </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" v-model="tasa" type="text" >
-              </p>
-            </div>
-          </div>
         </div>
       </article>
     </div>
@@ -148,26 +138,24 @@
 
 
         <div class="block">
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Nacimiento</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <input class="input" v-model="owner.birthdate" type="date"  placeholder="01/01/1980">
-              </p>
+            <div class="control is-horizontal">
+              <div class="control-label">
+                <label class="label">Fecha Nacimiento</label>
+              </div>
+              <div class="control is-grouped">
+                <p class="control is-expanded">
+                  <input class="input" v-model="owner.birthdate" type="date"  placeholder="01/01/1980">
+                </p>
+              </div>
+              <div class="control-label">
+                <label class="label">Ingresos</label>
+              </div>
+              <div class="control is-grouped">
+                <p class="control is-expanded">
+                  <input class="input" v-model="owner.ingress" type="text" >
+                </p>
               </div>
             </div>
-            <div class="control-label">
-              <label class="label">Ingresos</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <input class="input" type="text" v-model="owner.ingress"  placeholder="">
-              </p>
-              </div>
-            </div>
-          </div>
           <div class="control is-horizontal">
             <div class="control-label">
               <label class="label">Provincia</label>
@@ -358,10 +346,13 @@ export default {
           opcode:state.app.opcode,
           car:this.car,
           codia:state.app.carsoptions.codia,
-          owner:this.owner
+          owner:this.owner,
+          amount:this.amount,
+          month:this.month
+
         }
       }).then((response) => {
-        alert(response)
+        this.$router.push('/additional')
         console.log(response)
 
       }).catch((error) => {
