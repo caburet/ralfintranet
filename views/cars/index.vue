@@ -400,6 +400,7 @@ export default {
         }
       }
       this.car.infovalue=this.car.year*1000
+
       this.$http({
         method: 'GET',
         url: '/ralfintranet/api/loadloanlimit',
@@ -418,6 +419,7 @@ export default {
       }).catch((error) => {
         console.log(error)
       })
+
     }
   }
 }
