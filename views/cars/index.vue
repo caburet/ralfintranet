@@ -12,35 +12,32 @@
           </div>
           <div class="control">
             <div class="select is-fullwidth">
-              <select  v-model="car.brand" v-on:change="loadmodels()">
+              <select  v-model="car.brand"  v-on:change="loadmodels()">
                 <option v-for="node in brands" :value="node._id"  >{{node.label}}</option>
               </select>
             </div>
           </div>
-
-
         </div>
-          <div class="control is-horizontal">
-            <div class="control-label">
-              <label class="label">Modelo</label>
-            </div>
-            <div class="control">
-              <div class="select is-fullwidth">
-                <select  v-model="car.model" v-on:change="loadyears()">
-                  <option v-for="node in models" :value="node._id">{{node.label}}</option>
-                </select>
-              </div>
-            </div>
-
-          </div>
           <div class="control is-horizontal">
             <div class="control-label">
               <label class="label">Año</label>
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select  v-model="car.year" v-on:change="loadcarvalue()">
+                <select  v-model="car.year"  v-on:change="loadmodels()" >
                   <option v-for="node in years" :value="node.label">{{node.label}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="control is-horizontal">
+            <div class="control-label">
+              <label class="label">Modelo</label>
+            </div>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select  v-model="car.model" v-on:change="loadcarvalue()">
+                  <option v-for="node in models" :value="node._id">{{node.label}}</option>
                 </select>
               </div>
             </div>
@@ -237,7 +234,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES, LOAD_MODELS, LOAD_YEARS, LOAD_RATES, LOAD_CITYCODES } from 'vuex-store/mutation-types'
+import { INIT_AGENCIES, LOAD_MODELS, LOAD_YEARS, LOAD_CITYCODES } from 'vuex-store/mutation-types'
 import store from './../../store'
 const { state } = store
 export default {
@@ -368,41 +365,25 @@ export default {
       })
     },
     loadmodels () {
-      this.$http({
-        method: 'GET',
-        url: '/ralfintranet/api/loadmodel',
-        transformResponse: [(data) => {
-          return JSON.parse(data)
-        }],
-        params: {
-          parameters: {
-            brand:this.car.brand,
+      if (this.car.brand && this.car.year) {
+        this.$http({
+          method: 'GET',
+          url: '/ralfintranet/api/loadmodel',
+          transformResponse: [(data) => {
+            return JSON.parse(data)
+          }],
+          params: {
+            parameters: {
+              brand: this.car.brand,
+              year: this.car.year,
+            }
           }
-        }
-      }).then((response) => {
-        store.commit(LOAD_MODELS, response)
-      }).catch((error) => {
-        console.log(error)
-      })
-    },
-    loadyears () {
-      this.$http({
-        method: 'GET',
-        url: '/ralfintranet/api/loadyears',
-        transformResponse: [(data) => {
-          return JSON.parse(data)
-        }],
-        params: {
-          parameters: {
-            brand:this.car.brand,
-            model:this.car.model,
-          }
-        }
-      }).then((response) => {
-        store.commit(LOAD_YEARS, response)
-      }).catch((error) => {
-        console.log(error)
-      })
+        }).then((response) => {
+          store.commit(LOAD_MODELS, response)
+        }).catch((error) => {
+          console.log(error)
+        })
+      }
     },
     getyearname(element,id) {
       return element._id==id;
@@ -419,25 +400,24 @@ export default {
         }
       }
       this.car.infovalue=this.car.year*1000
-      if (this.car.year && this.car.km0) {
-//        this.$http({
-//          method: 'GET',
-//          url: '/ralfintranet/api/loadloanrates',
-//          transformResponse: [(data) => {
-//            return JSON.parse(data)
-//          }],
-//          params: {
-//            parameters: {
-//              year: yearvalue,
-//              km0: this.car.km0,
-//            }
-//          }
-//        }).then((response) => {
-//          store.commit(LOAD_RATES, response)
-//        }).catch((error) => {
-//          console.log(error)
-//        })
-      }
+      this.$http({
+        method: 'GET',
+        url: '/ralfintranet/api/loadloanlimit',
+        transformResponse: [(data) => {
+          return JSON.parse(data)
+        }],
+        params: {
+          parameters: {
+            opcode: state.app.opcode,
+            year: this.car.year,
+            km0: this.car.km0,
+          }
+        }
+      }).then((response) => {
+        store.commit(LOAD_MODELS, response)
+      }).catch((error) => {
+        console.log(error)
+      })
     }
   }
 }

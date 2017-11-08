@@ -166,6 +166,10 @@ const mutations = {
         }
       )
     }
+    for (let y of [...Array(20).keys()]) {
+      let actualyear = (new Date()).getFullYear()
+      state.carsoptions.years.push({_id: actualyear - y, label: actualyear - y})
+    }
     console.log(state.verifyclient)
   },
   [types.INIT_PERSON] (state, data) {
@@ -202,7 +206,6 @@ const mutations = {
   },
   [types.LOAD_MODELS] (state, data) {
     state.carsoptions.models = []
-    state.carsoptions.years = []
     for (let m of data.data.models) {
       state.carsoptions.models.push(
         {_id: JSON.parse(m).ModelNr,
@@ -211,43 +214,24 @@ const mutations = {
       )
     }
   },
-  [types.LOAD_YEARS] (state, data) {
-    console.log(data)
-    console.log(data.data.years[0])
-    console.log(JSON.parse(data.data.years[0]).Codia)
-    state.carsoptions.codia = JSON.parse(data.data.years[0]).Codia
-    state.carsoptions.years = []
-    for (let y of data.data.years) {
-      let foo = new Array(21)
-      for (let i = 1; i < foo.length; i++) {
-        let field = 'Pre' + ('0' + i).slice(-2)
-        if (JSON.parse(y)[field]) {
-          state.carsoptions.years.push(
-            {_id: JSON.parse(y)[field],
-              label: parseInt(JSON.parse(y).Year) - (i - 1)
-            }
-          )
-        }
-      }
-    }
-  },
-  [types.LOAD_RATES] (state, data) {
-    console.log(data)
-    state.carsoptions.years = []
-    for (let y of data.data.years) {
-      let foo = new Array(21)
-      for (let i = 1; i < foo.length; i++) {
-        let field = 'Pre' + ('0' + i).slice(-2)
-        if (JSON.parse(y)[field]) {
-          state.carsoptions.years.push(
-            {_id: JSON.parse(y)[field],
-              label: parseInt(JSON.parse(y).Year) - (i - 1)
-            }
-          )
-        }
-      }
-    }
-  },
+
+  // [types.LOAD_RATES] (state, data) {
+  //   console.log(data)
+  //   state.carsoptions.years = []
+  //   for (let y of data.data.years) {
+  //     let foo = new Array(21)
+  //     for (let i = 1; i < foo.length; i++) {
+  //       let field = 'Pre' + ('0' + i).slice(-2)
+  //       if (JSON.parse(y)[field]) {
+  //         state.carsoptions.years.push(
+  //           {_id: JSON.parse(y)[field],
+  //             label: parseInt(JSON.parse(y).Year) - (i - 1)
+  //           }
+  //         )
+  //       }
+  //     }
+  //   }
+  // },
   [types.LOGIN] (state, data) {
     console.log(data)
     state.personname = data
