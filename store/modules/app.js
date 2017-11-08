@@ -209,7 +209,8 @@ const mutations = {
     for (let m of data.data.models) {
       state.carsoptions.models.push(
         {_id: JSON.parse(m).ModelNr,
-          label: JSON.parse(m).ModelName
+          label: JSON.parse(m).ModelName,
+          codia: JSON.parse(m).Codia
         }
       )
     }

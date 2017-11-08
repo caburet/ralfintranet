@@ -98,6 +98,11 @@
               </div>
             </div>
           </div>
+          <div class="control is-horizontal" v-if="loanlimit>0">
+            <div class="control-label" v-if="car.infovalue>0">
+              <label  class="label">Monto máximo {{car.infovalue*loanlimit/100}}  (%{{loanlimit}})</label>
+            </div>
+          </div>
           <div class="control is-horizontal">
             <div class="control-label">
               <label class="label">Monto</label>
@@ -242,6 +247,7 @@ export default {
   },
   data () {
     return {
+      loanlimit:0,
       seenconyuge: false,
       seenconcubino: false,
       seengarante: false,
@@ -333,36 +339,54 @@ export default {
       })
     },
     onclicksavesecondwindow () {
-      this.$http({
-        method: 'GET',
-        url: '/ralfintranet/api/setsecondwindow',
-        transformResponse: [(data) => {
-          return JSON.parse(data)
-        }],
-        params: {
-          opcode:state.app.opcode,
-          car:this.car,
-          codia:state.app.carsoptions.codia,
-          owner:this.owner,
-          amount:this.amount,
-          month:this.month
-
+      let codia
+      if (this.car.model)
+      {
+        for(let i of this.models){
+          if(i._id==this.car.model){
+            codia= i.codia
+            break;
+          }
         }
-      }).then((response) => {
-        this.$router.push('/additional')
-        console.log(response)
+      }
+      console.log("va codia")
+      console.log(codia)
+      if (this.amount<= this.car.infovalue*this.loanlimit/100) {
+        this.$http({
+          method: 'GET',
+          url: '/ralfintranet/api/setsecondwindow',
+          transformResponse: [(data) => {
+            return JSON.parse(data)
+          }],
+          params: {
+            opcode: state.app.opcode,
+            car: this.car,
+            codia: codia,
+            owner: this.owner,
+            amount: this.amount,
+            month: this.month
 
-      }).catch((error) => {
-        let obj2 = {
-          title: 'Error',
-          message: error,
-          customCloseBtnText:"Cerrar",
-          type: 'error'
-        }
-        alert(error)
+          }
+        }).then((response) => {
+          this.$router.push('/additional')
+          console.log(response)
 
-        console.log(error)
-      })
+        }).catch((error) => {
+          let obj2 = {
+            title: 'Error',
+            message: error,
+            customCloseBtnText: "Cerrar",
+            type: 'error'
+          }
+          alert(error)
+
+          console.log(error)
+        })
+      }
+      else
+      {
+        alert("El monto supera el maximo permitido.")
+      }
     },
     loadmodels () {
       if (this.car.brand && this.car.year) {
@@ -399,26 +423,28 @@ export default {
           yearvalue=yearpair.label
         }
       }
-      this.car.infovalue=this.car.year*1000
 
-      this.$http({
-        method: 'GET',
-        url: '/ralfintranet/api/loadloanlimit',
-        transformResponse: [(data) => {
-          return JSON.parse(data)
-        }],
-        params: {
-          parameters: {
-            opcode: state.app.opcode,
-            year: this.car.year,
-            km0: this.car.km0,
+      this.car.infovalue=this.car.year*1000
+      if (this.car.year && this.car.km0) {
+        this.$http({
+          method: 'GET',
+          url: '/ralfintranet/api/loadloanlimit',
+          transformResponse: [(data) => {
+            return JSON.parse(data)
+          }],
+          params: {
+            parameters: {
+              opcode: state.app.opcode,
+              year: this.car.year,
+              km0: this.car.km0,
+            }
           }
-        }
-      }).then((response) => {
-        store.commit(LOAD_MODELS, response)
-      }).catch((error) => {
-        console.log(error)
-      })
+        }).then((response) => {
+          this.loanlimit=response.data.percentage
+        }).catch((error) => {
+          console.log(error)
+        })
+      }
 
     }
   }
