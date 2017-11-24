@@ -194,6 +194,11 @@ const mutations = {
         break
     }
   },
+  [types.SAVE_OPPCODE] (state, data) {
+    console.log(data)
+    state.opcode = data.opcode
+    state.owner.ID = data.personcode
+  },
   [types.LOAD_CITYCODES] (state, data) {
     state.verifyclient.citycodes = []
     for (let c of data.data.citycodes) {

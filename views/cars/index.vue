@@ -1,5 +1,7 @@
 <template>
   <div>
+    <input class="input" v-model="personcode" type="text" >
+    <input class="input" v-model="opcode" type="text" ><button class="button is-primary" v-on:click="onclickloadopp()">Salvar</button>
     <div class="tile is-ancestor">
     <div class="tile is-parent">
       <article class="tile is-child box">
@@ -239,7 +241,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES, LOAD_MODELS, LOAD_YEARS, LOAD_CITYCODES } from 'vuex-store/mutation-types'
+import { INIT_AGENCIES, LOAD_MODELS, LOAD_YEARS, LOAD_CITYCODES,SAVE_OPPCODE } from 'vuex-store/mutation-types'
 import store from './../../store'
 const { state } = store
 export default {
@@ -280,9 +282,10 @@ export default {
       months:[12, 15, 18, 24, 30, 36, 48],
       amount:'',
       tasa:'',
-
       errormensage:'',
-      showerrormensage:false
+      showerrormensage:false,
+      opcode:'',
+      personcode:'',
     }
   },
 
@@ -338,6 +341,10 @@ export default {
         console.log(error)
       })
     },
+    onclickloadopp () {
+      store.commit(SAVE_OPPCODE, {opcode:this.opcode,personcode:this.personcode})
+
+    },
     onclicksavesecondwindow () {
       let codia
       if (this.car.model)
@@ -368,6 +375,7 @@ export default {
 
           }
         }).then((response) => {
+
           this.$router.push('/additional')
           console.log(response)
 
