@@ -44,3 +44,5 @@ export const toggleInquiry = ({ commit }, opened) => commit(types.TOGGLE_INQUIRY
 export const loadcitycodes = ({ commit }, opened) => commit(types.LOAD_CITYCODES, data)
 
 export const saveopcode = ({ commit }, opened) => commit(types.SAVE_OPPCODE, data)
+
+export const seconddata = ({ commit }, opened) => commit(types.SECOND_DATA, data)

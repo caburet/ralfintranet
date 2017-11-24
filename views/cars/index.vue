@@ -236,16 +236,21 @@
       </article>
     </div>
   </div>
+    <modal v-if="showModal" @close="onclickclosemodal" @inquiry="onclickopeninquiry" @auth="onclickauthmodal" @pend="onclickpendmodal" @rech="onclickrechmodal" >
+      <p>{{modalContain}}</p>
+    </modal>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES, LOAD_MODELS, LOAD_YEARS, LOAD_CITYCODES,SAVE_OPPCODE } from 'vuex-store/mutation-types'
+import { INIT_AGENCIES, LOAD_MODELS, LOAD_YEARS, LOAD_CITYCODES, SAVE_OPPCODE, TOGGLE_MODAL, TOGGLE_INQUIRY, SECOND_DATA } from 'vuex-store/mutation-types'
 import store from './../../store'
+import { Modal } from 'components/layout/'
 const { state } = store
 export default {
   components: {
+    Modal
   },
   data () {
     return {
@@ -286,6 +291,8 @@ export default {
       showerrormensage:false,
       opcode:'',
       personcode:'',
+      rulenr:0,
+      continuestep2:true,
     }
   },
 
@@ -304,6 +311,12 @@ export default {
     },
     years () {
       return state.app.carsoptions.years
+    },
+    showModal() {
+      return state.app.showModal
+    },
+    modalContain() {
+      return state.app.modalContain
     }
 
   },
@@ -322,6 +335,55 @@ export default {
       {
         this.loadcitycodes()
       }
+    },
+    setrulestatus (params,rulestate) {
+      this.$http({
+        method: 'GET',
+        url: '/ralfintranet/api/setrulestatus',
+        transformResponse: [(data) => {
+          return JSON.parse(data)
+        }],
+        params: {
+          opcode: state.app.opcode,
+          username: params[0],
+          password: params[1],
+          ruleid: state.app.ruleid,
+          state: rulestate
+        }
+      }).then((response) => {
+
+        console.log(response)
+        this.nextrule(response)
+      }).catch((error) => {
+        let obj2 = {
+          title: 'Error',
+          message: error,
+          customCloseBtnText:"Cerrar",
+          type: 'error'
+        }
+        store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':error, button1:true, button3:false} )
+        console.log(error)
+      })
+    },
+    onclickclosemodal () {
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+      this.nextrule('')
+    },
+    onclickopeninquiry () {
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+      store.commit(TOGGLE_INQUIRY,{'showinquiry':true,'showverify':false} )
+    },
+    onclickauthmodal (params) {
+      this.setrulestatus(params,1)
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+    },
+    onclickpendmodal (params) {
+      this.setrulestatus(params,3)
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+    },
+    onclickrechmodal (params) {
+      this.setrulestatus(params,2)
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
     },
     loadcitycodes () {
       this.$http({
@@ -375,8 +437,10 @@ export default {
 
           }
         }).then((response) => {
-
-          this.$router.push('/additional')
+          store.commit(SECOND_DATA, response.data )
+          store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':'',button1:false, button3:false} )
+          this.nextrule(response)
+          //this.$router.push('/additional')
           console.log(response)
 
         }).catch((error) => {
@@ -395,6 +459,38 @@ export default {
       {
         alert("El monto supera el maximo permitido.")
       }
+    },
+    nextrule(response){
+      console.log("Va next rule consoles logs")
+
+      console.log(state.app.resrol.length,this.rulenr,this.continuestep2 )
+      console.log(this.rulenr == state.app.resrol.length)
+      var self = this
+      if (this.rulenr == state.app.resrol.length)
+      {
+        console.log("Termino!")
+        this.continuestep2 = false
+        // TODO save person
+        this.$router.push('/cars')
+      }
+      let rolmessage = state.app.resrol[this.rulenr]
+      this.rulenr +=1
+      if (this.continuestep2) {
+        console.log("rolmessage")
+        console.log(rolmessage.formIfReturnFalse)
+        console.log(rolmessage)
+        //this.continuestep2 = false
+        //this.$refs.simplert.openSimplert(obj)
+        if (rolmessage.ruleActionType==1)
+        {
+          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:true, button3:false,ruleid:rolmessage.RuleInternalId, form:rolmessage.formIfReturnFalse} )
+        }
+        else{
+          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:false, button3:true,ruleid:rolmessage.RuleInternalId, form:rolmessage.formIfReturnFalse} )
+        }
+
+      }
+
     },
     loadmodels () {
       if (this.car.brand && this.car.year) {

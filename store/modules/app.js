@@ -103,6 +103,13 @@ const mutations = {
     state.form_items_from_server = data.inquiryres
     state.inquirystring = data.inquirystring
   },
+  [types.SECOND_DATA] (state, data) {
+    console.log(data)
+    //state.opcode = data.opcode
+    //state.resrol = data.resrol
+    state.form_items_from_server = data.inquiryres
+    state.inquirystring = data.inquirystring
+  },
   [types.INQUIRY_DATA]: function (state, data) {
     console.log(data)
     if (data.type = 'checkbox') {
