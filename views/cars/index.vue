@@ -1,7 +1,6 @@
 <template>
   <div>
-    <input class="input" v-model="personcode" type="text" >
-    <input class="input" v-model="opcode" type="text" ><button class="button is-primary" v-on:click="onclickloadopp()">Salvar</button>
+  <div  v-if="showverify">
     <div class="tile is-ancestor">
     <div class="tile is-parent">
       <article class="tile is-child box">
@@ -239,12 +238,70 @@
     <modal v-if="showModal" @close="onclickclosemodal" @inquiry="onclickopeninquiry" @auth="onclickauthmodal" @pend="onclickpendmodal" @rech="onclickrechmodal" >
       <p>{{modalContain}}</p>
     </modal>
+
+  </div>
+  <div :id="inquiry" v-if="showinquiry">
+    <div class="tile is-ancestor">
+      <div class="tile is-parent">
+        <article class="tile is-child box">
+          <h1 class="title">Formulario Extendido</h1>
+          <form class="col s12 " id="lead_form" name="inquiryForm" v-on:submit.prevent="onSubmit">
+            <div class="block" >
+              <div class="control is-horizontal" v-for="formItem in formValues">
+                <div class="control-label">
+                  <label class="label">{{formItem.Question}}</label>
+                </div>
+                <div class="control">
+                  <div class="control is-grouped" v-if="formItem.Type == 'open'">
+                    <p class="control is-expanded">
+                      <input  v-on:change="onInquiryChange(formItem.QuestionCode,$event.target.value)" :name="formItem.QuestionCode" class="input" v-model="formItem.QuestionCode" type="memo" >
+                    </p>
+                  </div>
+                  <div class="control is-grouped" v-if="formItem.Type == 'multiple'">
+                    <p class="control is-expanded"  v-for="itemoptions in formItem.Options">
+                      <input v-on:change="onInquiryChange(formItem.QuestionCode,$event.target.value)" :name="formItem.QuestionCode" class="input"  type="checkbox" >
+                    </p>
+                  </div>
+                  <div class="control is-grouped" v-if="formItem.Type == 'combobox'">
+                    <div class="control">
+                      <select v-on:change="onInquiryChange(formItem.QuestionCode,$event.target.value)" :ref="formItem.QuestionCode"  :name="formItem.QuestionCode" type="radio" id="5No">
+                        <option value=""> </option>
+                        <option v-for="node in formItem.Options" :value="node" >{{node}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="control is-grouped" v-if="formItem.Type == 'yesno'">
+                    <div class="control is-expanded">
+                      <input v-on:change="onInquiryChange(formItem.QuestionCode,$event.target.value)" value="Yes" :name="formItem.QuestionCode" type="radio" id="5Yes">
+                      <label class="active" for="5Yes">Yes</label>
+                      <input v-on:change="onInquiryChange(formItem.QuestionCode,$event.target.value)" value="No" :name="formItem.QuestionCode" type="radio" id="5No">
+                      <label class="active" for="5No">No</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="control is-horizontal">
+                <div class="control-label">
+                </div>
+                <div class="control">
+                  <button class="button is-primary" type="submit">Siguiente</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </article>
+      </div>
+
+    </div>
+
+  </div>
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES, LOAD_MODELS, LOAD_YEARS, LOAD_CITYCODES, SAVE_OPPCODE, TOGGLE_MODAL, TOGGLE_INQUIRY, SECOND_DATA } from 'vuex-store/mutation-types'
+import { INIT_AGENCIES, LOAD_MODELS, LOAD_YEARS, LOAD_CITYCODES, SAVE_OPPCODE, TOGGLE_MODAL, TOGGLE_INQUIRY, INQUIRY_DATA , SECOND_DATA, EMPTY_INQUIRY } from 'vuex-store/mutation-types'
 import store from './../../store'
 import { Modal } from 'components/layout/'
 const { state } = store
@@ -260,7 +317,7 @@ export default {
       seengarante: false,
       owner: {
         birthdate:'',
-        ingress: '',
+        ingress: '15000',
         province: '',
         locality: '',
         cellphone: '',
@@ -271,10 +328,10 @@ export default {
       },
       car: {
         infovalue: 'A calcular',
-        year: '',
-        km0:'',
-        use:'',
-        gnc:'',
+        year: '2015',
+        km0:'0',
+        use:'0',
+        gnc:'0',
         brand:'',
         model:''
       },
@@ -282,11 +339,11 @@ export default {
 
       brand: '',
       model: '',
-      year: '',
-      month:'',
+      year: '2012',
+      month:'12',
       months:[12, 15, 18, 24, 30, 36, 48],
-      amount:'',
-      tasa:'',
+      amount:'100000',
+      tasa:'12',
       errormensage:'',
       showerrormensage:false,
       opcode:'',
@@ -317,6 +374,15 @@ export default {
     },
     modalContain() {
       return state.app.modalContain
+    },
+    showinquiry() {
+      return state.app.showinquiry
+    },
+    showverify() {
+      return state.app.showverify
+    },
+    formValues() {
+      return state.app.form_items_from_server
     }
 
   },
@@ -328,7 +394,16 @@ export default {
     ...mapActions([
       'addCase'
     ]),
+    onInquiryChange : function (a,b,c=''){
+      //here do what u want
+      console.log("update")
+      console.log(a)
+      console.log(b)
+      store.commit(INQUIRY_DATA, {id:a,value:b,type:c} )
+    },
     loadData () {
+    store.commit(SECOND_DATA, '' )
+    store.commit(TOGGLE_INQUIRY,{'showinquiry':false,'showverify':true} )
     this.owner=state.app.owner
       console.log(this.owner)
       if (this.owner.province)
@@ -370,6 +445,7 @@ export default {
       this.nextrule('')
     },
     onclickopeninquiry () {
+      console.log("openinquiry")
       store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
       store.commit(TOGGLE_INQUIRY,{'showinquiry':true,'showverify':false} )
     },
@@ -421,6 +497,7 @@ export default {
       console.log("va codia")
       console.log(codia)
       if (this.amount<= this.car.infovalue*this.loanlimit/100) {
+        store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':'Se procede a grabar la informacion',button1:false, button3:false} )
         this.$http({
           method: 'GET',
           url: '/ralfintranet/api/setsecondwindow',
@@ -437,13 +514,18 @@ export default {
 
           }
         }).then((response) => {
-          store.commit(SECOND_DATA, response.data )
-          store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':'',button1:false, button3:false} )
+          console.log("Rsponse del consulta")
+          if (response.data.quotes.length==0)
+          {
+            alert("No se pudo cotizar")
+          }
+          store.commit(SECOND_DATA, response.data)
+          store.commit(TOGGLE_MODAL, {'opened': false, 'modalcontain': '', button1: false, button3: false})
           this.nextrule(response)
           //this.$router.push('/additional')
           console.log(response)
-
         }).catch((error) => {
+          console.log("error")
           let obj2 = {
             title: 'Error',
             message: error,
@@ -460,6 +542,45 @@ export default {
         alert("El monto supera el maximo permitido.")
       }
     },
+    onSubmit : function (){
+      //here do what u want
+      console.log("finish")
+      console.log(state.app.inquirydata)
+      this.$http.post('/inquiry/inq_process?=='+state.app.inquirystring, state.app.inquirydata)
+        .then(function (response) {
+
+          // Success
+          console.log(response.data)
+          store.commit(TOGGLE_INQUIRY,{'showinquiry':false,'showverify':true} )
+//          let sumscores=0
+//          console.log("****************************************************************")
+//          console.log(response.data.InquiryResult)
+//          console.log(response.data.InquiryResult.fields)
+//          console.log(response.data.InquiryResult.fields)
+//          console.log(response.data.InquiryResult.fields.InquiryResultRows)
+//          for (let irr of response.data.InquiryResult.fields.InquiryResultRows)
+//          {
+//            console.log(irr)
+//            console.log(irr.fields.Score)
+//            console.log(sumscores)
+//            sumscores += irr.fields.Score
+//          }
+//          console.log(sumscores)
+          this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId='+state.app.opcode+'&score='+response.data.score+'&inquirycode='+response.data.InquiryResult.fields.InquiryCode )
+            .then(function (responsescore)
+              { console.log("Grabo el score")       }.bind(this)
+              ,function (responsescore) {
+                // Error
+                console.log(responsescore.data)
+              });
+          this.nextrule('')
+          console.log(response.data)
+        }.bind(this),function (response) {
+          // Error
+          console.log(response.data)
+        });
+      console.log("emitio false!")
+    },
     nextrule(response){
       console.log("Va next rule consoles logs")
 
@@ -471,7 +592,32 @@ export default {
         console.log("Termino!")
         this.continuestep2 = false
         // TODO save person
-        this.$router.push('/cars')
+        this.$http({
+          method: 'GET',
+          url: '/ralfintranet/api/setrci2',
+          transformResponse: [(data) => {
+            return JSON.parse(data)
+          }],
+          params: {
+            opcode: state.app.opcode
+
+          }
+        }).then((response) => {
+          console.log("Rsponse del consulta")
+          this.$router.push('/additional')
+        }).catch((error) => {
+          console.log("error")
+          let obj2 = {
+            title: 'Error',
+            message: error,
+            customCloseBtnText: "Cerrar",
+            type: 'error'
+          }
+          alert(error)
+
+          console.log(error)
+        })
+
       }
       let rolmessage = state.app.resrol[this.rulenr]
       this.rulenr +=1

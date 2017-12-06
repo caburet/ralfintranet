@@ -383,9 +383,11 @@
                       </p>
                     </div>
                     <div class="control is-grouped" v-if="formItem.Type == 'combobox'">
-                      <div class="control "  v-for="node in formItem.Options">
-                        <input v-on:change="onInquiryChange(formItem.QuestionCode,$event.target.value)" :ref="formItem.QuestionCode" :value="node" :name="formItem.QuestionCode" type="radio" id="5No">
-                        <label class="active" :for="node">{{node}}</label>
+                      <div class="control">
+                        <select v-on:change="onInquiryChange(formItem.QuestionCode,$event.target.value)" :ref="formItem.QuestionCode"  :name="formItem.QuestionCode" type="radio" id="5No">
+                          <option value=""> </option>
+                          <option v-for="node in formItem.Options" :value="node" >{{node}}</option>
+                        </select>
                       </div>
                     </div>
                     <div class="control is-grouped" v-if="formItem.Type == 'yesno'">
@@ -523,10 +525,10 @@ export default {
       this.$http.post('/inquiry/inq_process?=='+state.app.inquirystring, state.app.inquirydata)
         .then(function (response) {
 
-        // Success
+          // Success
           console.log(response.data)
-        store.commit(TOGGLE_INQUIRY,{'showinquiry':false,'showverify':true} )
-        this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId='+state.app.opcode+'&score='+response.data.score+'&inquirycode='+response.data.InquiryResult.fields.InquiryCode)
+          store.commit(TOGGLE_INQUIRY,{'showinquiry':false,'showverify':true} )
+          this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId='+state.app.opcode+'&score='+response.data.score+'&inquirycode='+response.data.InquiryResult.fields.InquiryCode )
           .then(function (responsescore)
           { console.log("Grabo el score")       }.bind(this)
             ,function (responsescore) {
@@ -586,6 +588,14 @@ export default {
           this[type].birthdate=response.data.person.birthdate.substring(0, 10);
           this[type].province=response.data.person.province
           this[type].citycode=response.data.person.localitycode
+          this[type].ingress=response.data.person.ingress
+          this[type].phone=response.data.person.phone
+          this[type].cellphone=response.data.person.cellphone
+          this[type].marstatus=response.data.person.marstatus
+          this[type].nacionality=response.data.person.nacionality
+          this[type].address=response.data.person.address
+          this[type].email=response.data.person.email
+          this[type].taxregtype=response.data.person.taxregtype
           response.data.person['type']=type
           store.commit(INIT_PERSON, response.data.person )
         }

@@ -52,6 +52,7 @@ const state = {
   verifyclient: {
     citycodes: [],
     provinces: [],
+    countrys: [],
     agencies: [],
     campaigns: [],
     products: []
@@ -103,10 +104,17 @@ const mutations = {
     state.form_items_from_server = data.inquiryres
     state.inquirystring = data.inquirystring
   },
+  [types.EMPTY_INQUIRY] (state, data) {
+    console.log("EMPTY_INQUIRY")
+    state.resrol = ''
+    state.form_items_from_server = ''
+    state.inquirystring = ''
+  },
   [types.SECOND_DATA] (state, data) {
+    console.log("SECOND_DATA")
     console.log(data)
     //state.opcode = data.opcode
-    //state.resrol = data.resrol
+    state.resrol = data.resrol
     state.form_items_from_server = data.inquiryres
     state.inquirystring = data.inquirystring
   },
@@ -133,6 +141,7 @@ const mutations = {
     state.verifyclient.campaigns = []
     state.verifyclient.products = []
     state.verifyclient.provinces = []
+    state.verifyclient.countrys = []
     for (let d in data.data.agencias) {
       let agencieData = JSON.parse(data.data.agencias[d])
       state.verifyclient.agencies.push(
@@ -167,6 +176,14 @@ const mutations = {
     }
     for (let p of data.data.provinces) {
       state.verifyclient.provinces.push(
+        {_id: JSON.parse(p).Code,
+          label: JSON.parse(p).Name
+
+        }
+      )
+    }
+    for (let p of data.data.countrys) {
+      state.verifyclient.countrys.push(
         {_id: JSON.parse(p).Code,
           label: JSON.parse(p).Name
 

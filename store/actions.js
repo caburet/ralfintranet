@@ -46,3 +46,5 @@ export const loadcitycodes = ({ commit }, opened) => commit(types.LOAD_CITYCODES
 export const saveopcode = ({ commit }, opened) => commit(types.SAVE_OPPCODE, data)
 
 export const seconddata = ({ commit }, opened) => commit(types.SECOND_DATA, data)
+
+export const emptyinquiry = ({ commit }, opened) => commit(types.EMPTY_INQUIRY, data)
