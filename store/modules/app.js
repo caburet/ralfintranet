@@ -142,6 +142,7 @@ const mutations = {
     state.verifyclient.products = []
     state.verifyclient.provinces = []
     state.verifyclient.countrys = []
+console.log("agencias")
     for (let d in data.data.agencias) {
       let agencieData = JSON.parse(data.data.agencias[d])
       state.verifyclient.agencies.push(
@@ -150,6 +151,7 @@ const mutations = {
         }
       )
     }
+console.log("campaña")
     for (let d of data.data.campaign) {
       state.verifyclient.campaigns.push(
         {_id: d.code,
@@ -159,6 +161,7 @@ const mutations = {
         }
       )
     }
+console.log("agencias")
     for (let p of data.data.product) {
       state.verifyclient.products.push(
         {_id: p.code,
@@ -167,6 +170,8 @@ const mutations = {
         }
       )
     }
+console.log("agencias")
+
     for (let p of data.data.brands) {
       state.carsoptions.brands.push(
         {_id: JSON.parse(p).BrandName,
@@ -174,16 +179,9 @@ const mutations = {
         }
       )
     }
+console.log("agencias")
     for (let p of data.data.provinces) {
       state.verifyclient.provinces.push(
-        {_id: JSON.parse(p).Code,
-          label: JSON.parse(p).Name
-
-        }
-      )
-    }
-    for (let p of data.data.countrys) {
-      state.verifyclient.countrys.push(
         {_id: JSON.parse(p).Code,
           label: JSON.parse(p).Name
 
@@ -239,7 +237,8 @@ const mutations = {
       state.carsoptions.models.push(
         {_id: JSON.parse(m).ModelNr,
           label: JSON.parse(m).ModelName,
-          codia: JSON.parse(m).Codia
+          codia: JSON.parse(m).Codia,
+	  carvalue: JSON.parse(m).CarValue
         }
       )
     }

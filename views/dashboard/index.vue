@@ -789,6 +789,7 @@ export default {
         // console.log(response.data.records)
         console.log('TERMINA LOS CONSOLE')
         store.commit(INIT_AGENCIES, response)
+console.log('Finish')
         if (response.data.personname) {
           store.commit(LOGIN, response.data.personname)
         }

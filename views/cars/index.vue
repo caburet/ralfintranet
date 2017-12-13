@@ -665,16 +665,19 @@ export default {
     loadcarvalue () {
       console.log(this.car.year)
       console.log(state.app.carsoptions.years)
+      console.log(state.app.carsoptions.models)
+      console.log(this.car)
+      console.log(state.app.carsoptions.models[this.car.model])
+      
       let yearvalue
-      for (let yearpair of state.app.carsoptions.years)
+      for (let modelspair of state.app.carsoptions.models)
       {
-        console.log(yearpair)
-        if (yearpair._id==this.car.year){
-          yearvalue=yearpair.label
+        if (modelspair._id==this.car.model){
+          yearvalue=modelspair.carvalue
         }
       }
 
-      this.car.infovalue=this.car.year*1000
+      this.car.infovalue=yearvalue*1000
       if (this.car.year && this.car.km0) {
         this.$http({
           method: 'GET',
