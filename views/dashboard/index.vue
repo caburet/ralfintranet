@@ -522,7 +522,7 @@ export default {
       //here do what u want
       console.log("finish")
       console.log(state.app.inquirydata)
-      this.$http.post('/inquiry/inq_process?=='+state.app.inquirystring, state.app.inquirydata)
+      this.$http.post('/inquiry/inq_process?=='+state.app.inquirystring+'record=Opportunity&rec_id='+state.app.opcode, state.app.inquirydata)
         .then(function (response) {
 
           // Success

@@ -546,7 +546,7 @@ export default {
       //here do what u want
       console.log("finish")
       console.log(state.app.inquirydata)
-      this.$http.post('/inquiry/inq_process?=='+state.app.inquirystring, state.app.inquirydata)
+      this.$http.post('/inquiry/inq_process?=='+state.app.inquirystring+'record=Opportunity&rec_id='+state.app.opcode, state.app.inquirydata)
         .then(function (response) {
 
           // Success
@@ -668,7 +668,7 @@ export default {
       console.log(state.app.carsoptions.models)
       console.log(this.car)
       console.log(state.app.carsoptions.models[this.car.model])
-      
+
       let yearvalue
       for (let modelspair of state.app.carsoptions.models)
       {
