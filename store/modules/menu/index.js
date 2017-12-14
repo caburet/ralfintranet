@@ -13,7 +13,7 @@ const state = {
     {
       name: 'Verificar',
       path: '/dashboard',
-      props: ['message'],
+      props: [],
       meta: {
         icon: 'fa-tachometer',
         link: 'dashboard/index.vue'
@@ -23,7 +23,7 @@ const state = {
     {
       name: 'cars',
       path: '/cars',
-      props: ['message'],
+      props: [],
       meta: {
         icon: 'fa-tachometer',
         link: 'cars/index.vue'
@@ -33,7 +33,7 @@ const state = {
     {
       name: 'additional',
       path: '/additional',
-      props: ['message'],
+      props: [],
       meta: {
         icon: 'fa-tachometer',
         link: 'additional/index.vue'
@@ -43,7 +43,7 @@ const state = {
     {
       name: 'simulator',
       path: '/simulator',
-      props: ['message'],
+      props: [],
       meta: {
         icon: 'fa-tachometer',
         link: 'simulator/index.vue'
