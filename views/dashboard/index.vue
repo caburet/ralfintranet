@@ -353,10 +353,6 @@
       </article>
     </div>
     </div>
-    <simplert :useRadius="true"
-              :useIcon="true"
-              ref="simplert">
-    </simplert>
     <modal v-if="showModal" @close="onclickclosemodal" @inquiry="onclickopeninquiry" @auth="onclickauthmodal" @pend="onclickpendmodal" @rech="onclickrechmodal" >
       <p>{{modalContain}}</p>
     </modal>
@@ -423,11 +419,10 @@ import { mapActions } from 'vuex'
 import { INIT_AGENCIES, LOGIN, INQUIRY_DATA, INIT_PERSON, TOGGLE_SIDEBAR, TOGGLE_MODAL, OPP_DATA, TOGGLE_INQUIRY} from 'vuex-store/mutation-types'
 import store from './../../store'
 import { Modal } from 'components/layout/'
-import Simplert from 'vue2-simplert'
+
 const { state } = store
 export default {
   components: {
-    Simplert,
     Modal
   },
   data: function () {
@@ -687,8 +682,6 @@ export default {
         console.log("rolmessage")
         console.log(rolmessage.formIfReturnFalse)
         console.log(rolmessage)
-          //this.continuestep2 = false
-          //this.$refs.simplert.openSimplert(obj)
           if (rolmessage.ruleActionType==1)
           {
             store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:true, button3:false,ruleid:rolmessage.RuleInternalId, form:rolmessage.formIfReturnFalse} )
@@ -713,7 +706,6 @@ export default {
           type: 'info',
           hideAllButton: true
         }
-        //this.$refs.simplert.openSimplert(obj)
         store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':'Se procede a grabar la informacion',button1:false, button3:false} )
         this.$http({
           method: 'GET',
@@ -755,8 +747,6 @@ export default {
             type: 'error'
           }
           store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':error, button1:false, button3:false} )
-          //this.$refs.simplert.openSimplert(obj2)
-
           console.log(error)
 
         })
@@ -768,7 +758,6 @@ export default {
           message: checkresult,
           type: 'warning'
         }
-        //this.$refs.simplert.openSimplert(obj)
         store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':checkresult, button1:true, button3:false} )
         this.showerrormensage=true
         this.errormensage=checkresult
