@@ -514,6 +514,13 @@ export default {
 
           }
         }).then((response) => {
+          if (response.data.loanratevalue==0)
+          {
+            alert("No se pudo determinar el valor de la Tasa")
+            store.commit(TOGGLE_MODAL, {'opened': false, 'modalcontain': '', button1: false, button3: false})
+            return false;
+          }
+
           console.log("Rsponse del consulta")
           if (response.data.quotes.length==0)
           {
@@ -552,20 +559,6 @@ export default {
           // Success
           console.log(response.data)
           store.commit(TOGGLE_INQUIRY,{'showinquiry':false,'showverify':true} )
-//          let sumscores=0
-//          console.log("****************************************************************")
-//          console.log(response.data.InquiryResult)
-//          console.log(response.data.InquiryResult.fields)
-//          console.log(response.data.InquiryResult.fields)
-//          console.log(response.data.InquiryResult.fields.InquiryResultRows)
-//          for (let irr of response.data.InquiryResult.fields.InquiryResultRows)
-//          {
-//            console.log(irr)
-//            console.log(irr.fields.Score)
-//            console.log(sumscores)
-//            sumscores += irr.fields.Score
-//          }
-//          console.log(sumscores)
           this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId='+state.app.opcode+'&score='+response.data.score+'&inquirycode='+response.data.InquiryResult.fields.InquiryCode )
             .then(function (responsescore)
               { console.log("Grabo el score")       }.bind(this)
