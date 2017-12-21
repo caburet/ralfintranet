@@ -22,11 +22,16 @@
             <div class="control-label">
               <label class="label">Nacionalidad</label>
             </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.nationality"  placeholder="">
-              </p>
+
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select  v-model="nationality" >
+                  <option value="OTROS">Otros</option>
+                  <option v-for="node in nationalitys" :value="node._id" >{{node._id}}</option>
+                </select>
+              </div>
             </div>
+
           </div>
           <div class="control is-horizontal">
             <div class="control-label">
@@ -76,11 +81,14 @@
             <div class="control-label">
               <label class="label">Situacion Laboral</label>
             </div>
-              <div class="control is-grouped">
-                <p class="control is-expanded">
-                  <input class="input" type="text" v-model="owner.work"  placeholder="">
-                </p>
+            <div class="control">
+              <div class="select is-fullwidth">
+                <select  v-model="jobposition" >
+                  <option value="OTROS">Otros</option>
+                  <option v-for="node in jobpositions" :value="node._id" >{{node._id}}</option>
+                </select>
               </div>
+            </div>
             <div class="control-label">
               <label class="label">Puesto Laboral</label>
             </div>
@@ -110,7 +118,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="gowner.cellphone"  placeholder="">
+                <input class="input" type="text" v-model="cyowner.cellphone"  placeholder="">
               </p>
             </div>
             <div class="control-label">
@@ -118,7 +126,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="gowner.phone"  placeholder="">
+                <input class="input" type="text" v-model="cyowner.phone"  placeholder="">
               </p>
             </div>
           </div>
@@ -128,7 +136,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="gowner.email"  placeholder="">
+                <input class="input" type="text" v-model="cyowner.email"  placeholder="">
               </p>
             </div>
             <div class="control-label">
@@ -136,7 +144,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                  <input class="input" type="text" v-model="gowner.ingress"  placeholder="">
+                  <input class="input" type="text" v-model="cyowner.ingress"  placeholder="">
               </p>
             </div>
           </div>
@@ -174,6 +182,12 @@ export default {
     Modal
   },
   computed:{
+    jobpositions (){
+      return state.app.verifyclient.jobpositions
+    },
+    nationalitys (){
+      return state.app.verifyclient.nationalitys
+    },
     showModal() {
       return state.app.showModal
     },
@@ -193,7 +207,7 @@ export default {
         workplace: '',
         work: ''
       },
-      gowner: {
+      cyowner: {
         cellphone: '',
         phone: '',
         email: '',
@@ -242,7 +256,7 @@ export default {
           params: {
             opcode: state.app.opcode,
             owner: Object.assign({}, state.app.owner, this.owner),
-            gowner: Object.assign({}, state.app.gowner, this.gowner)
+            cyowner: Object.assign({}, state.app.cyowner, this.cyowner)
 
           }
         }).then((response) => {

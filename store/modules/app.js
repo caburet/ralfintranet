@@ -55,7 +55,10 @@ const state = {
     countrys: [],
     agencies: [],
     campaigns: [],
-    products: []
+    products: [],
+    nationalitys:[],
+    jobpositions:[]
+
   },
   carvalues: {
     brand: []
@@ -152,46 +155,98 @@ console.log("agencias")
       )
     }
 console.log("campaña")
-    for (let d of data.data.campaign) {
-      state.verifyclient.campaigns.push(
-        {_id: d.code,
-          label: d.name,
-          custcode: d.custcode
+    try {
+      for (let d of data.data.campaign) {
+        state.verifyclient.campaigns.push(
+          {
+            _id: d.code,
+            label: d.name,
+            custcode: d.custcode
 
-        }
-      )
+          }
+        )
+      }
     }
-console.log("agencias")
-    for (let p of data.data.product) {
-      state.verifyclient.products.push(
-        {_id: p.code,
-          campaign: p.campaign,
-          label: p.name
-        }
-      )
-    }
-console.log("agencias")
+    catch (err) {}
 
-    for (let p of data.data.brands) {
-      state.carsoptions.brands.push(
-        {_id: JSON.parse(p).BrandName,
-          label: JSON.parse(p).BrandName
-        }
-      )
-    }
 console.log("agencias")
-    for (let p of data.data.provinces) {
-      state.verifyclient.provinces.push(
-        {_id: JSON.parse(p).Code,
-          label: JSON.parse(p).Name
-
-        }
-      )
+    try {
+      for (let p of data.data.product) {
+        state.verifyclient.products.push(
+          {_id: p.code,
+            campaign: p.campaign,
+            label: p.name
+          }
+        )
+      }
     }
+    catch (err) {}
+console.log("agencias")
+    try {
+        for (let p of data.data.brands) {
+          state.carsoptions.brands.push(
+            {_id: JSON.parse(p).BrandName,
+              label: JSON.parse(p).BrandName
+            }
+          )
+        }
+      }
+      catch (err) {}
+console.log("nationalitys")
+    try {
+      for (let p of data.data.nationalitys) {
+        state.verifyclient.nationalitys.push(
+          {_id: JSON.parse(p).Code,
+            label: JSON.parse(p).Name
+
+          }
+        )
+      }
+    }
+    catch (err) {}
+    console.log("agencias")
+    try {
+      for (let p of data.data.provinces) {
+        state.verifyclient.provinces.push(
+          {_id: JSON.parse(p).Code,
+            label: JSON.parse(p).Name
+
+          }
+        )
+      }
+    }
+    catch (err) {}
+    console.log("countrys")
+    try {
+      for (let p of data.data.countrys) {
+        state.verifyclient.countrys.push(
+          {_id: JSON.parse(p).Code,
+            label: JSON.parse(p).Name
+
+          }
+        )
+      }
+    }
+    catch (err) {}
+    console.log("jobpositions")
+    try {
+      for (let p of data.data.jobpositions) {
+        state.verifyclient.jobpositions.push(
+          {_id: JSON.parse(p).Code,
+            label: JSON.parse(p).Name
+
+          }
+        )
+      }
+    }
+    catch (err) {}
+    try {
     for (let y of [...Array(20).keys()]) {
       let actualyear = (new Date()).getFullYear()
       state.carsoptions.years.push({_id: actualyear - y, label: actualyear - y})
     }
+    }
+    catch (err) {}
     console.log(state.verifyclient)
   },
   [types.INIT_PERSON] (state, data) {
@@ -226,7 +281,8 @@ console.log("agencias")
     for (let c of data.data.citycodes) {
       state.verifyclient.citycodes.push(
         {_id: JSON.parse(c).CityCode,
-          label: JSON.parse(c).Code
+          label: JSON.parse(c).Code,
+          localitycode:JSON.parse(c).LocalityCode
         }
       )
     }
@@ -244,23 +300,6 @@ console.log("agencias")
     }
   },
 
-  // [types.LOAD_RATES] (state, data) {
-  //   console.log(data)
-  //   state.carsoptions.years = []
-  //   for (let y of data.data.years) {
-  //     let foo = new Array(21)
-  //     for (let i = 1; i < foo.length; i++) {
-  //       let field = 'Pre' + ('0' + i).slice(-2)
-  //       if (JSON.parse(y)[field]) {
-  //         state.carsoptions.years.push(
-  //           {_id: JSON.parse(y)[field],
-  //             label: parseInt(JSON.parse(y).Year) - (i - 1)
-  //           }
-  //         )
-  //       }
-  //     }
-  //   }
-  // },
   [types.LOGIN] (state, data) {
     console.log(data)
     state.personname = data
