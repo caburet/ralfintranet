@@ -48,3 +48,9 @@ export const saveopcode = ({ commit }, opened) => commit(types.SAVE_OPPCODE, dat
 export const seconddata = ({ commit }, opened) => commit(types.SECOND_DATA, data)
 
 export const emptyinquiry = ({ commit }, opened) => commit(types.EMPTY_INQUIRY, data)
+
+export const loadloanlimit = ({ commit }, opened) => commit(types.LOAD_LOANLIMIT, data)
+
+export const loadloanlimitvalues = ({ commit }, opened) => commit(types.LOAD_LOANLIMITVALUES, data)
+
+export const updateloanamount = ({ commit }, opened) => commit(types.UPDATE_LOANAMOUNT, data)

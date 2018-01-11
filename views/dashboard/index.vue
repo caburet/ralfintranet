@@ -515,27 +515,29 @@ export default {
     },
     onSubmit : function (){
       //here do what u want
-      console.log("finish")
-      console.log(state.app.inquirydata)
-      this.$http.post('/inquiry/inq_process?=='+state.app.inquirystring, state.app.inquirydata)
-        .then(function (response) {
+      if (Object.keys(this.formValues).length == Object.keys(state.app.inquirydata).length) {
+        this.$http.post('/inquiry/inq_process?==' + state.app.inquirystring, state.app.inquirydata)
+          .then(function (response) {
 
-          // Success
-          console.log(response.data)
-          store.commit(TOGGLE_INQUIRY,{'showinquiry':false,'showverify':true} )
-          this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId='+state.app.opcode+'&score='+response.data.score+'&inquirycode='+response.data.InquiryResult.fields.InquiryCode )
-          .then(function (responsescore)
-          { console.log("Grabo el score")       }.bind(this)
-            ,function (responsescore) {
+            // Success
+            console.log(response.data)
+            store.commit(TOGGLE_INQUIRY, {'showinquiry': false, 'showverify': true})
+            this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId=' + state.app.opcode + '&score=' + response.data.score + '&inquirycode=' + response.data.InquiryResult.fields.InquiryCode)
+              .then(function (responsescore) { console.log("Grabo el score") }.bind(this)
+                , function (responsescore) {
+                  // Error
+                  console.log(responsescore.data)
+                });
+            this.nextrule('')
+            console.log(response.data)
+          }.bind(this), function (response) {
             // Error
-            console.log(responsescore.data)
+            console.log(response.data)
           });
-        this.nextrule('')
-        console.log(response.data)
-      }.bind(this),function (response) {
-        // Error
-        console.log(response.data)
-      });
+      }
+      else {
+        alert("Tienes que completar los "+this.formValues.length)
+      }
       console.log("emitio false!")
     },
     openInNewTab(url) {
@@ -582,7 +584,7 @@ export default {
           this[type].sex=response.data.person.sex
           this[type].birthdate=response.data.person.birthdate.substring(0, 10);
           this[type].province=response.data.person.province
-          this[type].citycode=response.data.person.localitycode
+          this[type].citycode=response.data.person.citycode
           this[type].ingress=response.data.person.ingress
           this[type].phone=response.data.person.phone
           this[type].cellphone=response.data.person.cellphone
@@ -591,6 +593,9 @@ export default {
           this[type].address=response.data.person.address
           this[type].email=response.data.person.email
           this[type].taxregtype=response.data.person.taxregtype
+          this[type].workphone=response.data.person.workphone
+          this[type].workplace=response.data.person.workplace
+          this[type].work=response.data.person.work
           response.data.person['type']=type
           store.commit(INIT_PERSON, response.data.person )
         }
@@ -627,7 +632,7 @@ export default {
           state: rulestate
         }
       }).then((response) => {
-
+        l
         console.log(response)
         this.nextrule(response)
       }).catch((error) => {
@@ -673,6 +678,7 @@ export default {
       {
         console.log("Termino!")
         this.continuestep2 = false
+        this.loadowner ('owner')
         // TODO save person
         this.$router.push('/cars')
       }

@@ -1,6 +1,11 @@
 import * as types from '../mutation-types'
 
 const state = {
+  loaninstallment:0,
+  amount:0,
+  carvalue: '',
+  loanlimit: '',
+  loanrates: [],
   resrol: [],
   inquirydata: {},
   inquirystring: '',
@@ -13,7 +18,7 @@ const state = {
   form: false,
   buttons1: false,
   personname: '',
-  opcode: '',
+  opcode: '8721',
   ruleid: '',
   owner: {
     sex: '',
@@ -259,13 +264,46 @@ console.log("nationalitys")
         state.owner.sex = data.sex
         state.owner.birthdate = data.birthdate.substring(0, 10)
         state.owner.province = data.province
-        state.owner.citycode = data.localitycode
+        state.owner.citycode = data.citycode
+        state.owner.ingress = data.ingress
+        state.owner.phone = data.phone
+        state.owner.cellphone = data.cellphone
+        state.owner.marstatus = data.marstatus
+        state.owner.nationality = data.nationality
+        state.owner.address = data.address
+        state.owner.email = data.email
+        state.owner.taxregtype = data.taxregtype
+        state.owner.workphone = data.workphone
+        state.owner.workplace = data.workplace
+        state.owner.work = data.work
+
         break
       case 'cowner':
+        state.cowner.ID = data.ID
+        state.cowner.name = data.name
+        state.cowner.lastname = data.lastname
+        state.cowner.sex = data.sex
+        state.cowner.birthdate = data.birthdate.substring(0, 10)
+        state.cowner.province = data.province
+        state.cowner.citycode = data.citycode
         break
       case 'gowner':
+        state.gowner.ID = data.ID
+        state.gowner.name = data.name
+        state.gowner.lastname = data.lastname
+        state.gowner.sex = data.sex
+        state.gowner.birthdate = data.birthdate.substring(0, 10)
+        state.gowner.province = data.province
+        state.gowner.citycode = data.citycode
         break
       case 'coowner':
+        state.coowner.ID = data.ID
+        state.coowner.name = data.name
+        state.coowner.lastname = data.lastname
+        state.coowner.sex = data.sex
+        state.coowner.birthdate = data.birthdate.substring(0, 10)
+        state.coowner.province = data.province
+        state.coowner.citycode = data.citycode
         break
       default:
         break
@@ -275,6 +313,10 @@ console.log("nationalitys")
     console.log(data)
     state.opcode = data.opcode
     state.owner.ID = data.personcode
+  },
+  [types.UPDATE_LOANAMOUNT] (state, data) {
+    state.loaninstallment=data.month
+    state.amount=data.amount
   },
   [types.LOAD_CITYCODES] (state, data) {
     state.verifyclient.citycodes = []
@@ -299,7 +341,31 @@ console.log("nationalitys")
       )
     }
   },
+  [types.LOAD_LOANLIMIT] (state, data) {
+    console.log(data)
+    state.loanlimit = data.loanlimit
+    state.carvalue = data.carvalue
+  },
+  [types.LOAD_LOANLIMITVALUES] (state, data) {
+    state.loanrates=[]
+    for (let m of data.loanrates) {
+      console.log(m.LoanTerm,state.loaninstallment)
 
+
+      if (m.LoanTerm === state.loaninstallment){
+        console.log(m.LoanValue)
+        state.loaninstallment=m.LoanInstall
+      }
+      state.loanrates.push(
+        {LoanValue: m.LoanValue,
+          LoanTerm: m.LoanTerm,
+          LoanInstall: m.LoanInstall,
+          LoanMaxAmount:  state.carvalue*state.loanlimit/100,
+        }
+      )
+    }
+
+  },
   [types.LOGIN] (state, data) {
     console.log(data)
     state.personname = data

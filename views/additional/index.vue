@@ -25,7 +25,7 @@
 
             <div class="control">
               <div class="select is-fullwidth">
-                <select  v-model="nationality" >
+                <select  v-model="owner.nationality" >
                   <option value="OTROS">Otros</option>
                   <option v-for="node in nationalitys" :value="node._id" >{{node._id}}</option>
                 </select>
@@ -83,8 +83,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select  v-model="jobposition" >
-                  <option value="OTROS">Otros</option>
+                <select  v-model="owner.workplace" >
                   <option v-for="node in jobpositions" :value="node._id" >{{node._id}}</option>
                 </select>
               </div>
@@ -94,7 +93,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.workplace"  placeholder="">
+                <input class="input" type="text" v-model="owner.work"  placeholder="">
               </p>
             </div>
           </div>
@@ -103,7 +102,7 @@
     </div>
 
     </div>
-    <div class="tile is-ancestor">
+    <div class="tile is-ancestor" v-if="showConyuge">
     <div class="tile is-parent">
       <article class="tile is-child box">
         <h1 class="title">Datos Del Conyuge del Crédito</h1>
@@ -159,12 +158,32 @@
             </div>
           </div>
 
-
-
         </div>
       </article>
     </div>
-  </div>
+    </div>
+
+
+
+    <div class="tile is-ancestor" >
+      <div class="tile is-parent">
+        <article class="tile is-child box">
+             <div class="block">
+
+            <div class="control is-horizontal">
+              <div class="control is-grouped">
+                <div class="control">
+                  <button class="button is-primary" v-on:click="onclicksavethirdwindow()">Salvar</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </article>
+      </div>
+    </div>
+
+
     <modal v-if="showModal" @close="onclickclosemodal" @inquiry="onclickopeninquiry" @auth="onclickauthmodal" @pend="onclickpendmodal" @rech="onclickrechmodal" >
       <p>{{modalContain}}</p>
     </modal>
@@ -191,28 +210,17 @@ export default {
     showModal() {
       return state.app.showModal
     },
+    showConyuge() {
+      return state.app.cyowner
+    },
     modalContain() {
       return state.app.modalContain
     },
   },
   data () {
     return {
-      owner: {
-        marstatus: '',
-        nationality: '',
-        address: '',
-        addressnr: '',
-        email: '',
-        taxregtype:'',
-        workplace: '',
-        work: ''
-      },
-      cyowner: {
-        cellphone: '',
-        phone: '',
-        email: '',
-        ingress: '',
-      }
+      owner:state.app.owner,
+      cyowner:state.app.cyowner
     }
   },
   created: function () {
@@ -260,16 +268,9 @@ export default {
 
           }
         }).then((response) => {
-          console.log("Rsponse del consulta")
-          if (response.data.quotes.length==0)
-          {
-            alert("No se pudo cotizar")
-          }
-          store.commit(SECOND_DATA, response.data)
-          store.commit(TOGGLE_MODAL, {'opened': false, 'modalcontain': '', button1: false, button3: false})
-          this.nextrule(response)
-          //this.$router.push('/additional')
-          console.log(response)
+           console.log("Rsponse del consulta")
+           this.$router.push('/simulator')
+           console.log(response)
         }).catch((error) => {
           console.log("error")
           let obj2 = {

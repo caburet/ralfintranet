@@ -141,24 +141,6 @@
 
 
         <div class="block">
-            <div class="control is-horizontal">
-              <div class="control-label">
-                <label class="label">Fecha Nacimiento</label>
-              </div>
-              <div class="control is-grouped">
-                <p class="control is-expanded">
-                  <input class="input" v-model="owner.birthdate" type="date"  placeholder="01/01/1980">
-                </p>
-              </div>
-              <div class="control-label">
-                <label class="label">Ingresos</label>
-              </div>
-              <div class="control is-grouped">
-                <p class="control is-expanded">
-                  <input class="input" v-model="owner.ingress" type="text" >
-                </p>
-              </div>
-            </div>
           <div class="control is-horizontal">
             <div class="control-label">
               <label class="label">Provincia</label>
@@ -176,7 +158,7 @@
             <div class="control">
               <div class="select is-fullwidth">
                 <select v-model="owner.citycode" >
-                  <option v-for="node in citycodes" :value="node._id">{{node._id}} {{node.label}}</option>
+                  <option v-for="node in citycodes" :value="node.label">{{node.label}}</option>
                 </select>
               </div>
             </div>
@@ -191,10 +173,11 @@
               </p>
             </div>
             <div class="control-label">
-              <label class="label"></label>
+              <label class="label">Ingresos</label>
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
+                <input class="input" v-model="owner.ingress" type="text" >
               </p>
             </div>
           </div>
@@ -301,7 +284,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES, LOAD_MODELS, LOAD_YEARS, LOAD_CITYCODES, SAVE_OPPCODE, TOGGLE_MODAL, TOGGLE_INQUIRY, INQUIRY_DATA , SECOND_DATA, EMPTY_INQUIRY } from 'vuex-store/mutation-types'
+import { INIT_AGENCIES, UPDATE_LOANAMOUNT, LOAD_MODELS, LOAD_LOANLIMIT, LOAD_YEARS, LOAD_CITYCODES, SAVE_OPPCODE, TOGGLE_MODAL, TOGGLE_INQUIRY, INQUIRY_DATA , SECOND_DATA, EMPTY_INQUIRY } from 'vuex-store/mutation-types'
 import store from './../../store'
 import { Modal } from 'components/layout/'
 const { state } = store
@@ -317,21 +300,20 @@ export default {
       seengarante: false,
       owner: {
         birthdate:'',
-        ingress: '15000',
+        ingress: '',
         province: '',
         locality: '',
         cellphone: '',
-        phone: '',
         phone: '',
         workphone: '',
         localitycode:''
       },
       car: {
         infovalue: 'A calcular',
-        year: '2015',
-        km0:'0',
-        use:'0',
-        gnc:'0',
+        year: '',
+        km0:'',
+        use:'',
+        gnc:'',
         brand:'',
         model:''
       },
@@ -339,11 +321,11 @@ export default {
 
       brand: '',
       model: '',
-      year: '2012',
-      month:'12',
+      year: '',
+      month:'',
       months:[12, 15, 18, 24, 30, 36, 48],
-      amount:'100000',
-      tasa:'12',
+      amount:'',
+      tasa:'',
       errormensage:'',
       showerrormensage:false,
       opcode:'',
@@ -498,6 +480,7 @@ export default {
       console.log(codia)
       if (this.amount<= this.car.infovalue*this.loanlimit/100) {
         store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':'Se procede a grabar la informacion',button1:false, button3:false} )
+        store.commit(UPDATE_LOANAMOUNT, {amount:this.amount, month:this.month} )
         this.$http({
           method: 'GET',
           url: '/ralfintranet/api/setsecondwindow',
@@ -551,27 +534,29 @@ export default {
     },
     onSubmit : function (){
       //here do what u want
-      console.log("finish")
-      console.log(state.app.inquirydata)
-      this.$http.post('/inquiry/inq_process?=='+state.app.inquirystring, state.app.inquirydata)
-        .then(function (response) {
+      if (Object.keys(this.formValues).length == Object.keys(state.app.inquirydata).length) {
+        this.$http.post('/inquiry/inq_process?==' + state.app.inquirystring, state.app.inquirydata)
+          .then(function (response) {
 
-          // Success
-          console.log(response.data)
-          store.commit(TOGGLE_INQUIRY,{'showinquiry':false,'showverify':true} )
-          this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId='+state.app.opcode+'&score='+response.data.score+'&inquirycode='+response.data.InquiryResult.fields.InquiryCode )
-            .then(function (responsescore)
-              { console.log("Grabo el score")       }.bind(this)
-              ,function (responsescore) {
-                // Error
-                console.log(responsescore.data)
-              });
-          this.nextrule('')
-          console.log(response.data)
-        }.bind(this),function (response) {
-          // Error
-          console.log(response.data)
-        });
+            // Success
+            console.log(response.data)
+            store.commit(TOGGLE_INQUIRY, {'showinquiry': false, 'showverify': true})
+            this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId=' + state.app.opcode + '&score=' + response.data.score + '&inquirycode=' + response.data.InquiryResult.fields.InquiryCode)
+              .then(function (responsescore) { console.log("Grabo el score") }.bind(this)
+                , function (responsescore) {
+                  // Error
+                  console.log(responsescore.data)
+                });
+            this.nextrule('')
+            console.log(response.data)
+          }.bind(this), function (response) {
+            // Error
+            console.log(response.data)
+          });
+      }
+      else {
+        alert("Tienes que completar todos los campos.")
+      }
       console.log("emitio false!")
     },
     nextrule(response){
@@ -687,6 +672,7 @@ export default {
           }
         }).then((response) => {
           this.loanlimit=response.data.percentage
+          store.commit(LOAD_LOANLIMIT, {loanlimit:response.data.percentage,carvalue:this.car.infovalue})
         }).catch((error) => {
           console.log(error)
         })

@@ -9,25 +9,45 @@
           <div class="control-label">
             <label class="label">Monto a Simular</label>
           </div>
+
+            <div class="control is-grouped">
+              <p class="control is-expanded">
+                <input class="input" type="text" v-model="amount"  placeholder="">
+              </p>
+            </div>
+
+          <div class="control-label">
+            <label class="label">LoanInstallments</label>
+          </div>
+
           <div class="control">
             <div class="select is-fullwidth">
-              <select  v-model="brand">
-                <option v-for="node in brand" :value="node._id">{{node.label}}</option>
+              <select  v-model="loaninstallment" v-on:change="calculateloan()">
+                <option v-for="node in loaninstallments" :value="node.LoanInstall" >{{node.LoanTerm}}</option>
               </select>
             </div>
           </div>
         </div>
           <div class="control is-horizontal">
             <div class="control-label">
-              <label class="label">Plazo</label>
+              <label class="label">LoanInstallAmount</label>
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.name"  placeholder="">
+                <input class="input" type="text" v-model="loaninstallamount"  placeholder="" readonly="readonly">
               </p>
             </div>
-          </div>
+            <div class="control-label">
 
+            </div>
+
+            <div class="control">
+              <button class="button is-primary" v-on:click="onclicksavefourthwindow()">Terminar</button>
+            </div>
+          </div>
+          <div class='table-responsive'>
+             <v-client-table :data="rowlist" :columns="columns" :options="options" ></v-client-table>
+          </div>
         </div>
       </article>
     </div>
@@ -38,7 +58,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES } from 'vuex-store/mutation-types'
+import { LOAD_LOANLIMITVALUES,TOGGLE_MODAL } from 'vuex-store/mutation-types'
 import store from './../../store'
 const { state } = store
 export default {
@@ -46,40 +66,26 @@ export default {
   },
   data () {
     return {
+      loaninstallment:state.app.loaninstallment,
+      amount:state.app.amount,
+      loaninstallamount:0,
+      itemsperpage: 20,
+      paginate: ['cases'],
+      columns: ['LoanTerm', 'LoanValue', 'LoanMaxAmount'],
+      options: {
+        sortable: ['LoanTerm'],
+        headings: {
+          LoanTerm: 'LoanTerm',
+          'LoanValue': 'LoanValue',
+          'LoanMaxAmount': 'LoanMaxAmount'
+        }
+      },
       seenconyuge: false,
       seenconcubino: false,
       seengarante: false,
       car: {
         infovalue: '111000'
 
-      },
-      owner: {
-        sex: '',
-        name: '',
-        ID: '',
-        IDtype: '',
-        lastname: ''
-      },
-      gowner: {
-        sex: '',
-        name: '',
-        ID: '',
-        IDtype: '',
-        lastname: ''
-      },
-      cowner: {
-        sex: '',
-        name: '',
-        ID: '',
-        IDtype: '',
-        lastname: ''
-      },
-      coowner: {
-        sex: '',
-        name: '',
-        ID: '',
-        IDtype: '',
-        lastname: ''
       },
       campaign: '',
       brand: state.app.carvalues.brand
@@ -89,82 +95,87 @@ export default {
     this.loadData()
   },
   stated: {},
+  computed: {
+    personname () {
+      return state.app.personname
+    },
+    loaninstallments (){
+      return state.app.loanrates
+    },
+    rowlist () {
+        return state.app.loanrates
+    }
+  },
   methods: {
     ...mapActions([
       'addCase'
     ]),
-    onclickfnbkp () {
-      let dic = {}
-      dic.tittle = this.tittle
-      dic.who = this.who
-      dic.tittle = this.tittle
-      dic.type = this.type
-      this.addCase(dic)
-    },
-    onclickcan () {
-      this.$router.push('/cases/basic')
-    },
-    onclickfn () {
-      this.$http({
-        method: 'GET',
-        url: 'http://localhost:8080/ralfintranet/api/savedata',
-        transformResponse: [(data) => {
-          return JSON.parse(data)
-        }],
-        params: {
-          parameters: {
-            Normalized: false,
-            NumberOfDays: false,
-            DataPeriod: false,
-            Elements: JSON.stringify(this.owner),
-            owner: JSON.stringify(this.owner),
-            gowner: JSON.stringify(this.gowner),
-            cowner: JSON.stringify(this.cowner),
-            coowner: JSON.stringify(this.coowner)
-          }
-        }
-      }).then((response) => {
-        console.log(response)
-        console.log(response.data)
-        console.log(response.data.records)
-        var arrayLength = response.data.records.length
-        for (var i = 0; i < arrayLength; i++) {
-          let obj = JSON.parse(response.data.records[i])
-          console.log('####################################')
-          console.log(obj)
-          let dic = {}
-          dic.SerNr = obj.SerNr
-          dic.CaseTypeComment = obj.CaseTypeComment
-          dic.Asignee = obj.Asignee
-          dic.ProblemDesc = obj.ProblemDesc
-          dic.CaseComment = obj.CaseComment
-          dic.StatusName = obj.StatusName
-          dic.TransDate = obj.TransDate
-          dic.TransTime = obj.TransTime
-          this.addCase(dic)
-        }
-      }).catch((error) => {
-        console.log(error)
-      })
-    },
     loadData () {
       console.log(this.$route.params)
       this.$http({
-        url: '/ralfintranet/api/getVerifyClientData/',
+        url: '/ralfintranet/api/getSimulatorData/',
         transformResponse: [(data) => {
           return JSON.parse(data)
         }],
         params: {
+          op:state.app.opcode
         }
       }).then((response) => {
-        console.log('ARRANCA LOS CONSOLE')
-        console.log(response.data)
-        // console.log(response.data.records)
-        console.log('TERMINA LOS CONSOLE')
-        store.commit(INIT_AGENCIES, response)
+        console.log(response)
+
+        store.commit(LOAD_LOANLIMITVALUES, response.data)
+        console.log("vaaa ",state.app.loaninstallment)
+        this.loaninstallment=state.app.loaninstallment
+        this.loaninstallamount = (this.amount * this.loaninstallment).toFixed(2);
       }).catch((error) => {
         console.log(error)
       })
+    },
+    calculateloan(){
+      this.loaninstallamount = (this.amount * this.loaninstallment).toFixed(2);
+    },
+    onclicksavefourthwindow () {
+      let loaninstallmentselected
+      for( let li of this.rowlist) {
+        if (li.LoanInstall==this.loaninstallment)
+        {
+          console.log(li.LoanTerm)
+          loaninstallmentselected=li.LoanTerm
+        }
+      }
+      if (true) {
+        store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':'Se procede a grabar la informacion',button1:false, button3:false} )
+        this.$http({
+          method: 'GET',
+          url: '/ralfintranet/api/setfourthwindow',
+          transformResponse: [(data) => {
+            return JSON.parse(data)
+          }],
+          params: {
+            opcode: state.app.opcode,
+            amount: this.amount,
+            loaninstallment: loaninstallmentselected,
+            loaninstallamount:this.loaninstallamount
+
+          }
+        }).then((response) => {
+          console.log("Rsponse del consulta")
+          store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':'',button1:false, button3:false} )
+          this.$router.push('/dashboard')
+          console.log(response)
+        }).catch((error) => {
+          console.log("error")
+          let obj2 = {
+            title: 'Error',
+            message: error,
+            customCloseBtnText: "Cerrar",
+            type: 'error'
+          }
+          alert(error)
+
+          console.log(error)
+        })
+      }
     }
   }
 }

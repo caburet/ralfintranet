@@ -9,7 +9,11 @@ import router from './router'
 import store from './store'
 import * as filters from './filters'
 import { TOGGLE_SIDEBAR } from 'vuex-store/mutation-types'
+import {ServerTable, ClientTable, Event} from 'vue-tables-2';
 Vue.router = router
+Vue.use(ClientTable, {
+  perPage: 25
+})
 Vue.use(VueAxios, axios)
 Vue.use(VueAuth, {
   auth: {
