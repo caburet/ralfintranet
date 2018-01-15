@@ -12,7 +12,7 @@
 
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="amount"  placeholder="">
+                <input class="input" type="text" v-model="amount"  placeholder="" v-on:change="calculateloan()">
               </p>
             </div>
 
@@ -69,7 +69,9 @@ export default {
       loaninstallment:state.app.loaninstallment,
       amount:state.app.amount,
       loaninstallamount:0,
+      loanlimit:70,
       itemsperpage: 20,
+      car:state.app.car,
       paginate: ['cases'],
       columns: ['LoanTerm', 'LoanValue', 'LoanMaxAmount'],
       options: {
@@ -124,6 +126,8 @@ export default {
         console.log(response)
 
         store.commit(LOAD_LOANLIMITVALUES, response.data)
+        this.loanlimit = response.data.percentage
+        this.car.infovalue = response.data.infovalue
         console.log("vaaa ",state.app.loaninstallment)
         this.loaninstallment=state.app.loaninstallment
         this.loaninstallamount = (this.amount * this.loaninstallment).toFixed(2);
@@ -132,6 +136,12 @@ export default {
       })
     },
     calculateloan(){
+      console.log(this.amount,this.car.infovalue,this.loanlimit)
+
+      if (this.amount > (this.car.infovalue * this.loanlimit / 100))
+      {
+        this.amount = this.car.infovalue * this.loanlimit / 100
+      }
       this.loaninstallamount = (this.amount * this.loaninstallment).toFixed(2);
     },
     onclicksavefourthwindow () {

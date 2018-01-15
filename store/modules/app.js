@@ -18,7 +18,7 @@ const state = {
   form: false,
   buttons1: false,
   personname: '',
-  opcode: '8721',
+  opcode: '8787',
   ruleid: '',
   owner: {
     sex: '',
@@ -78,6 +78,10 @@ const state = {
   },
   effect: {
     translate3d: true
+  },
+  car:{
+    infovalue:0,
+    loanlimit:0
   }
 }
 
@@ -256,6 +260,14 @@ console.log("nationalitys")
   },
   [types.INIT_PERSON] (state, data) {
     console.log(data)
+    function processText(inputText) {
+      var output = [];
+      var json = inputText.split(' ');
+      json.forEach(function (item) {
+        output.push(item.replace(/\'/g, '').split(/(\d+)/).filter(Boolean));
+      });
+      return output;
+    }
     switch (data.type) {
       case 'owner':
         state.owner.ID = data.ID
@@ -270,7 +282,8 @@ console.log("nationalitys")
         state.owner.cellphone = data.cellphone
         state.owner.marstatus = data.marstatus
         state.owner.nationality = data.nationality
-        state.owner.address = data.address
+        state.owner.address = processText(data.address )[0]
+        state.owner.addressnr = processText(data.address).slice(1, ).join(" ")
         state.owner.email = data.email
         state.owner.taxregtype = data.taxregtype
         state.owner.workphone = data.workphone
@@ -317,6 +330,8 @@ console.log("nationalitys")
   [types.UPDATE_LOANAMOUNT] (state, data) {
     state.loaninstallment=data.month
     state.amount=data.amount
+    state.car.infovalue = data.infovalue
+    state.car.loanlimit = data.loanlimit
   },
   [types.LOAD_CITYCODES] (state, data) {
     state.verifyclient.citycodes = []

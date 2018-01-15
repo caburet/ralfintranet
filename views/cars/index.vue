@@ -480,7 +480,7 @@ export default {
       console.log(codia)
       if (this.amount<= this.car.infovalue*this.loanlimit/100) {
         store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':'Se procede a grabar la informacion',button1:false, button3:false} )
-        store.commit(UPDATE_LOANAMOUNT, {amount:this.amount, month:this.month} )
+        store.commit(UPDATE_LOANAMOUNT, {amount:this.amount, month:this.month, infovalue: this.car.infovalue,loanlimit:this.loanlimit } )
         this.$http({
           method: 'GET',
           url: '/ralfintranet/api/setsecondwindow',
@@ -497,6 +497,29 @@ export default {
 
           }
         }).then((response) => {
+            this.$http({
+              method: 'GET',
+              url: '/ralfintranet/api/genQuoteSmartix',
+              transformResponse: [(data) => {
+                return JSON.parse(data)
+              }],
+              params: {
+                opcode: state.app.opcode,
+              }
+            }).then((response) => {
+
+            }).catch((error) => {
+              console.log("error")
+              let obj2 = {
+                title: 'Error',
+                message: error,
+                customCloseBtnText: "Cerrar",
+                type: 'error'
+              }
+              alert(error)
+
+              console.log(error)
+            })
           if (response.data.loanratevalue==0)
           {
             alert("No se pudo determinar el valor de la Tasa")
