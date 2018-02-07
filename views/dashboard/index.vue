@@ -345,7 +345,7 @@
               <label class="label"></label>
             </div>
             <div class="control">
-              <button class="button is-primary" v-on:click="onclickfn()">Salvar</button>
+              <button v-if="!showModal" class="button is-primary" v-on:click="onclickfn()">Salvar</button>
               <button class="button is-link" v-on:click="onclickcan()">Cancelar</button>
             </div>
           </div>
@@ -515,7 +515,7 @@ export default {
     },
     onSubmit : function (){
       //here do what u want
-      if (Object.keys(this.formValues).length == Object.keys(state.app.inquirydata).length) {
+//      if (Object.keys(this.formValues).length == Object.keys(state.app.inquirydata).length) {
         this.$http.post('/inquiry/inq_process?==' + state.app.inquirystring, state.app.inquirydata)
           .then(function (response) {
 
@@ -534,10 +534,10 @@ export default {
             // Error
             console.log(response.data)
           });
-      }
-      else {
-        alert("Tienes que completar los "+this.formValues.length)
-      }
+//      }
+//      else {
+//        alert("Tienes que completar los "+this.formValues.length)
+//      }
       console.log("emitio false!")
     },
     openInNewTab(url) {
@@ -712,6 +712,7 @@ export default {
           type: 'info',
           hideAllButton: true
         }
+
         store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':'Se procede a grabar la informacion',button1:false, button3:false} )
         this.$http({
           method: 'GET',

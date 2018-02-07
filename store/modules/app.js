@@ -113,6 +113,7 @@ const mutations = {
   [types.OPP_DATA] (state, data) {
     console.log(data)
     state.opcode = data.opcode
+    state.pcode = data.pcode
     state.resrol = data.resrol
     state.form_items_from_server = data.inquiryres
     state.inquirystring = data.inquirystring
@@ -269,6 +270,10 @@ console.log("nationalitys")
       });
       return output;
     }
+    console.log("vaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    console.log(processText(data.address ))
+    console.log(processText(data.address )[0][0])
+    console.log(processText(data.address)[0].slice(1, ).join(" "))
     switch (data.type) {
       case 'owner':
         state.owner.ID = data.ID
@@ -283,8 +288,8 @@ console.log("nationalitys")
         state.owner.cellphone = data.cellphone
         state.owner.marstatus = data.marstatus
         state.owner.nationality = data.nationality
-        state.owner.address = processText(data.address )[0]
-        state.owner.addressnr = processText(data.address).slice(1, ).join(" ")
+        state.owner.address = processText(data.address )[0][0]
+        state.owner.addressnr = processText(data.address)[0].slice(1, ).join(" ")
         state.owner.email = data.email
         state.owner.taxregtype = data.taxregtype
         state.owner.workphone = data.workphone
@@ -333,6 +338,20 @@ console.log("nationalitys")
     state.amount=data.amount
     state.car.infovalue = data.infovalue
     state.car.loanlimit = data.loanlimit
+    let newloanrates=[]
+    for (let m of state.loanrates) {
+      newloanrates.push(
+        {
+          LoanValue: m.LoanValue,
+          LoanTerm: m.LoanTerm,
+          LoanInstall: m.LoanInstall,
+          LoanMaxAmount: state.carvalue * state.loanlimit / 100,
+          LoanInstallAmount: (state.amount * m.LoanInstall).toFixed(2)
+        }
+      )
+    }
+    state.loanrates = newloanrates
+
   },
   [types.LOAD_CITYCODES] (state, data) {
     state.verifyclient.citycodes = []
@@ -377,6 +396,7 @@ console.log("nationalitys")
           LoanTerm: m.LoanTerm,
           LoanInstall: m.LoanInstall,
           LoanMaxAmount:  state.carvalue*state.loanlimit/100,
+          LoanInstallAmount: (state.amount * m.LoanInstall).toFixed(2)
         }
       )
     }

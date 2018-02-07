@@ -38,6 +38,20 @@
               </p>
             </div>
             <div class="control-label">
+              <label class="label">Observaciones</label>
+            </div>
+            <div class="control is-grouped">
+              <p class="control is-expanded">
+                <textarea class="input" v-model="observation"  placeholder="" ></textarea>
+              </p>
+            </div>
+          </div>
+          <div class="control is-horizontal">
+            <div class="control-label">
+            </div>
+            <div class="control is-grouped">
+            </div>
+            <div class="control-label">
 
             </div>
 
@@ -45,24 +59,30 @@
               <button class="button is-primary" v-on:click="onclicksavefourthwindow()">Terminar</button>
             </div>
           </div>
-          <div class='table-responsive'>
-             <v-client-table :data="rowlist" :columns="columns" :options="options" ></v-client-table>
+          <div class='table-responsive' ref="table">
+             <v-client-table  :data="rowtable" :columns="columns" :options="options" ></v-client-table>
           </div>
         </div>
       </article>
     </div>
 
     </div>
+    <modal v-if="showModal" @close="onclickclosemodal" @inquiry="onclickopeninquiry" @auth="onclickauthmodal" @pend="onclickpendmodal" @rech="onclickrechmodal" >
+      <p>{{modalContain}}</p>
+    </modal>
   </div>
+
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import { LOAD_LOANLIMITVALUES,TOGGLE_MODAL } from 'vuex-store/mutation-types'
+import { LOAD_LOANLIMITVALUES,TOGGLE_MODAL,UPDATE_LOANAMOUNT } from 'vuex-store/mutation-types'
 import store from './../../store'
+import { Modal } from 'components/layout/'
 const { state } = store
 export default {
   components: {
+    Modal
   },
   data () {
     return {
@@ -70,16 +90,19 @@ export default {
       amount:state.app.amount,
       loaninstallamount:0,
       loanlimit:70,
+      observation:'',
       itemsperpage: 20,
       car:state.app.car,
+      rowlist:[],
       paginate: ['cases'],
-      columns: ['LoanTerm', 'LoanValue', 'LoanMaxAmount'],
+      columns: ['LoanTerm', 'LoanValue', 'LoanMaxAmount','LoanInstallAmount'],
       options: {
         sortable: ['LoanTerm'],
         headings: {
           LoanTerm: 'LoanTerm',
           'LoanValue': 'LoanValue',
-          'LoanMaxAmount': 'LoanMaxAmount'
+          'LoanMaxAmount': 'LoanMaxAmount',
+          'LoanInstallAmount':'LoanInstallAmount'
         }
       },
       seenconyuge: false,
@@ -98,20 +121,60 @@ export default {
   },
   stated: {},
   computed: {
+
+    showverify() {
+      return state.app.showverify
+    },
+    showinquiry() {
+      return state.app.showinquiry
+    },
+    showModal() {
+      return state.app.showModal
+    },
+    modalContain() {
+      return state.app.modalContain
+    },
     personname () {
       return state.app.personname
     },
     loaninstallments (){
       return state.app.loanrates
     },
-    rowlist () {
-        return state.app.loanrates
-    }
+    rowtable (){
+      return state.app.loanrates
+    },
+
   },
   methods: {
     ...mapActions([
       'addCase'
     ]),
+    onclickcan () {
+
+      let text='texto '
+      store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':text , button1:true,button3:false} )
+      //this.$router.push('/cases/basic')
+    },
+    onclickclosemodal () {
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+      this.nextrule('')
+    },
+    onclickopeninquiry () {
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+      store.commit(TOGGLE_INQUIRY,{'showinquiry':true,'showverify':false} )
+    },
+    onclickauthmodal (params) {
+      this.setrulestatus(params,1)
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+    },
+    onclickpendmodal (params) {
+      this.setrulestatus(params,3)
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+    },
+    onclickrechmodal (params) {
+      this.setrulestatus(params,2)
+      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+    },
     loadData () {
       console.log(this.$route.params)
       this.$http({
@@ -130,7 +193,10 @@ export default {
         this.car.infovalue = response.data.infovalue
         console.log("vaaa ",state.app.loaninstallment)
         this.loaninstallment=state.app.loaninstallment
-        this.loaninstallamount = (this.amount * this.loaninstallment).toFixed(2);
+        console.log(state.app)
+
+        this.loaninstallamount = (state.app.amount * state.app.loaninstallment).toFixed(2);
+        this.rowlist =state.app.loanrates
       }).catch((error) => {
         console.log(error)
       })
@@ -143,6 +209,11 @@ export default {
         this.amount = this.car.infovalue * this.loanlimit / 100
       }
       this.loaninstallamount = (this.amount * this.loaninstallment).toFixed(2);
+
+      store.commit(UPDATE_LOANAMOUNT, {month:state.app.loaninstallment,amount:this.amount,infovalue:state.app.car.infovalue,loanlimit:state.app.car.loanlimit})
+      this.rowlist =state.app.loanrates
+      console.log(this.$refs)
+      console.log(this.$refs.table)
     },
     onclicksavefourthwindow () {
       let loaninstallmentselected
@@ -162,17 +233,29 @@ export default {
             return JSON.parse(data)
           }],
           params: {
+            pcode: state.app.pcode,
             opcode: state.app.opcode,
             amount: this.amount,
             loaninstallment: loaninstallmentselected,
-            loaninstallamount:this.loaninstallamount
+            loaninstallamount:this.loaninstallamount,
+            observation:this.observation
 
           }
         }).then((response) => {
           console.log("Rsponse del consulta")
+<<<<<<< HEAD
           console.log(response.data)
           console.log(response.data.links)
           let linkshtml=''
+=======
+          //alert(response.data.msg)
+          let linkshtml=''
+          console.log(response.data)
+          console.log(response.data.links)
+          console.log(response.data.links[0])
+          //console.log(response.data.links[0])
+
+>>>>>>> 5b419189827fb325af1228c01eca774ec62b916c
           Object.keys(response.data.links).forEach(function (key) {
             // do something with obj[key]
             console.log(key)
