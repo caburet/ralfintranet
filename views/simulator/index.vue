@@ -170,8 +170,19 @@ export default {
           }
         }).then((response) => {
           console.log("Rsponse del consulta")
-          store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':'',button1:false, button3:false} )
-          this.$router.push('/dashboard')
+          console.log(response.data)
+          console.log(response.data.links)
+          let linkshtml=''
+          Object.keys(response.data.links).forEach(function (key) {
+            // do something with obj[key]
+            console.log(key)
+            console.log(response.data.links[key])
+            linkshtml += "<a href='"+response.data.links[key]+"'>"+key+" </a> "
+          });
+
+
+          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':'',button1:false, button3:false, links:response.data.links} )
+          //this.$router.push('/dashboard')
           console.log(response)
         }).catch((error) => {
           console.log("error")

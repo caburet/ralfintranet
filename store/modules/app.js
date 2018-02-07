@@ -107,6 +107,7 @@ const mutations = {
     state.buttons3 = data.button3
     state.buttons1 = data.button1
     state.form = data.form
+    state.links = data.links
     state.ruleid = data.ruleid
   },
   [types.OPP_DATA] (state, data) {
