@@ -243,19 +243,10 @@ export default {
           }
         }).then((response) => {
           console.log("Rsponse del consulta")
-<<<<<<< HEAD
           console.log(response.data)
           console.log(response.data.links)
           let linkshtml=''
-=======
-          //alert(response.data.msg)
-          let linkshtml=''
-          console.log(response.data)
-          console.log(response.data.links)
-          console.log(response.data.links[0])
-          //console.log(response.data.links[0])
 
->>>>>>> 5b419189827fb325af1228c01eca774ec62b916c
           Object.keys(response.data.links).forEach(function (key) {
             // do something with obj[key]
             console.log(key)
