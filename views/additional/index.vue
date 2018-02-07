@@ -262,6 +262,7 @@ export default {
             return JSON.parse(data)
           }],
           params: {
+            pcode: state.app.pcode,
             opcode: state.app.opcode,
             owner: Object.assign({}, state.app.owner, this.owner),
             cyowner: Object.assign({}, state.app.cyowner, this.cyowner)

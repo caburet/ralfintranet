@@ -38,7 +38,7 @@
             <div class="control">
               <div class="select is-fullwidth">
                 <select  v-model="car.model" v-on:change="loadcarvalue()">
-                  <option v-for="node in models" :value="node._id">{{node.label}}</option>
+                  <option v-for="node in models" :value="node.label">{{node.label}}</option>
                 </select>
               </div>
             </div>
@@ -315,7 +315,7 @@ export default {
         use:'',
         gnc:'',
         brand:'',
-        model:''
+        model:'',
       },
       campaign: '',
 
@@ -472,6 +472,7 @@ export default {
         for(let i of this.models){
           if(i._id==this.car.model){
             codia= i.codia
+            this.car.modelname=i.modelname
             break;
           }
         }
@@ -489,6 +490,7 @@ export default {
           }],
           params: {
             opcode: state.app.opcode,
+            pcode: state.app.pcode,
             car: this.car,
             codia: codia,
             owner: this.owner,
@@ -497,29 +499,29 @@ export default {
 
           }
         }).then((response) => {
-            this.$http({
-              method: 'GET',
-              url: '/ralfintranet/api/genQuoteSmartix',
-              transformResponse: [(data) => {
-                return JSON.parse(data)
-              }],
-              params: {
-                opcode: state.app.opcode,
-              }
-            }).then((response) => {
-
-            }).catch((error) => {
-              console.log("error")
-              let obj2 = {
-                title: 'Error',
-                message: error,
-                customCloseBtnText: "Cerrar",
-                type: 'error'
-              }
-              alert(error)
-
-              console.log(error)
-            })
+//            this.$http({
+//              method: 'GET',
+//              url: '/ralfintranet/api/genQuoteSmartix',
+//              transformResponse: [(data) => {
+//                return JSON.parse(data)
+//              }],
+//              params: {
+//                opcode: state.app.opcode,
+//              }
+//            }).then((response) => {
+//
+//            }).catch((error) => {
+//              console.log("error")
+//              let obj2 = {
+//                title: 'Error',
+//                message: error,
+//                customCloseBtnText: "Cerrar",
+//                type: 'error'
+//              }
+//              alert(error)
+//
+//              console.log(error)
+//            })
           if (response.data.loanratevalue==0)
           {
             alert("No se pudo determinar el valor de la Tasa")
@@ -673,7 +675,7 @@ export default {
       let yearvalue
       for (let modelspair of state.app.carsoptions.models)
       {
-        if (modelspair._id==this.car.model){
+        if (modelspair.label==this.car.model){
           yearvalue=modelspair.carvalue
         }
       }
