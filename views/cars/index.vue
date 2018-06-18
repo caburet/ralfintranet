@@ -13,7 +13,7 @@
           </div>
           <div class="control">
             <div class="select is-fullwidth">
-              <select  v-model="car.brand"  v-on:change="loadmodels()">
+              <select  v-model="car.brand"  v-on:change="loadmodels()" name="car.brand">
                 <option v-for="node in brands" :value="node._id"  >{{node.label}}</option>
               </select>
             </div>
@@ -25,7 +25,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select  v-model="car.year"  v-on:change="loadmodels()" >
+                <select  v-model="car.year"  v-on:change="loadmodels()" name="car.year">
                   <option v-for="node in years" :value="node.label">{{node.label}}</option>
                 </select>
               </div>
@@ -37,7 +37,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select  v-model="car.model" v-on:change="loadcarvalue()">
+                <select  v-model="car.model" v-on:change="loadcarvalue()" name="car.model">
                   <option v-for="node in models" :value="node.label">{{node.label}}</option>
                 </select>
               </div>
@@ -50,7 +50,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="car.km0"  v-on:change="loadcarvalue()">
+                <select v-model="car.km0"  v-on:change="loadcarvalue()" name="car.km0">
                   <option value="0">No</option>
                   <option value="1">Si</option>
                 </select>
@@ -63,7 +63,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" v-model="car.gnc" type="text" >
+                <input class="input" v-model="car.gnc" type="text" name="car.gnc">
               </p>
             </div>
           </div>
@@ -73,7 +73,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="car.use" >
+                <select v-model="car.use" name="car.use">
                   <option value="0">Particular</option>
                   <option value="1">Transporte de Personas</option>
                   <option value="2">Transporte de Cargas</option>
@@ -94,7 +94,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <input class="input" type="text" v-model="car.infovalue"  placeholder="" disabled>
+                <input class="input" type="text" v-model="car.infovalue"  placeholder="" disabled name="car.infovalue">
               </p>
               </div>
             </div>
@@ -110,7 +110,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" v-model="amount" type="text" >
+                <input class="input" v-model="amount" type="text" name="amount">
               </p>
             </div>
           </div>
@@ -120,7 +120,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="month" >
+                <select v-model="month" name="month">
                   <option v-for="node in months" :value="node"  >{{node}}</option>
                 </select>
               </div>
@@ -147,7 +147,7 @@
             </div>
             <div class="control">
                 <div class="select is-fullwidth">
-                  <select v-model="owner.province" v-on:change="loadcitycodes()">
+                  <select v-model="owner.province" v-on:change="loadcitycodes()" name="owner.province">
                     <option v-for="node in provinces" :value="node._id">{{node.label}}</option>
                   </select>
                 </div>
@@ -157,7 +157,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="owner.citycode" >
+                <select v-model="owner.citycode" name="owner.citycode">
                   <option v-for="node in citycodes" :value="node.label">{{node.label}}</option>
                 </select>
               </div>
@@ -169,7 +169,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.cellphone" placeholder="Numero">
+                <input class="input" type="text" v-model="owner.cellphone" placeholder="Numero" name="owner.cellphone">
               </p>
             </div>
             <div class="control-label">
@@ -177,7 +177,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" v-model="owner.ingress" type="text" >
+                <input class="input" v-model="owner.ingress" type="text" name="owner.ingress">
               </p>
             </div>
           </div>
@@ -187,15 +187,18 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" v-model="owner.workphone" type="text" >
+                <input class="input" v-model="owner.workphone" type="text" name="owner.workphone">
               </p>
             </div>
             <div class="control-label">
-              <label class="label"></label>
+              <label class="label">Fecha de Nacimiento</label>
             </div>
-            <div class="control">
-              <button class="button is-primary" v-on:click="onclicksavesecondwindow()">Salvar</button>
+            <div class="control is-grouped">
+              <p class="control is-expanded">
+                <input class="input" v-model="owner.birthdate" type="date" name="owner.birthdate">
+              </p>
             </div>
+
           </div>
           <div class="control is-horizontal">
             <div class="control-label">
@@ -203,16 +206,16 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" v-model="owner.phone" type="text" >
+                <input class="input" v-model="owner.phone" type="text" name="owner.phone">
               </p>
             </div>
             <div class="control-label">
               <label class="label"></label>
             </div>
-            <div class="control is-grouped">
-              <p class="control is-expanded">
-              </p>
+            <div class="control">
+              <button class="button is-primary" v-on:click="onclicksavesecondwindow()" name="Salvar">Salvar</button>
             </div>
+
           </div>
         </div>
       </article>
@@ -323,7 +326,7 @@ export default {
       model: '',
       year: '',
       month:'',
-      months:[12, 15, 18, 24, 30, 36, 48],
+      months:[12, 15, 18, 24, 30, 36, 48, 60],
       amount:'',
       tasa:'',
       errormensage:'',
@@ -408,9 +411,14 @@ export default {
           state: rulestate
         }
       }).then((response) => {
+        if (response.data.ok==true) {
+          console.log(response)
+          this.nextrule(response)
+        }else {
+          //alert(response.data.error)
+          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
+        }
 
-        console.log(response)
-        this.nextrule(response)
       }).catch((error) => {
         let obj2 = {
           title: 'Error',
@@ -456,7 +464,12 @@ export default {
           }
         }
       }).then((response) => {
-        store.commit(LOAD_CITYCODES, response)
+        if (response.data.ok==true) {
+          store.commit(LOAD_CITYCODES, response)
+        }else {
+          //alert(response.data.error)
+          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
+        }
       }).catch((error) => {
         console.log(error)
       })
@@ -466,11 +479,22 @@ export default {
 
     },
     onclicksavesecondwindow () {
+      if (!this.owner.birthdate || !this.owner.province)
+      {
+        alert("Los campos FECHA DE NACIMIENTO y PROVINCIA son obligatorios.")
+        return false
+      }
       let codia
+      console.log(this.car.model)
       if (this.car.model)
       {
+        console.log(this.models)
         for(let i of this.models){
-          if(i._id==this.car.model){
+          console.log(i)
+          if(i.label==this.car.model){
+
+            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            console.log(i.codia)
             codia= i.codia
             this.car.modelname=i.modelname
             break;
@@ -499,46 +523,27 @@ export default {
 
           }
         }).then((response) => {
-//            this.$http({
-//              method: 'GET',
-//              url: '/ralfintranet/api/genQuoteSmartix',
-//              transformResponse: [(data) => {
-//                return JSON.parse(data)
-//              }],
-//              params: {
-//                opcode: state.app.opcode,
-//              }
-//            }).then((response) => {
-//
-//            }).catch((error) => {
-//              console.log("error")
-//              let obj2 = {
-//                title: 'Error',
-//                message: error,
-//                customCloseBtnText: "Cerrar",
-//                type: 'error'
-//              }
-//              alert(error)
-//
-//              console.log(error)
-//            })
-          if (response.data.loanratevalue==0)
-          {
-            alert("No se pudo determinar el valor de la Tasa")
-            store.commit(TOGGLE_MODAL, {'opened': false, 'modalcontain': '', button1: false, button3: false})
-            return false;
-          }
+          if (response.data.ok==true) {
+            if (response.data.loanratevalue == 0) {
+              alert("No se pudo determinar el valor de la Tasa")
+              store.commit(TOGGLE_MODAL, {'opened': false, 'modalcontain': '', button1: false, button3: false})
+              return false;
+            }
 
-          console.log("Rsponse del consulta")
-          if (response.data.quotes.length==0)
-          {
-            alert("No se pudo cotizar")
+            console.log("Rsponse del consulta")
+
+            if (response.data.quotes.length == 0 && response.data.checksmartix) {
+              alert("No se pudo cotizar")
+            }
+            store.commit(SECOND_DATA, response.data)
+            store.commit(TOGGLE_MODAL, {'opened': false, 'modalcontain': '', button1: false, button3: false})
+            this.nextrule(response)
+            //this.$router.push('/additional')
+            console.log(response)
+          }else {
+            //alert(response.data.error)
+            store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
           }
-          store.commit(SECOND_DATA, response.data)
-          store.commit(TOGGLE_MODAL, {'opened': false, 'modalcontain': '', button1: false, button3: false})
-          this.nextrule(response)
-          //this.$router.push('/additional')
-          console.log(response)
         }).catch((error) => {
           console.log("error")
           let obj2 = {
@@ -559,29 +564,36 @@ export default {
     },
     onSubmit : function (){
       //here do what u want
-      if (Object.keys(this.formValues).length == Object.keys(state.app.inquirydata).length) {
+
         this.$http.post('/inquiry/inq_process?==' + state.app.inquirystring, state.app.inquirydata)
           .then(function (response) {
-
-            // Success
-            console.log(response.data)
-            store.commit(TOGGLE_INQUIRY, {'showinquiry': false, 'showverify': true})
-            this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId=' + state.app.opcode + '&score=' + response.data.score + '&inquirycode=' + response.data.InquiryResult.fields.InquiryCode)
-              .then(function (responsescore) { console.log("Grabo el score") }.bind(this)
-                , function (responsescore) {
-                  // Error
-                  console.log(responsescore.data)
-                });
+            if (Object.keys(this.formValues).length == Object.keys(state.app.inquirydata).length) {
+              // Success
+              console.log(response.data)
+              this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId=' + state.app.opcode + '&score=' + response.data.score + '&inquirycode=' + response.data.InquiryResult.fields.InquiryCode)
+                .then(function (responsescore) { console.log("Grabo el score") }.bind(this)
+                  , function (responsescore) {
+                    // Error
+                    console.log(responsescore.data)
+                  });
+            }
+            else {
+              this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId=' + state.app.opcode + '&score=0 &inquirycode=' + response.data.InquiryResult.fields.InquiryCode)
+                .then(function (responsescore) { console.log("Grabo el score") }.bind(this)
+                  , function (responsescore) {
+                    // Error
+                    console.log(responsescore.data)
+                  });
+            }
+            store.commit(TOGGLE_INQUIRY,{'showinquiry':false,'showverify':true} )
             this.nextrule('')
             console.log(response.data)
           }.bind(this), function (response) {
             // Error
             console.log(response.data)
           });
-      }
-      else {
-        alert("Tienes que completar todos los campos.")
-      }
+
+
       console.log("emitio false!")
     },
     nextrule(response){
@@ -606,8 +618,14 @@ export default {
 
           }
         }).then((response) => {
-          console.log("Rsponse del consulta")
-          this.$router.push('/additional')
+          if (response.data.ok==true) {
+            console.log("Rsponse del consulta")
+            this.$router.push('/additional')
+          }
+          else {
+            //alert(response.data.error)
+            store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
+          }
         }).catch((error) => {
           console.log("error")
           let obj2 = {
@@ -656,7 +674,12 @@ export default {
             }
           }
         }).then((response) => {
-          store.commit(LOAD_MODELS, response)
+          if (response.data.ok==true) {
+            store.commit(LOAD_MODELS, response)
+          }else {
+            //alert(response.data.error)
+            store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
+          }
         }).catch((error) => {
           console.log(error)
         })
@@ -696,8 +719,13 @@ export default {
             }
           }
         }).then((response) => {
-          this.loanlimit=response.data.percentage
-          store.commit(LOAD_LOANLIMIT, {loanlimit:response.data.percentage,carvalue:this.car.infovalue})
+          if (response.data.ok==true) {
+            this.loanlimit = response.data.percentage
+            store.commit(LOAD_LOANLIMIT, {loanlimit: response.data.percentage, carvalue: this.car.infovalue})
+          }else {
+            //alert(response.data.error)
+            store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
+          }
         }).catch((error) => {
           console.log(error)
         })

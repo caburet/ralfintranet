@@ -11,7 +11,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="owner.marstatus" >
+                <select v-model="owner.marstatus" name="owner.marstatus" >
                   <option value="0">Soltero</option>
                   <option value="1">Casado</option>
                   <option value="2">Divorciado</option>
@@ -25,7 +25,7 @@
 
             <div class="control">
               <div class="select is-fullwidth">
-                <select  v-model="owner.nationality" >
+                <select  v-model="owner.nationality" name="owner.nationality">
                   <option value="OTROS">Otros</option>
                   <option v-for="node in nationalitys" :value="node._id" >{{node._id}}</option>
                 </select>
@@ -39,7 +39,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.address"  placeholder="">
+                <input class="input" type="text" v-model="owner.address"  placeholder="" name="owner.address">
               </p>
             </div>
             <div class="control-label">
@@ -47,7 +47,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.addressnr"  placeholder="">
+                <input class="input" type="text" v-model="owner.addressnr"  placeholder="" name="owner.addressnr">
               </p>
             </div>
           </div>
@@ -57,7 +57,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.email"  placeholder="">
+                <input class="input" type="text" v-model="owner.email"  placeholder="" name="owner.email">
               </p>
             </div>
             <div class="control-label">
@@ -65,7 +65,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="owner.taxregtype" >
+                <select v-model="owner.taxregtype" name="owner.taxregtype">
                   <option value="0">Responsable Inscripto</option>
                   <option value="1">Consumidor Final</option>
                   <option value="2">Iva No Resp.</option>
@@ -83,7 +83,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select  v-model="owner.workplace" >
+                <select  v-model="owner.workplace" name="owner.workplace">
                   <option v-for="node in jobpositions" :value="node._id" >{{node._id}}</option>
                 </select>
               </div>
@@ -93,7 +93,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.work"  placeholder="">
+                <input class="input" type="text" v-model="owner.work"  placeholder="" name="owner.work">
               </p>
             </div>
           </div>
@@ -117,7 +117,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="cyowner.cellphone"  placeholder="">
+                <input class="input" type="text" v-model="cyowner.cellphone"  placeholder="" name="cyowner.cellphone">
               </p>
             </div>
             <div class="control-label">
@@ -125,7 +125,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="cyowner.phone"  placeholder="">
+                <input class="input" type="text" v-model="cyowner.phone"  placeholder="" name="cyowner.phone">
               </p>
             </div>
           </div>
@@ -135,7 +135,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="cyowner.email"  placeholder="">
+                <input class="input" type="text" v-model="cyowner.email"  placeholder="" name="cyowner.email">
               </p>
             </div>
             <div class="control-label">
@@ -143,7 +143,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                  <input class="input" type="text" v-model="cyowner.ingress"  placeholder="">
+                  <input class="input" type="text" v-model="cyowner.ingress"  placeholder="" name="cyowner.ingress">
               </p>
             </div>
           </div>
@@ -153,7 +153,7 @@
             </div>
             <div class="control is-grouped">
               <div class="control">
-                <button class="button is-primary" v-on:click="onclicksavethirdwindow()">Salvar</button>
+                <button class="button is-primary" v-on:click="onclicksavethirdwindow()" name="Salvar">Salvar</button>
               </div>
             </div>
           </div>
@@ -269,9 +269,14 @@ export default {
 
           }
         }).then((response) => {
+           if (response.data.ok==true) {
            console.log("Rsponse del consulta")
            this.$router.push('/simulator')
            console.log(response)
+           }else {
+             //alert(response.data.error)
+             store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
+           }
         }).catch((error) => {
           console.log("error")
           let obj2 = {

@@ -16,6 +16,7 @@ const state = {
   modalContain: '',
   buttons3: false,
   form: false,
+  links: [],
   buttons1: false,
   personname: '',
   opcode: '8787',
@@ -180,19 +181,20 @@ console.log("campaña")
     }
     catch (err) {}
 
-console.log("agencias")
+console.log("product")
     try {
       for (let p of data.data.product) {
         state.verifyclient.products.push(
           {_id: p.code,
             campaign: p.campaign,
-            label: p.name
+            label: p.name,
+            custcode: p.custcode
           }
         )
       }
     }
     catch (err) {}
-console.log("agencias")
+console.log("brands")
     try {
         for (let p of data.data.brands) {
           state.carsoptions.brands.push(
@@ -215,7 +217,7 @@ console.log("nationalitys")
       }
     }
     catch (err) {}
-    console.log("agencias")
+    console.log("provinces")
     try {
       for (let p of data.data.provinces) {
         state.verifyclient.provinces.push(

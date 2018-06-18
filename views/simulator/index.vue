@@ -1,6 +1,26 @@
 <template>
   <div>
-    <div class="tile is-ancestor">
+    <div :id="inquiry" v-if="links">
+      <div class="tile is-ancestor">
+        <div class="tile is-parent">
+          <article class="tile is-child box">
+            {{modalContain}}
+            <div v-if="links">
+              <p v-if="links.length > 0"> Por favor descargue estos documentos antes de hacer click en continuar</p>
+              <div v-if="links.length > 0" v-for="ln in links">
+                {{ln.key}}
+                <div v-for="ln2, key in ln.value">
+                  <a target="_blank" v-bind:href="ln2">Hoja {{++key}}</a>
+                </div>
+              </div>
+            </div>
+            <button   class="button is-primary" @click="onclickclosemodal()">Continuar</button>
+          </article>
+        </div>
+
+      </div>
+    </div>
+    <div class="tile is-ancestor" v-else>
     <div class="tile is-parent">
       <article class="tile is-child box">
         <h1 class="title">Simulador de Prestamo</h1>
@@ -12,7 +32,7 @@
 
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="amount"  placeholder="" v-on:change="calculateloan()">
+                <input class="input" type="text" v-model="amount"  placeholder="" v-on:change="calculateloan()" name="amount">
               </p>
             </div>
 
@@ -22,7 +42,7 @@
 
           <div class="control">
             <div class="select is-fullwidth">
-              <select  v-model="loaninstallment" v-on:change="calculateloan()">
+              <select  v-model="loaninstallment" v-on:change="calculateloan()" name="loaninstallment">
                 <option v-for="node in loaninstallments" :value="node.LoanInstall" >{{node.LoanTerm}}</option>
               </select>
             </div>
@@ -34,7 +54,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="loaninstallamount"  placeholder="" readonly="readonly">
+                <input class="input" type="text" v-model="loaninstallamount"  placeholder="" readonly="readonly" name="loaninstallamount">
               </p>
             </div>
             <div class="control-label">
@@ -42,7 +62,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <textarea class="input" v-model="observation"  placeholder="" ></textarea>
+                <textarea class="input" v-model="observation"  placeholder=""  name="observation" ></textarea>
               </p>
             </div>
           </div>
@@ -56,7 +76,7 @@
             </div>
 
             <div class="control">
-              <button class="button is-primary" v-on:click="onclicksavefourthwindow()">Terminar</button>
+              <button class="button is-primary" v-on:click="onclicksavefourthwindow()" name="Terminar">Terminar</button>
             </div>
           </div>
           <div class='table-responsive' ref="table">
@@ -70,6 +90,7 @@
     <modal v-if="showModal" @close="onclickclosemodal" @inquiry="onclickopeninquiry" @auth="onclickauthmodal" @pend="onclickpendmodal" @rech="onclickrechmodal" >
       <p>{{modalContain}}</p>
     </modal>
+
   </div>
 
 </template>
@@ -118,6 +139,7 @@ export default {
   },
   created: function () {
     this.loadData()
+    store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
   },
   stated: {},
   computed: {
@@ -143,7 +165,9 @@ export default {
     rowtable (){
       return state.app.loanrates
     },
-
+    links() {
+      return state.app.links
+    }
   },
   methods: {
     ...mapActions([
@@ -157,7 +181,7 @@ export default {
     },
     onclickclosemodal () {
       store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
-      this.nextrule('')
+      this.$router.push('/dashboard')
     },
     onclickopeninquiry () {
       store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
@@ -186,17 +210,23 @@ export default {
           op:state.app.opcode
         }
       }).then((response) => {
-        console.log(response)
+        if (response.data.ok==true) {
+          console.log(response)
 
-        store.commit(LOAD_LOANLIMITVALUES, response.data)
-        this.loanlimit = response.data.percentage
-        this.car.infovalue = response.data.infovalue
-        console.log("vaaa ",state.app.loaninstallment)
-        this.loaninstallment=state.app.loaninstallment
-        console.log(state.app)
+          store.commit(LOAD_LOANLIMITVALUES, response.data)
+          this.loanlimit = response.data.percentage
+          this.car.infovalue = response.data.infovalue
+          console.log("vaaa ", state.app.loaninstallment)
+          this.loaninstallment = state.app.loaninstallment
+          console.log(state.app)
 
-        this.loaninstallamount = (state.app.amount * state.app.loaninstallment).toFixed(2);
-        this.rowlist =state.app.loanrates
+          this.loaninstallamount = (state.app.amount * state.app.loaninstallment).toFixed(2);
+          this.rowlist = state.app.loanrates
+        }
+      else {
+        //alert(response.data.error)
+        store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
+      }
       }).catch((error) => {
         console.log(error)
       })
@@ -242,22 +272,34 @@ export default {
 
           }
         }).then((response) => {
-          console.log("Rsponse del consulta")
-          console.log(response.data)
-          console.log(response.data.links)
-          let linkshtml=''
+          if (response.data.ok==true) {
+            console.log("Rsponse del consulta")
+            console.log(response.data)
+            console.log(response.data.links)
+            let templinks = []
 
-          Object.keys(response.data.links).forEach(function (key) {
-            // do something with obj[key]
-            console.log(key)
-            console.log(response.data.links[key])
-            linkshtml += "<a href='"+response.data.links[key]+"'>"+key+" </a> "
-          });
+            Object.keys(response.data.links).forEach(function (key) {
+              console.log(key)
+              console.log(response.data.links[key])
+              templinks.push({key: key, value: response.data.links[key]})
+            });
+            console.log(templinks)
 
+            store.commit(TOGGLE_MODAL, {
+              'opened': false,
+              'modalcontain': response.data.msg,
+              button1: true,
+              button3: false,
+              links: templinks
+            })
+            //vm.$forceUpdate();
+            //this.$router.push('/dashboard')
+            console.log(response)
 
-          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':'',button1:false, button3:false, links:response.data.links} )
-          //this.$router.push('/dashboard')
-          console.log(response)
+        }else {
+          //alert(response.data.error)
+          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
+        }
         }).catch((error) => {
           console.log("error")
           let obj2 = {

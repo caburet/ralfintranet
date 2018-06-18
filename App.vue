@@ -74,7 +74,7 @@ export default {
 }
 
 @import '~bulma';
-
+@import './intranetcarfacil.css';
 @import '~wysiwyg.css/wysiwyg.sass';
 
 $fa-font-path: '~font-awesome/fonts/';

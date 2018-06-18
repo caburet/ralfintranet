@@ -8,16 +8,25 @@
             <strong bold v-if="buttons3"> Ingrese sus datos para continuar.</strong>
             <input v-if="buttons3" v-model="username" name="username" class="input" type="text" placeholder="email@example.org">
             <input v-if="buttons3" v-model="password" name="password" class="input" type="password" placeholder="password">
+            <div v-if="links">
+              <p v-if="links.length > 0"> Por favor descargue estos documentos antes de hacer click en continuar</p>
+              <div v-if="links.length > 0" v-for="ln in links">
+                {{ln.key}}
+                <div v-for="ln2, key in ln.value">
+                  <a target="_blank" v-bind:href="ln2">Hoja {{++key}}</a>
+                </div>
+              </div>
+            </div>
             <br/><br/>
             <button  v-if="buttons3" class="button is-primary" @click="$emit('auth',[username,password])">Autorizar</button>
             <button  v-if="buttons3" class="button is-primary" @click="$emit('pend',[username,password])">Pendiente</button>
             <button  v-if="buttons3" class="button is-primary" @click="$emit('rech',[username,password])">Rechazar</button>
+
             <button  v-if="buttons1" class="button is-primary" @click="$emit('close')">Continuar</button>
             <button  v-if="form" class="button is-primary" @click="$emit('inquiry')">Encuesta</button>
             <img v-if="!buttons1 && !buttons3"src="spinner.gif">
-            <div v-for="(key,value) in links">
-              <a target="_blank" v-bind:href="key">{{value}}</a>
-            </div>
+
+
           </div>
           </div>
         </div>
@@ -35,7 +44,8 @@ export default {
   data(){
     return {
       username:'',
-      password:''
+      password:'',
+      link:[]
     }
   },
   methods: {

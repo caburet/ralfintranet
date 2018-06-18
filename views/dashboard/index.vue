@@ -13,8 +13,7 @@
           </div>
           <div class="control">
             <div class="select is-fullwidth">
-              <select  v-model="agencie" v-on:change="cleancampaign()">
-                <option value="OTROS">Otros</option>
+              <select  v-model="agencie" v-on:change="cleancampaign()" name="agencie">
                 <option v-for="node in agencies" :value="node._id" >{{node.label}}</option>
               </select>
             </div>
@@ -24,9 +23,8 @@
           </div>
           <div class="control">
             <div class="select is-fullwidth">
-              <select v-model="campaign"  v-on:change="cleanproduct()">
-                <option value="OTROS">Otros</option>
-                <option v-for="node in campaigns" :value="node._id">{{node.label}}</option>
+              <select v-model="campaign"  v-on:change="cleanproduct()" name="campaign">
+                 <option v-for="node in campaigns" :value="node._id">{{node.label}}</option>
 
 
               </select>
@@ -45,8 +43,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="product"  >
-                  <option value="OTROS">Otros</option>
+                <select v-model="product"  name="product">
                   <option v-for="node in products" :value="node._id">{{node.label}}</option>
                 </select>
               </div>
@@ -64,8 +61,8 @@
               <label class="label">Tipo de Doc.</label>
             </div>
             <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="owner.IDtype" >
+              <div class="select is-fullwidth" >
+                <select v-model="owner.IDtype" name="owner.IDtype">
                   <option v-for="node in idtypes" :value="node._id">{{node.label}}</option>
                 </select>
               </div>
@@ -75,7 +72,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.ID" v-on:change="loadowner('owner')" placeholder="Numero">
+                <input class="input" type="text" v-model="owner.ID" v-on:change="loadowner('owner')" placeholder="Numero" name="owner.ID">
               </p>
             </div>
           </div>
@@ -85,7 +82,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="owner.name"  placeholder="Nombre">
+                <input class="input" type="text" v-model="owner.name"  placeholder="Nombre" name="owner.name">
               </p>
             </div>
             <div class="control-label">
@@ -93,7 +90,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" v-model="owner.lastname" type="text"  placeholder="Apellido">
+                <input class="input" v-model="owner.lastname" type="text"  placeholder="Apellido" name="owner.lastname">
               </p>
             </div>
           </div>
@@ -102,8 +99,8 @@
               <label class="label">Sexo</label>
             </div>
             <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="owner.sex" >
+              <div class="select is-fullwidth" >
+                <select v-model="owner.sex" name="owner.sex">
                   <option value="1">Femenino</option>
                   <option value="0">Masculino</option>
                 </select>
@@ -125,13 +122,13 @@
               <label class="label"></label>
             </div>
             <div class="control">
-              <button class="button is-primary" v-on:click="seenconyuge = !seenconyuge">Mostrar Conyuge</button>
+              <button class="button is-primary" v-on:click="seenconyuge = !seenconyuge" name="seenconyuge">Mostrar Conyuge</button>
             </div>
             <div class="control">
-              <button class="button is-primary" v-on:click="seenconcubino = !seenconcubino">Mostrar Concubino/a</button>
+              <button class="button is-primary" v-on:click="seenconcubino = !seenconcubino" name="seenconcubino">Mostrar Concubino/a</button>
             </div>
             <div class="control">
-              <button class="button is-primary" v-on:click="seengarante = !seengarante">Mostrar Garante</button>
+              <button class="button is-primary" v-on:click="seengarante = !seengarante" name="seengarante">Mostrar Garante</button>
             </div>
 
           </div>
@@ -150,7 +147,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="cowner.IDtype" >
+                <select v-model="cowner.IDtype" name="cowner.IDtype">
                   <option v-for="node in idtypes" :value="node._id">{{node.label}}</option>
                 </select>
               </div>
@@ -160,7 +157,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="cowner.ID" v-on:change="loadowner('cowner')" placeholder="Numero">
+                <input class="input" type="text" v-model="cowner.ID" v-on:change="loadowner('cowner')" placeholder="Numero" name="cowner.ID">
               </p>
             </div>
           </div>
@@ -170,7 +167,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="cowner.name" placeholder="Nombre">
+                <input class="input" type="text" v-model="cowner.name" placeholder="Nombre" name="cowner.name">
               </p>
             </div>
             <div class="control-label">
@@ -178,7 +175,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="cowner.lastname" placeholder="Apellido">
+                <input class="input" type="text" v-model="cowner.lastname" placeholder="Apellido" name="cowner.lastname">
               </p>
             </div>
           </div>
@@ -188,8 +185,8 @@
               <label class="label">Sexo</label>
             </div>
             <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="cowner.sex" >
+              <div class="select is-fullwidth" >
+                <select v-model="cowner.sex" name="cowner.sex">
                   <option value="1">Femenino</option>
                   <option value="0">Masculino</option>
                 </select>
@@ -218,8 +215,8 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="coowner.IDtype" >
-                  <option v-for="node in idtypes" :value="node._id">{{node.label}}</option>
+                <select v-model="coowner.IDtype" name="coowner.IDtype">
+                  <option v-for="node in idtypes" :value="node._id" >{{node.label}}</option>
                 </select>
               </div>
             </div>
@@ -228,7 +225,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="coowner.ID" v-on:change="loadowner('coowner')"placeholder="Numero">
+                <input class="input" type="text" v-model="coowner.ID" v-on:change="loadowner('coowner')"placeholder="Numero" name="coowner.ID">
               </p>
             </div>
           </div>
@@ -238,7 +235,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="coowner.name" placeholder="Nombre">
+                <input class="input" type="text" v-model="coowner.name" placeholder="Nombre" name="coowner.name">
               </p>
             </div>
             <div class="control-label">
@@ -246,7 +243,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="coowner.lastname" placeholder="Apellido">
+                <input class="input" type="text" v-model="coowner.lastname" placeholder="Apellido" name="coowner.lastname">
               </p>
             </div>
           </div>
@@ -257,7 +254,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="coowner.sex" >
+                <select v-model="coowner.sex" name="coowner.sex">
                   <option value="1">Femenino</option>
                   <option value="0">Masculino</option>
                 </select>
@@ -286,7 +283,7 @@
             </div>
             <div class="control">
               <div class="select is-fullwidth">
-                <select v-model="gowner.IDtype" >
+                <select v-model="gowner.IDtype" name="gowner.IDtype">
                   <option v-for="node in idtypes" :value="node._id">{{node.label}}</option>
                 </select>
               </div>
@@ -296,7 +293,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="gowner.ID" v-on:change="loadowner('gowner')"placeholder="Numero">
+                <input class="input" type="text" v-model="gowner.ID" v-on:change="loadowner('gowner')" placeholder="Numero" name="gowner.ID">
               </p>
             </div>
           </div>
@@ -306,7 +303,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="gowner.name" placeholder="Nombre">
+                <input class="input" type="text" v-model="gowner.name" placeholder="Nombre" name="gowner.name">
               </p>
             </div>
             <div class="control-label">
@@ -314,7 +311,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" type="text" v-model="gowner.lastname" placeholder="Apellido">
+                <input class="input" type="text" v-model="gowner.lastname" placeholder="Apellido" name="gowner.lastname">
               </p>
             </div>
           </div>
@@ -324,8 +321,8 @@
               <label class="label">Sexo</label>
             </div>
             <div class="control">
-              <div class="select is-fullwidth">
-                <select v-model="gowner.sex" >
+              <div class="select is-fullwidth" >
+                <select v-model="gowner.sex" name="gowner.sex">
                   <option value="1">Femenino</option>
                   <option value="0">Masculino</option>
                 </select>
@@ -345,8 +342,8 @@
               <label class="label"></label>
             </div>
             <div class="control">
-              <button v-if="!showModal" class="button is-primary" v-on:click="onclickfn()">Salvar</button>
-              <button class="button is-link" v-on:click="onclickcan()">Cancelar</button>
+              <button v-if="!showModal" class="button is-primary" v-on:click="onclickfn()" name="Salvar">Salvar</button>
+              <button class="button is-link" v-on:click="onclickcan()" name="Cancelar">Cancelar</button>
             </div>
           </div>
         </div>
@@ -489,10 +486,15 @@ export default {
       return state.app.verifyclient.agencies
     },
     campaigns () {
-      return state.app.verifyclient.campaigns.filter(x => x.custcode === this.agencie )
+        return state.app.verifyclient.campaigns.filter(x => x.custcode === this.agencie )
     },
     products () {
-      return state.app.verifyclient.products.filter(x => x.campaign === this.campaign )
+      console.log("PRODUCTSSS")
+      console.log("campaing"+this.campaign)
+      console.log("agencie" + this.agencie )
+      console.log("PRODUCTSSS")
+      console.log("PRODUCTSSS")
+      return state.app.verifyclient.products.filter(x => x.campaign === this.campaign ).filter(x => x.custcode === this.agencie )
     },
     formValues() {
       return state.app.form_items_from_server
@@ -515,29 +517,36 @@ export default {
     },
     onSubmit : function (){
       //here do what u want
-//      if (Object.keys(this.formValues).length == Object.keys(state.app.inquirydata).length) {
-        this.$http.post('/inquiry/inq_process?==' + state.app.inquirystring, state.app.inquirydata)
-          .then(function (response) {
 
+      this.$http.post('/inquiry/inq_process?==' + state.app.inquirystring, state.app.inquirydata)
+        .then(function (response) {
+          if (Object.keys(this.formValues).length == Object.keys(state.app.inquirydata).length) {
             // Success
             console.log(response.data)
-            store.commit(TOGGLE_INQUIRY, {'showinquiry': false, 'showverify': true})
             this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId=' + state.app.opcode + '&score=' + response.data.score + '&inquirycode=' + response.data.InquiryResult.fields.InquiryCode)
               .then(function (responsescore) { console.log("Grabo el score") }.bind(this)
                 , function (responsescore) {
                   // Error
                   console.log(responsescore.data)
                 });
-            this.nextrule('')
-            console.log(response.data)
-          }.bind(this), function (response) {
-            // Error
-            console.log(response.data)
-          });
-//      }
-//      else {
-//        alert("Tienes que completar los "+this.formValues.length)
-//      }
+          }
+          else {
+            this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId=' + state.app.opcode + '&score=0 &inquirycode=' + response.data.InquiryResult.fields.InquiryCode)
+              .then(function (responsescore) { console.log("Grabo el score") }.bind(this)
+                , function (responsescore) {
+                  // Error
+                  console.log(responsescore.data)
+                });
+          }
+          store.commit(TOGGLE_INQUIRY,{'showinquiry':false,'showverify':true} )
+          this.nextrule('')
+          console.log(response.data)
+        }.bind(this), function (response) {
+          // Error
+          console.log(response.data)
+        });
+
+
       console.log("emitio false!")
     },
     openInNewTab(url) {
@@ -632,9 +641,14 @@ export default {
           state: rulestate
         }
       }).then((response) => {
-        l
-        console.log(response)
-        this.nextrule(response)
+        if (response.data.ok==true) {
+          console.log(response)
+          this.nextrule(response)
+        }
+        else {
+          //alert(response.data.error)
+          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.error,button1:true, button3:false} )
+        }
       }).catch((error) => {
         let obj2 = {
           title: 'Error',
@@ -714,6 +728,14 @@ export default {
         }
 
         store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':'Se procede a grabar la informacion',button1:false, button3:false} )
+        let agenciename=''
+        for (let cm of this.agencies)
+        {
+          if (cm._id==this.agencie)
+          {
+            agenciename=cm.label
+          }
+        }
         this.$http({
           method: 'GET',
           url: '/ralfintranet/api/savedata',
@@ -724,6 +746,7 @@ export default {
             parameters: {
               campaign: this.campaign,
               agencie: this.agencie,
+              agenciename: agenciename,
               product: this.product,
               owner: JSON.stringify(this.owner),
               gowner: JSON.stringify(this.gowner),
@@ -744,7 +767,7 @@ export default {
           }
           else {
             //alert(response.data.error)
-              store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':response.data.error,button1:false, button3:false} )
+              store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
           }
         }).catch((error) => {
           let obj2 = {
@@ -753,7 +776,7 @@ export default {
             customCloseBtnText:"Cerrar",
             type: 'error'
           }
-          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':error, button1:false, button3:false} )
+          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error :"+error, button1:false, button3:false} )
           console.log(error)
 
         })
@@ -780,17 +803,25 @@ export default {
         params: {
         }
       }).then((response) => {
-        console.log('ARRANCA LOS CONSOLE')
-        //console.log(response.data)
-        // console.log(response.data.records)
-        console.log('TERMINA LOS CONSOLE')
-        store.commit(INIT_AGENCIES, response)
-console.log('Finish')
-        if (response.data.personname) {
-          store.commit(LOGIN, response.data.personname)
+
+        console.log(response)
+        if (response.data.ok==true) {
+          console.log('ARRANCA LOS CONSOLE')
+          //console.log(response.data)
+          // console.log(response.data.records)
+          console.log('TERMINA LOS CONSOLE')
+          store.commit(INIT_AGENCIES, response)
+          console.log('Finish')
+          if (response.data.personname) {
+            store.commit(LOGIN, response.data.personname)
+          }
+          else {
+            this.$router.push('/login')
+          }
         }
         else {
-          this.$router.push('/login')
+          //alert(response.data.error)
+          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
         }
       }).catch((error) => {
         console.log("es el catch!!!!")
