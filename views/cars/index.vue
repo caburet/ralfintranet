@@ -195,7 +195,7 @@
             </div>
             <div class="control is-grouped">
               <p class="control is-expanded">
-                <input class="input" v-model="owner.birthdate" type="date" name="owner.birthdate">
+                <input class="input" v-model="owner.birthdate" type="date" name="owner.birthdate" value="">
               </p>
             </div>
 
@@ -287,7 +287,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { INIT_AGENCIES, UPDATE_LOANAMOUNT, LOAD_MODELS, LOAD_LOANLIMIT, LOAD_YEARS, LOAD_CITYCODES, SAVE_OPPCODE, TOGGLE_MODAL, TOGGLE_INQUIRY, INQUIRY_DATA , SECOND_DATA, EMPTY_INQUIRY } from 'vuex-store/mutation-types'
+import { INIT_AGENCIES, UPDATE_LOANAMOUNT, LOAD_MODELS, LOAD_LOANLIMIT, LOAD_YEARS, LOAD_CITYCODES, SAVE_OPPCODE, TOGGLE_MODAL, TOGGLE_INQUIRY, INQUIRY_DATA, SECOND_DATA, EMPTY_INQUIRY } from 'vuex-store/mutation-types'
 import store from './../../store'
 import { Modal } from 'components/layout/'
 const { state } = store
@@ -297,55 +297,55 @@ export default {
   },
   data () {
     return {
-      loanlimit:0,
+      loanlimit: 0,
       seenconyuge: false,
       seenconcubino: false,
       seengarante: false,
       owner: {
-        birthdate:'',
+        birthdate: '',
         ingress: '',
         province: '',
         locality: '',
         cellphone: '',
         phone: '',
         workphone: '',
-        localitycode:''
+        localitycode: ''
       },
       car: {
         infovalue: 'A calcular',
         year: '',
-        km0:'',
-        use:'',
-        gnc:'',
-        brand:'',
-        model:'',
+        km0: '',
+        use: '',
+        gnc: '',
+        brand: '',
+        model: ''
       },
       campaign: '',
 
       brand: '',
       model: '',
       year: '',
-      month:'',
-      months:[12, 15, 18, 24, 30, 36, 48, 60],
-      amount:'',
-      tasa:'',
-      errormensage:'',
-      showerrormensage:false,
-      opcode:'',
-      personcode:'',
-      rulenr:0,
-      continuestep2:true,
+      month: '',
+      months: [12, 15, 18, 24, 30, 36, 48, 60],
+      amount: '',
+      tasa: '',
+      errormensage: '',
+      showerrormensage: false,
+      opcode: '',
+      personcode: '',
+      rulenr: 0,
+      continuestep2: true
     }
   },
 
-  computed:{
-    provinces (){
+  computed: {
+    provinces () {
       return state.app.verifyclient.provinces
     },
-    citycodes (){
+    citycodes () {
       return state.app.verifyclient.citycodes
     },
-    brands (){
+    brands () {
       return state.app.carsoptions.brands
     },
     models () {
@@ -354,19 +354,19 @@ export default {
     years () {
       return state.app.carsoptions.years
     },
-    showModal() {
+    showModal () {
       return state.app.showModal
     },
-    modalContain() {
+    modalContain () {
       return state.app.modalContain
     },
-    showinquiry() {
+    showinquiry () {
       return state.app.showinquiry
     },
-    showverify() {
+    showverify () {
       return state.app.showverify
     },
-    formValues() {
+    formValues () {
       return state.app.form_items_from_server
     }
 
@@ -379,24 +379,23 @@ export default {
     ...mapActions([
       'addCase'
     ]),
-    onInquiryChange : function (a,b,c=''){
-      //here do what u want
-      console.log("update")
+    onInquiryChange: function (a, b, c = '') {
+      // here do what u want
+      console.log('update')
       console.log(a)
       console.log(b)
-      store.commit(INQUIRY_DATA, {id:a,value:b,type:c} )
+      store.commit(INQUIRY_DATA, {id: a, value: b, type: c})
     },
     loadData () {
-    store.commit(SECOND_DATA, '' )
-    store.commit(TOGGLE_INQUIRY,{'showinquiry':false,'showverify':true} )
-    this.owner=state.app.owner
+      store.commit(SECOND_DATA, '')
+      store.commit(TOGGLE_INQUIRY, {'showinquiry': false, 'showverify': true})
+      this.owner = state.app.owner
       console.log(this.owner)
-      if (this.owner.province)
-      {
+      if (this.owner.province) {
         this.loadcitycodes()
       }
     },
-    setrulestatus (params,rulestate) {
+    setrulestatus (params, rulestate) {
       this.$http({
         method: 'GET',
         url: '/ralfintranet/api/setrulestatus',
@@ -411,45 +410,44 @@ export default {
           state: rulestate
         }
       }).then((response) => {
-        if (response.data.ok==true) {
+        if (response.data.ok == true) {
           console.log(response)
           this.nextrule(response)
-        }else {
-          //alert(response.data.error)
-          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
+        } else {
+          // alert(response.data.error)
+          store.commit(TOGGLE_MODAL, {'opened': true, 'modalcontain': 'Error:' + response.data.error, button1: true, button3: false})
         }
-
       }).catch((error) => {
         let obj2 = {
           title: 'Error',
           message: error,
-          customCloseBtnText:"Cerrar",
+          customCloseBtnText: 'Cerrar',
           type: 'error'
         }
-        store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':error, button1:true, button3:false} )
+        store.commit(TOGGLE_MODAL, {'opened': true, 'modalcontain': error, button1: true, button3: false})
         console.log(error)
       })
     },
     onclickclosemodal () {
-      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+      store.commit(TOGGLE_MODAL, {'opened': false, 'modalcontain': 'vacio', button1: true, button3: false})
       this.nextrule('')
     },
     onclickopeninquiry () {
-      console.log("openinquiry")
-      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
-      store.commit(TOGGLE_INQUIRY,{'showinquiry':true,'showverify':false} )
+      console.log('openinquiry')
+      store.commit(TOGGLE_MODAL, {'opened': false, 'modalcontain': 'vacio', button1: true, button3: false})
+      store.commit(TOGGLE_INQUIRY, {'showinquiry': true, 'showverify': false})
     },
     onclickauthmodal (params) {
-      this.setrulestatus(params,1)
-      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+      this.setrulestatus(params, 1)
+      store.commit(TOGGLE_MODAL, {'opened': false, 'modalcontain': 'vacio', button1: true, button3: false})
     },
     onclickpendmodal (params) {
-      this.setrulestatus(params,3)
-      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+      this.setrulestatus(params, 3)
+      store.commit(TOGGLE_MODAL, {'opened': false, 'modalcontain': 'vacio', button1: true, button3: false})
     },
     onclickrechmodal (params) {
-      this.setrulestatus(params,2)
-      store.commit(TOGGLE_MODAL, {'opened':false,'modalcontain':"vacio" ,button1:true, button3:false} )
+      this.setrulestatus(params, 2)
+      store.commit(TOGGLE_MODAL, {'opened': false, 'modalcontain': 'vacio', button1: true, button3: false})
     },
     loadcitycodes () {
       this.$http({
@@ -460,52 +458,48 @@ export default {
         }],
         params: {
           parameters: {
-            province:this.owner.province,
+            province: this.owner.province
           }
         }
       }).then((response) => {
-        if (response.data.ok==true) {
+        if (response.data.ok == true) {
           store.commit(LOAD_CITYCODES, response)
-        }else {
-          //alert(response.data.error)
-          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
+        } else {
+          // alert(response.data.error)
+          store.commit(TOGGLE_MODAL, {'opened': true, 'modalcontain': 'Error:' + response.data.error, button1: true, button3: false})
         }
       }).catch((error) => {
         console.log(error)
       })
     },
     onclickloadopp () {
-      store.commit(SAVE_OPPCODE, {opcode:this.opcode,personcode:this.personcode})
-
+      store.commit(SAVE_OPPCODE, {opcode: this.opcode, personcode: this.personcode})
     },
     onclicksavesecondwindow () {
-      if (!this.owner.birthdate || !this.owner.province)
-      {
-        alert("Los campos FECHA DE NACIMIENTO y PROVINCIA son obligatorios.")
+      if (!this.owner.birthdate || (parseInt(this.owner.birthdate.split('-')[0]) > 2010 || !this.owner.province)) {
+        alert('Los campos FECHA DE NACIMIENTO y PROVINCIA son obligatorios.')
         return false
       }
       let codia
       console.log(this.car.model)
-      if (this.car.model)
-      {
+      if (this.car.model) {
         console.log(this.models)
-        for(let i of this.models){
+        for (let i of this.models) {
           console.log(i)
-          if(i.label==this.car.model){
-
-            console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+          if (i.label == this.car.model) {
+            console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa')
             console.log(i.codia)
-            codia= i.codia
-            this.car.modelname=i.modelname
-            break;
+            codia = i.codia
+            this.car.modelname = i.modelname
+            break
           }
         }
       }
-      console.log("va codia")
+      console.log('va codia')
       console.log(codia)
-      if (this.amount<= this.car.infovalue*this.loanlimit/100) {
-        store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':'Se procede a grabar la informacion',button1:false, button3:false} )
-        store.commit(UPDATE_LOANAMOUNT, {amount:this.amount, month:this.month, infovalue: this.car.infovalue,loanlimit:this.loanlimit } )
+      if (this.amount <= this.car.infovalue * this.loanlimit / 100) {
+        store.commit(TOGGLE_MODAL, {'opened': true, 'modalcontain': 'Se procede a grabar la informacion', button1: false, button3: false})
+        store.commit(UPDATE_LOANAMOUNT, {amount: this.amount, month: this.month, infovalue: this.car.infovalue, loanlimit: this.loanlimit })
         this.$http({
           method: 'GET',
           url: '/ralfintranet/api/setsecondwindow',
@@ -523,88 +517,83 @@ export default {
 
           }
         }).then((response) => {
-          if (response.data.ok==true) {
+          if (response.data.ok == true) {
             if (response.data.loanratevalue == 0) {
-              alert("No se pudo determinar el valor de la Tasa")
+              alert('No se pudo determinar el valor de la Tasa')
               store.commit(TOGGLE_MODAL, {'opened': false, 'modalcontain': '', button1: false, button3: false})
-              return false;
+              return false
             }
 
-            console.log("Rsponse del consulta")
+            console.log('Rsponse del consulta')
 
             if (response.data.quotes.length == 0 && response.data.checksmartix) {
-              alert("No se pudo cotizar")
+              alert('No se pudo cotizar')
             }
             store.commit(SECOND_DATA, response.data)
             store.commit(TOGGLE_MODAL, {'opened': false, 'modalcontain': '', button1: false, button3: false})
             this.nextrule(response)
-            //this.$router.push('/additional')
+            // this.$router.push('/additional')
             console.log(response)
-          }else {
-            //alert(response.data.error)
-            store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
+          } else {
+            // alert(response.data.error)
+            store.commit(TOGGLE_MODAL, {'opened': true, 'modalcontain': 'Error:' + response.data.error, button1: true, button3: false})
           }
         }).catch((error) => {
-          console.log("error")
+          console.log('error')
           let obj2 = {
             title: 'Error',
             message: error,
-            customCloseBtnText: "Cerrar",
+            customCloseBtnText: 'Cerrar',
             type: 'error'
           }
           alert(error)
 
           console.log(error)
         })
-      }
-      else
-      {
-        alert("El monto supera el maximo permitido.")
+      } else {
+        alert('El monto supera el maximo permitido.')
       }
     },
-    onSubmit : function (){
-      //here do what u want
+    onSubmit: function () {
+      // here do what u want
 
-        this.$http.post('/inquiry/inq_process?==' + state.app.inquirystring, state.app.inquirydata)
+      this.$http.post('/inquiry/inq_process?==' + state.app.inquirystring, state.app.inquirydata)
           .then(function (response) {
             if (Object.keys(this.formValues).length == Object.keys(state.app.inquirydata).length) {
               // Success
               console.log(response.data)
               this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId=' + state.app.opcode + '&score=' + response.data.score + '&inquirycode=' + response.data.InquiryResult.fields.InquiryCode)
-                .then(function (responsescore) { console.log("Grabo el score") }.bind(this)
+                .then(function (responsescore) { console.log('Grabo el score') }
                   , function (responsescore) {
                     // Error
                     console.log(responsescore.data)
-                  });
-            }
-            else {
+                  })
+            } else {
               this.$http.get('/ralfintranet/api/saveinquiryscore?&opportunityId=' + state.app.opcode + '&score=0 &inquirycode=' + response.data.InquiryResult.fields.InquiryCode)
-                .then(function (responsescore) { console.log("Grabo el score") }.bind(this)
+                .then(function (responsescore) { console.log('Grabo el score') }
                   , function (responsescore) {
                     // Error
                     console.log(responsescore.data)
-                  });
+                  })
             }
-            store.commit(TOGGLE_INQUIRY,{'showinquiry':false,'showverify':true} )
+            store.commit(TOGGLE_INQUIRY, {'showinquiry': false, 'showverify': true})
             this.nextrule('')
             console.log(response.data)
           }.bind(this), function (response) {
             // Error
             console.log(response.data)
-          });
+          })
 
-
-      console.log("emitio false!")
+      console.log('emitio false!')
     },
-    nextrule(response){
-      console.log("Va next rule consoles logs")
+    nextrule (response) {
+      console.log('Va next rule consoles logs')
 
-      console.log(state.app.resrol.length,this.rulenr,this.continuestep2 )
+      console.log(state.app.resrol.length, this.rulenr, this.continuestep2)
       console.log(this.rulenr == state.app.resrol.length)
       var self = this
-      if (this.rulenr == state.app.resrol.length)
-      {
-        console.log("Termino!")
+      if (this.rulenr == state.app.resrol.length) {
+        console.log('Termino!')
         this.continuestep2 = false
         // TODO save person
         this.$http({
@@ -618,46 +607,40 @@ export default {
 
           }
         }).then((response) => {
-          if (response.data.ok==true) {
-            console.log("Rsponse del consulta")
+          if (response.data.ok == true) {
+            console.log('Rsponse del consulta')
             this.$router.push('/additional')
-          }
-          else {
-            //alert(response.data.error)
-            store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
+          } else {
+            // alert(response.data.error)
+            store.commit(TOGGLE_MODAL, {'opened': true, 'modalcontain': 'Error:' + response.data.error, button1: true, button3: false})
           }
         }).catch((error) => {
-          console.log("error")
+          console.log('error')
           let obj2 = {
             title: 'Error',
             message: error,
-            customCloseBtnText: "Cerrar",
+            customCloseBtnText: 'Cerrar',
             type: 'error'
           }
           alert(error)
 
           console.log(error)
         })
-
       }
       let rolmessage = state.app.resrol[this.rulenr]
-      this.rulenr +=1
+      this.rulenr += 1
       if (this.continuestep2) {
-        console.log("rolmessage")
+        console.log('rolmessage')
         console.log(rolmessage.formIfReturnFalse)
         console.log(rolmessage)
-        //this.continuestep2 = false
-        //this.$refs.simplert.openSimplert(obj)
-        if (rolmessage.ruleActionType==1)
-        {
-          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:true, button3:false,ruleid:rolmessage.RuleInternalId, form:rolmessage.formIfReturnFalse} )
+        // this.continuestep2 = false
+        // this.$refs.simplert.openSimplert(obj)
+        if (rolmessage.ruleActionType == 1) {
+          store.commit(TOGGLE_MODAL, {'opened': true, 'modalcontain': rolmessage.message, button1: true, button3: false, ruleid: rolmessage.RuleInternalId, form: rolmessage.formIfReturnFalse})
+        } else {
+          store.commit(TOGGLE_MODAL, {'opened': true, 'modalcontain': rolmessage.message, button1: false, button3: true, ruleid: rolmessage.RuleInternalId, form: rolmessage.formIfReturnFalse})
         }
-        else{
-          store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':rolmessage.message, button1:false, button3:true,ruleid:rolmessage.RuleInternalId, form:rolmessage.formIfReturnFalse} )
-        }
-
       }
-
     },
     loadmodels () {
       if (this.car.brand && this.car.year) {
@@ -670,23 +653,23 @@ export default {
           params: {
             parameters: {
               brand: this.car.brand,
-              year: this.car.year,
+              year: this.car.year
             }
           }
         }).then((response) => {
-          if (response.data.ok==true) {
+          if (response.data.ok == true) {
             store.commit(LOAD_MODELS, response)
-          }else {
-            //alert(response.data.error)
-            store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
+          } else {
+            // alert(response.data.error)
+            store.commit(TOGGLE_MODAL, {'opened': true, 'modalcontain': 'Error:' + response.data.error, button1: true, button3: false})
           }
         }).catch((error) => {
           console.log(error)
         })
       }
     },
-    getyearname(element,id) {
-      return element._id==id;
+    getyearname (element, id) {
+      return element._id == id
     },
     loadcarvalue () {
       console.log(this.car.year)
@@ -696,14 +679,13 @@ export default {
       console.log(state.app.carsoptions.models[this.car.model])
 
       let yearvalue
-      for (let modelspair of state.app.carsoptions.models)
-      {
-        if (modelspair.label==this.car.model){
-          yearvalue=modelspair.carvalue
+      for (let modelspair of state.app.carsoptions.models) {
+        if (modelspair.label == this.car.model) {
+          yearvalue = modelspair.carvalue
         }
       }
 
-      this.car.infovalue=yearvalue*1000
+      this.car.infovalue = yearvalue * 1000
       if (this.car.year && this.car.km0) {
         this.$http({
           method: 'GET',
@@ -715,22 +697,21 @@ export default {
             parameters: {
               opcode: state.app.opcode,
               year: this.car.year,
-              km0: this.car.km0,
+              km0: this.car.km0
             }
           }
         }).then((response) => {
-          if (response.data.ok==true) {
+          if (response.data.ok == true) {
             this.loanlimit = response.data.percentage
             store.commit(LOAD_LOANLIMIT, {loanlimit: response.data.percentage, carvalue: this.car.infovalue})
-          }else {
-            //alert(response.data.error)
-            store.commit(TOGGLE_MODAL, {'opened':true,'modalcontain':"Error:"+response.data.error,button1:true, button3:false} )
+          } else {
+            // alert(response.data.error)
+            store.commit(TOGGLE_MODAL, {'opened': true, 'modalcontain': 'Error:' + response.data.error, button1: true, button3: false})
           }
         }).catch((error) => {
           console.log(error)
         })
       }
-
     }
   }
 }
